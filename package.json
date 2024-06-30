@@ -20,8 +20,10 @@
     "next": "14.2.4",
     "next-auth": "^4.24.7",
     "react": "^18",
-    "react-beautiful-dnd": "^13.1.1",
+    "react-dnd": "^16.0.1",
+    "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^18",
+    "react-simple-typewriter": "^5.0.1",
     "react-toastify": "^10.0.5"
   },
   "devDependencies": {

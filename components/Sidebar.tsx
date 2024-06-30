@@ -63,7 +63,7 @@ const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
                 <IconButton onClick={toggleSidebar} edge="start" color="inherit" aria-label="toggle sidebar">
                     {isOpen ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                 </IconButton>
-                {isOpen && <Typography variant="h5" sx={{ mr: 3, fontWeight: 'bold' }}>ApplicaAi</Typography>}
+                {isOpen && <Typography variant="h5" sx={{ mr: 5, fontWeight: 'bold' }}>ApplicaAi</Typography>}
             </Toolbar>
             <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.12)' }} />
             <List>
@@ -95,7 +95,7 @@ const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
                                     {icon}
                                 </ListItemIcon>
                                 {isOpen && (
-                                    <Typography sx={{ textAlign: 'left', fontWeight: 'bold', fontSize: '1.25rem' }}>
+                                    <Typography sx={{ textAlign: 'left', fontWeight: 'bold', fontSize: '1rem' }}>
                                         {text}
                                     </Typography>
                                 )}

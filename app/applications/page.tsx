@@ -1,63 +1,22 @@
-'use client';
+'use client'
 
-import React, { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
-import axios from 'axios';
-import ApplicationsKanban from '../../components/ApplicationsKanban';
-import { IApplication } from '../../lib/models/Application';
+import { useState } from 'react';
+import JobApplicationsTable from '../../components/ApplicationsTable';
+import JobApplicationsKanban from '../../components/ApplicationsKanban';
 import DataControlModal from '../../components/DataControlModal';
-import ApplicationsModal from "../../components/ApplicationsModal";
+import JobApplicationModal from '../../components/ApplicationsModal';
+import { IApplication } from '../../lib/models/Application';
 
-const Applications: React.FC = () => {
-    const [applications, setApplications] = useState<IApplication[]>([]);
+const JobApplicationsDashboard = () => {
     const [isDataControlModalOpen, setIsDataControlModalOpen] = useState(false);
     const [viewMode, setViewMode] = useState<'table' | 'kanban'>('kanban');
-    const [isApplicationModalOpen, setIsApplicationModalOpen] = useState(false);
-    const [selectedApplication, setSelectedApplication] = useState<IApplication | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const [isJobApplicationModalOpen, setIsJobApplicationModalOpen] = useState(false);
+    const [selectedJobApplication, setSelectedJobApplication] = useState<IApplication | null>(null);
 
-    useEffect(() => {
-        const fetchApplications = async () => {
-            try {
-                const response = await axios.get('/api/applications');
-                setApplications(response.data);
-            } catch (error) {
-                console.error('Error fetching job applications:', error);
-                setError('Error fetching job applications');
-                toast.error('Error fetching job applications');
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchApplications();
-    }, []);
-
-    const handleOpenModal = (application: IApplication | null) => {
-        setSelectedApplication(application);
-        setIsApplicationModalOpen(true);
+    const handleOpenModal = (jobApplication: IApplication | null) => {
+        setSelectedJobApplication(jobApplication);
+        setIsJobApplicationModalOpen(true);
     };
-
-    const handleAddApplication = (newApplication: IApplication) => {
-        setApplications((prevApplications) => [newApplication, ...prevApplications]);
-    };
-
-    const handleUpdateApplication = (updatedApplication: IApplication) => {
-        setApplications((prevApplications) =>
-            prevApplications.map((app) =>
-                app._id === updatedApplication._id ? updatedApplication : app
-            )
-        );
-    };
-
-    if (loading) {
-        return <p>Loading...</p>;
-    }
-
-    if (error) {
-        return <p>{error}</p>;
-    }
 
     return (
         <div>
@@ -66,41 +25,43 @@ const Applications: React.FC = () => {
                 <div>
                     <button
                         onClick={() => setIsDataControlModalOpen(true)}
-                        className="bg-blue-500 text-white px-4 py-2 rounded mr-2 border-2 border-transparent hover:bg-blue-600 hover:border-blue-600 active:bg-transparent active:text-blue-500 active:border-blue-500"
+                        className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
                     >
                         Data Control
                     </button>
                     <button
                         onClick={() => handleOpenModal(null)}
-                        className="bg-blue-500 text-white px-4 py-2 rounded mr-2 border-2 border-transparent hover:bg-blue-600 hover:border-blue-600 active:bg-transparent active:text-blue-500 active:border-blue-500"
+                        className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
                     >
                         Create New
                     </button>
                     <button
                         onClick={() => setViewMode(viewMode === 'table' ? 'kanban' : 'table')}
-                        className="bg-blue-500 text-white px-4 py-2 rounded border-2 border-transparent hover:bg-blue-600 hover:border-blue-600 active:bg-transparent active:text-blue-500 active:border-blue-500"
+                        className="bg-blue-500 text-white px-4 py-2 rounded"
                     >
                         {viewMode === 'table' ? 'Switch to Kanban' : 'Switch to Table'}
                     </button>
                 </div>
             </div>
+            {viewMode === 'table' ?
+                <JobApplicationsTable onOpenModal={handleOpenModal} /> :
+                <JobApplicationsKanban onOpenModal={handleOpenModal} />
+            }
             {isDataControlModalOpen && (
                 <DataControlModal onClose={() => setIsDataControlModalOpen(false)} />
             )}
-            <ApplicationsKanban
-                applications={applications}
-                onOpenModal={handleOpenModal}
-                onUpdateApplication={handleUpdateApplication}
-            />
-            {isApplicationModalOpen && (
-                <ApplicationsModal
-                    application={selectedApplication}
-                    onClose={() => setIsApplicationModalOpen(false)}
-                    onSave={handleAddApplication}
+            {isJobApplicationModalOpen && (
+                <JobApplicationModal
+                    application={selectedJobApplication}
+                    onClose={() => setIsJobApplicationModalOpen(false)}
+                    onSave={(application: IApplication) => {
+                        setSelectedJobApplication(null);
+                        setIsJobApplicationModalOpen(false);
+                    }}
                 />
             )}
         </div>
     );
 };
 
-export default Applications;
+export default JobApplicationsDashboard;

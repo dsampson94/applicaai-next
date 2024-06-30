@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { IApplication } from '../lib/models/Application';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { IApplication } from '../lib/models/Application';
 
-interface ApplicationsModalProps {
+interface JobApplicationModalProps {
     application?: IApplication | null;
     onClose: () => void;
     onSave: (application: IApplication) => void;
@@ -18,7 +18,7 @@ const statusOptions = [
     { value: 'Rejected', label: 'Rejected' },
 ];
 
-const ApplicationsModal: React.FC<ApplicationsModalProps> = ({ application, onClose, onSave }) => {
+const JobApplicationModal: React.FC<JobApplicationModalProps> = ({ application, onClose, onSave }) => {
     const [role, setRole] = useState(application?.role || '');
     const [company, setCompany] = useState(application?.company || '');
     const [status, setStatus] = useState(application?.status || 'Not Applied');
@@ -187,4 +187,4 @@ const ApplicationsModal: React.FC<ApplicationsModalProps> = ({ application, onCl
     );
 };
 
-export default ApplicationsModal;
+export default JobApplicationModal;
