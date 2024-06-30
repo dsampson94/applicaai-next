@@ -14,17 +14,9 @@ import {
 } from '@mui/material';
 import { usePathname, useRouter } from 'next/navigation';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import PeopleIcon from '@mui/icons-material/People';
-import LocalGroceryStoreIcon from '@mui/icons-material/LocalGroceryStore';
-import ListAltIcon from '@mui/icons-material/ListAlt';
-import KitchenIcon from '@mui/icons-material/Kitchen';
-import {ENDPOINTS} from "../lib/constants";
 
 interface SidebarProps {
     isOpen: boolean;
@@ -41,15 +33,7 @@ const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
 
     const menuItems = [
         { text: 'Profile', icon: <AccountCircleIcon />, path: '/profile' },
-        { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
-        { text: 'Users', icon: <PeopleIcon />, path: `/${ENDPOINTS.users.slice(0, -1)}` },
-        { text: 'Orders', icon: <ShoppingCartIcon />, path: `/${ENDPOINTS.orders.slice(0, -1)}` },
-        { text: 'Menus', icon: <RestaurantMenuIcon />, path: `/${ENDPOINTS.menus.slice(0, -1)}` },
-        { text: 'Recipes', icon: <ListAltIcon />, path: `/${ENDPOINTS.recipes.slice(0, -1)}` },
-        { text: 'Ingredients', icon: <KitchenIcon />, path: `/${ENDPOINTS.ingredients.slice(0, -1)}` },
-        { text: 'Suppliers', icon: <LocalGroceryStoreIcon />, path: `/${ENDPOINTS.suppliers.slice(0, -1)}` },
-        { text: 'Locations', icon: <LocationOnIcon />, path: `/${ENDPOINTS.locations.slice(0, -1)}` },
-        // { text: 'Reviews', icon: <RateReviewIcon />, path: `/${ENDPOINTS.reviews.slice(0, -1)}` }
+        { text: 'Applications', icon: <DashboardIcon />, path: '/applications' },
     ];
 
     return (
