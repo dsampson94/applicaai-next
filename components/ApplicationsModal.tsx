@@ -1,0 +1,190 @@
+import React, { useState, useEffect } from 'react';
+import { IApplication } from '../lib/models/Application';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+
+interface ApplicationsModalProps {
+    application?: IApplication | null;
+    onClose: () => void;
+    onSave: (application: IApplication) => void;
+}
+
+const statusOptions = [
+    { value: '', label: 'Select Status' },
+    { value: 'Not Applied', label: 'Not Applied' },
+    { value: 'Applied', label: 'Applied' },
+    { value: 'Interviewing', label: 'Interviewing' },
+    { value: 'Offered', label: 'Offered' },
+    { value: 'Rejected', label: 'Rejected' },
+];
+
+const ApplicationsModal: React.FC<ApplicationsModalProps> = ({ application, onClose, onSave }) => {
+    const [role, setRole] = useState(application?.role || '');
+    const [company, setCompany] = useState(application?.company || '');
+    const [status, setStatus] = useState(application?.status || 'Not Applied');
+    const [jobSpec, setJobSpec] = useState<string | null>(application?.jobSpec || null);
+    const [jobSpecName, setJobSpecName] = useState<string | null>(application?.jobSpecName || '');
+    const [cvName, setCvName] = useState<string | null>(application?.cvName || '');
+    const [tags, setTags] = useState<string[]>(application?.tags || []);
+    const [newTag, setNewTag] = useState<string>('');
+
+    useEffect(() => {
+        if (application) {
+            setRole(application.role || '');
+            setCompany(application.company || '');
+            setStatus(application.status || 'Not Applied');
+            setJobSpec(application.jobSpec || null);
+            setJobSpecName(application.jobSpecName || '');
+            setCvName(application.cvName || null);
+            setTags(application.tags || []);
+        }
+    }, [application]);
+
+    const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>, setFile: React.Dispatch<React.SetStateAction<string | null>>, setName: React.Dispatch<React.SetStateAction<string | null>>) => {
+        const file = event.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const base64String = reader.result as string;
+                setFile(base64String);
+                setName(file.name);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleAddTag = () => {
+        if (newTag.trim() !== '') {
+            setTags([...tags, newTag.trim()]);
+            setNewTag('');
+        }
+    };
+
+    const handleRemoveTag = (tag: string) => {
+        setTags(tags.filter(t => t !== tag));
+    };
+
+    const handleSubmit = async () => {
+        const updates = { role, company, status, jobSpec, jobSpecName, cvName, tags };
+        try {
+            if (application) {
+                const response = await axios.put(`/api/applications/${application._id}`, updates);
+                onSave(response.data);
+                toast.success('Job application updated successfully');
+            } else {
+                const response = await axios.post('/api/applications', updates);
+                onSave(response.data);
+                toast.success('Job application created successfully');
+            }
+            onClose();
+        } catch (error: any) {
+            toast.error(`Failed to save job application: ${error.message}`);
+        }
+    };
+
+    return (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-10">
+            <div className="bg-white p-8 rounded shadow-md w-full max-w-4xl grid grid-cols-2 gap-8">
+                <div className="col-span-1">
+                    <h2 className="text-2xl mb-4">{application ? 'Update Job Application' : 'Create Job Application'}</h2>
+                    <input
+                        type="text"
+                        value={role}
+                        onChange={(e) => setRole(e.target.value)}
+                        placeholder="Role"
+                        className="mb-2 p-2 border border-gray-300 rounded w-full"
+                    />
+                    <input
+                        type="text"
+                        value={company}
+                        onChange={(e) => setCompany(e.target.value)}
+                        placeholder="Company"
+                        className="mb-2 p-2 border border-gray-300 rounded w-full"
+                    />
+                    <select
+                        value={status}
+                        onChange={(e) => setStatus(e.target.value)}
+                        className="mb-4 p-2 border border-gray-300 rounded w-full"
+                    >
+                        {statusOptions.map(option => (
+                            <option key={option.value} value={option.value}>{option.label}</option>
+                        ))}
+                    </select>
+                    <label className="block mb-2">CV:</label>
+                    <select
+                        value={cvName || ''}
+                        onChange={(e) => setCvName(e.target.value)}
+                        className="mb-4 p-2 border border-gray-300 rounded w-full"
+                    >
+                        {/* Add options for CVs if you have them */}
+                    </select>
+                    <label className="block mb-2">Job Spec:</label>
+                    <input
+                        type="file"
+                        onChange={(e) => handleFileUpload(e, setJobSpec, setJobSpecName)}
+                        className="mb-4 p-2 border border-gray-300 rounded w-full"
+                    />
+                    <input
+                        type="text"
+                        value={jobSpecName || ''}
+                        onChange={(e) => setJobSpecName(e.target.value)}
+                        placeholder="Job Spec Name"
+                        className="mb-2 p-2 border border-gray-300 rounded w-full"
+                    />
+                    <div className="mb-4">
+                        <label className="block mb-2">Tags:</label>
+                        <div className="flex flex-wrap mb-2">
+                            {tags.map(tag => (
+                                <div key={tag} className="bg-blue-100 text-blue-800 rounded-full px-3 py-1 mr-2 mb-2 flex items-center">
+                                    <span>{tag}</span>
+                                    <button
+                                        onClick={() => handleRemoveTag(tag)}
+                                        className="ml-2 text-red-500"
+                                    >
+                                        &times;
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                        <input
+                            type="text"
+                            value={newTag}
+                            onChange={(e) => setNewTag(e.target.value)}
+                            placeholder="New Tag"
+                            className="mb-2 p-2 border border-gray-300 rounded w-full"
+                        />
+                        <button
+                            onClick={handleAddTag}
+                            className="bg-blue-500 text-white px-4 py-2 rounded border-2 border-transparent hover:bg-blue-600 hover:border-blue-600 active:bg-transparent active:text-blue-500 active:border-blue-500"
+                        >
+                            Add Tag
+                        </button>
+                    </div>
+                    <div className="flex justify-end">
+                        <button onClick={onClose} className="bg-gray-500 text-white px-4 py-2 rounded mr-2 border-2 border-transparent hover:bg-gray-600 hover:border-gray-600 active:bg-transparent active:text-gray-500 active:border-gray-500">
+                            Cancel
+                        </button>
+                        <button onClick={handleSubmit} className="bg-blue-500 text-white px-4 py-2 rounded border-2 border-transparent hover:bg-blue-600 hover:border-blue-600 active:bg-transparent active:text-blue-500 active:border-blue-500">
+                            {application ? 'Update' : 'Create'}
+                        </button>
+                    </div>
+                </div>
+                <div className="col-span-1 flex flex-col space-y-4 ">
+                    {jobSpec && (
+                        <div>
+                            <h3 className="mb-2">Job Spec:</h3>
+                            <iframe
+                                src={jobSpec}
+                                title="Job Spec Preview"
+                                className="w-full h-64 mb-4 border border-gray-300"
+                            />
+                        </div>
+                    )}
+                    {/* Add CV preview if available */}
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default ApplicationsModal;
