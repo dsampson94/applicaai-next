@@ -4,13 +4,15 @@ import React from 'react';
 import {
     Box,
     ButtonBase,
+    Divider,
     IconButton,
     List,
     ListItem,
     ListItemIcon,
     ListItemText,
     Toolbar,
-    Tooltip
+    Tooltip,
+    Typography
 } from '@mui/material';
 import { usePathname, useRouter } from 'next/navigation';
 import DashboardIcon from '@mui/icons-material/Dashboard';
@@ -39,31 +41,43 @@ const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
     return (
         <Box
             sx={{
-                maxWidth: isOpen ? 200 : 60,
-                minWidth: isOpen ? 200 : 60,
+                minWidth: isOpen ? 240 : 70,
                 transition: 'width 0.3s',
                 overflow: 'hidden',
                 display: 'flex',
                 flexDirection: 'column',
-                height: '100%',
-                borderRight: 1,
-                borderColor: 'divider'
+                height: '100vh',
+                backgroundColor: '#1e293b',
+                color: 'white',
+                boxShadow: '2px 0 5px rgba(0,0,0,0.1)'
             }}
         >
-            <Toolbar>
+            <Toolbar
+                sx={{
+                    display: 'flex',
+                    justifyContent: isOpen ? 'space-between' : 'center',
+                    alignItems: 'center',
+                    padding: isOpen ? '0 16px' : '0 8px',
+                }}
+            >
                 <IconButton onClick={toggleSidebar} edge="start" color="inherit" aria-label="toggle sidebar">
                     {isOpen ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                 </IconButton>
+                {isOpen && <Typography variant="h5" sx={{ mr: 3, fontWeight: 'bold' }}>ApplicaAi</Typography>}
             </Toolbar>
+            <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.12)' }} />
             <List>
                 {menuItems.map(({ text, icon, path }) => (
                     <Tooltip title={!isOpen ? text : ''} key={text} placement="right">
                         <ListItem
                             sx={{
-                                backgroundColor: pathname === path ? 'rgba(0, 0, 0, 0.08)' : 'transparent',
+                                backgroundColor: pathname === path ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
                                 '&:hover': {
-                                    backgroundColor: 'rgba(0, 0, 0, 0.04)',
-                                }
+                                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                                },
+                                padding: '10px 16px',
+                                margin: '4px 0',
+                                borderRadius: '8px'
                             }}
                         >
                             <ButtonBase
@@ -72,14 +86,19 @@ const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
                                     display: 'flex',
                                     justifyContent: 'flex-start',
                                     alignItems: 'center',
-                                    textAlign: 'left'
+                                    textAlign: 'left',
+                                    color: pathname === path ? '#EF4444' : 'white',
                                 }}
                                 onClick={() => handleNavigation(path)}
                             >
-                                <ListItemIcon>
+                                <ListItemIcon sx={{ color: 'white' }}>
                                     {icon}
                                 </ListItemIcon>
-                                {isOpen && <ListItemText primary={text} sx={{ textAlign: 'left' }} />}
+                                {isOpen && (
+                                    <Typography sx={{ textAlign: 'left', fontWeight: 'bold', fontSize: '1.25rem' }}>
+                                        {text}
+                                    </Typography>
+                                )}
                             </ButtonBase>
                         </ListItem>
                     </Tooltip>
