@@ -1,19 +1,18 @@
 'use client'
 
-import { useState } from 'react';
+import {useState} from 'react';
 import JobApplicationsTable from '../../components/ApplicationsTable';
 import JobApplicationsKanban from '../../components/ApplicationsKanban';
 import DataControlModal from '../../components/DataControlModal';
 import JobApplicationModal from '../../components/ApplicationsModal';
-import { IApplication } from '../../lib/models/Application';
 
 const JobApplicationsDashboard = () => {
     const [isDataControlModalOpen, setIsDataControlModalOpen] = useState(false);
     const [viewMode, setViewMode] = useState<'table' | 'kanban'>('kanban');
     const [isJobApplicationModalOpen, setIsJobApplicationModalOpen] = useState(false);
-    const [selectedJobApplication, setSelectedJobApplication] = useState<IApplication | null>(null);
+    const [selectedJobApplication, setSelectedJobApplication] = useState(null);
 
-    const handleOpenModal = (jobApplication: IApplication | null) => {
+    const handleOpenModal = (jobApplication: null) => {
         setSelectedJobApplication(jobApplication);
         setIsJobApplicationModalOpen(true);
     };
@@ -44,17 +43,17 @@ const JobApplicationsDashboard = () => {
                 </div>
             </div>
             {viewMode === 'table' ?
-                <JobApplicationsTable onOpenModal={handleOpenModal} /> :
-                <JobApplicationsKanban onOpenModal={handleOpenModal} />
+                <JobApplicationsTable onOpenModal={handleOpenModal}/> :
+                <JobApplicationsKanban onOpenModal={handleOpenModal}/>
             }
             {isDataControlModalOpen && (
-                <DataControlModal onClose={() => setIsDataControlModalOpen(false)} />
+                <DataControlModal onClose={() => setIsDataControlModalOpen(false)}/>
             )}
             {isJobApplicationModalOpen && (
                 <JobApplicationModal
                     application={selectedJobApplication}
                     onClose={() => setIsJobApplicationModalOpen(false)}
-                    onSave={(application: IApplication) => {
+                    onSave={() => {
                         setSelectedJobApplication(null);
                         setIsJobApplicationModalOpen(false);
                     }}

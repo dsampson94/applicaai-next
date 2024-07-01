@@ -36,6 +36,7 @@ const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
     const menuItems = [
         { text: 'Profile', icon: <AccountCircleIcon />, path: '/profile' },
         { text: 'Applications', icon: <DashboardIcon />, path: '/applications' },
+        { text: 'Users', icon: <AccountCircleIcon />, path: '/users' }
     ];
 
     return (

@@ -1,72 +1,70 @@
-// app/api/applications/[id]/route.ts
+import {NextRequest} from 'next/server';
+import prisma from '../../../../lib/prisma';
+import {handleResponse, verifyToken} from '../../../../lib/api/server';
 
-import { NextRequest, NextResponse } from 'next/server';
-import { getToken } from 'next-auth/jwt';
-import {ObjectId} from "bson";
-import connectToDatabase from "../../../../lib/db/connect";
-
-const RESOURCE_NAME = 'applications';
+const RESOURCE_NAME = 'application';
 
 type Params = { params: { id: string } };
 
-export async function GET(req: NextRequest, { params }: Params) {
-    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-    if (!token) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const userId = token.id;
-    const { db } = await connectToDatabase();
-    const { id } = params;
+export async function GET(req: NextRequest, {params}: Params) {
+    const {id: userId} = verifyToken(req);
+    const {id} = params;
 
     try {
-        const jobApplication = await db.collection(RESOURCE_NAME).findOne({ _id: new ObjectId(id), userId });
-        return NextResponse.json(jobApplication);
+        const jobApplication = await prisma.application.findFirst({
+            where: {
+                id,
+                userId,
+            },
+        });
+        return handleResponse(RESOURCE_NAME, '', jobApplication);
     } catch (error: any) {
-        console.error(`Error fetching ${RESOURCE_NAME}: ${error.message}`);
-        return NextResponse.json({ error: `Error fetching ${RESOURCE_NAME}` }, { status: 500 });
+        return handleResponse(RESOURCE_NAME, error.message);
     }
 }
 
-export async function PUT(req: NextRequest, { params }: Params) {
-    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-    if (!token) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const userId = token.id;
-    const { db } = await connectToDatabase();
-    const { id } = params;
+export async function PUT(req: NextRequest, {params}: Params) {
+    const {id: userId} = verifyToken(req);
+    const {id} = params;
     const data = await req.json();
 
     try {
-        const updatedJobApplication = await db.collection(RESOURCE_NAME).findOneAndUpdate(
-            { _id: new ObjectId(id), userId },
-            { $set: data },
-            { returnDocument: 'after' }
-        );
-        return NextResponse.json(updatedJobApplication.value);
+        await prisma.application.updateMany({
+            where: {
+                id,
+                userId,
+            },
+            data,
+        });
+        const applications = await prisma.application.findMany({
+            where: {
+                userId,
+            },
+        });
+        return handleResponse(RESOURCE_NAME, '', applications);
     } catch (error: any) {
-        console.error(`Error updating ${RESOURCE_NAME}: ${error.message}`);
-        return NextResponse.json({ error: `Error updating ${RESOURCE_NAME}` }, { status: 500 });
+        return handleResponse(RESOURCE_NAME, error.message);
     }
 }
 
-export async function DELETE(req: NextRequest, { params }: Params) {
-    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-    if (!token) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const userId = token.id;
-    const { db } = await connectToDatabase();
-    const { id } = params;
+export async function DELETE(req: NextRequest, {params}: Params) {
+    const {id: userId} = verifyToken(req);
+    const {id} = params;
 
     try {
-        await db.collection(RESOURCE_NAME).deleteOne({ _id: new ObjectId(id), userId });
-        return NextResponse.json({ message: `${RESOURCE_NAME.slice(0, -1)} deleted` });
+        await prisma.application.deleteMany({
+            where: {
+                id,
+                userId,
+            },
+        });
+        const applications = await prisma.application.findMany({
+            where: {
+                userId,
+            },
+        });
+        return handleResponse(RESOURCE_NAME, '', applications);
     } catch (error: any) {
-        console.error(`Error deleting ${RESOURCE_NAME}: ${error.message}`);
-        return NextResponse.json({ error: `Error deleting ${RESOURCE_NAME}` }, { status: 500 });
+        return handleResponse(RESOURCE_NAME, error.message);
     }
 }

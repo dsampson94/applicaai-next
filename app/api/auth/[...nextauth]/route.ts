@@ -1,53 +1,80 @@
-import NextAuth from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import {MongoDBAdapter} from "@next-auth/mongodb-adapter";
-import bcrypt from "bcryptjs";
-import clientPromise from "../../../../lib/db/mongodb";
-import connectToDatabase from "../../../../lib/db/connect";
+import NextAuth from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import {PrismaAdapter} from '@next-auth/prisma-adapter';
+import prisma from '../../../../lib/prisma';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+
+interface UserPayload {
+    id: string;
+    username: string;
+    email: string;
+    role: string;
+}
+
+const generateToken = (user: UserPayload): string => {
+    return jwt.sign(user, process.env.JWT_SECRET as string, {expiresIn: '1h'});
+};
 
 const authOptions = {
     providers: [
         CredentialsProvider({
             name: 'Credentials',
             credentials: {
-                username: { label: 'Username', type: 'text' },
-                password: { label: 'Password', type: 'password' },
+                username: {label: 'Username', type: 'text'},
+                password: {label: 'Password', type: 'password'},
             },
             async authorize(credentials) {
                 if (!credentials) return null;
-                const { db } = await connectToDatabase();
 
-                const user = await db.collection('users').findOne({ username: credentials.username as string });
-                if (user && await bcrypt.compare(credentials.password as string, user.password)) {
-                    return { id: user._id.toString(), username: user.username, email: user.email };
+                const user = await prisma.user.findUnique({
+                    where: {username: credentials.username},
+                });
+
+                if (user && await bcrypt.compare(credentials.password, user.password)) {
+                    const tokenPayload: UserPayload = {
+                        id: user.id,
+                        username: user.username,
+                        email: user.email,
+                        role: user.role,
+                    };
+
+                    return {
+                        ...tokenPayload,
+                        accessToken: generateToken(tokenPayload),
+                    };
                 }
+
                 return null;
             },
         }),
     ],
-    adapter: MongoDBAdapter(clientPromise),
+    adapter: PrismaAdapter(prisma),
     session: {
         strategy: 'jwt',
     },
     jwt: {
-        secret: process.env.NEXTAUTH_SECRET,
+        secret: process.env.JWT_SECRET as string,
     },
     callbacks: {
-        async jwt({ token, user }) {
+        async jwt({token, user}) {
             if (user) {
                 token.id = user.id;
                 token.username = user.username;
                 token.email = user.email;
+                token.role = user.role;
+                token.accessToken = user.accessToken;
             }
             return token;
         },
-        async session({ session, token }) {
+        async session({session, token}) {
             session.user = {
-                ...session.user,
                 id: token.id,
                 username: token.username,
                 email: token.email,
+                role: token.role,
             };
+            session.accessToken = token.accessToken;
             return session;
         },
     },
@@ -58,10 +85,10 @@ const authOptions = {
         verifyRequest: '/auth/verify-request',
         newUser: undefined,
     },
-    secret: process.env.NEXTAUTH_SECRET,
+    secret: process.env.NEXTAUTH_SECRET as string,
 };
 
 // @ts-ignore
 const handler = NextAuth(authOptions);
 
-export { handler as GET, handler as POST };
+export {handler as GET, handler as POST};

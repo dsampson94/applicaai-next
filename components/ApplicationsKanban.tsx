@@ -1,7 +1,7 @@
-import {useEffect, useState} from 'react';
+// src/components/JobApplicationsKanban.tsx
+import React, {useEffect, useState} from 'react';
 import {useSession} from 'next-auth/react';
 import {toast} from 'react-toastify';
-import axios from 'axios';
 import {DndProvider, useDrag, useDrop} from 'react-dnd';
 import {HTML5Backend} from 'react-dnd-html5-backend';
 import InsightsModal from './InsightsModal';
@@ -10,82 +10,63 @@ import StarIcon from '@mui/icons-material/Star';
 import MagicIcon from '@mui/icons-material/AutoAwesome';
 import EyeIcon from '@mui/icons-material/Visibility';
 import DeleteIcon from '@mui/icons-material/Delete';
-
-interface JobApplication {
-    _id: string;
-    role: string;
-    company: string;
-    status: string;
-    tags?: string[];
-    isFavorite?: boolean;
-}
+import {Application} from '../prisma/generated/prisma';
+import useJobApplicationsStore from '../lib/api/client/store/jobApplicationsStore';
 
 interface JobApplicationsKanbanProps {
-    onOpenModal: (jobApplication: any | null) => void;
+    onOpenModal: (jobApplication: Application | null) => void;
 }
 
 const JobApplicationsKanban: React.FC<JobApplicationsKanbanProps> = ({onOpenModal}) => {
-    const [selectedJobApplication, setSelectedJobApplication] = useState<any | null>(null);
+    const [selectedJobApplication, setSelectedJobApplication] = useState<Application | null>(null);
     const [isInsightsModalOpen, setIsInsightsModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-    const [jobToDelete, setJobToDelete] = useState<JobApplication | null>(null);
-    const [jobApplications, setJobApplications] = useState<JobApplication[]>([]);
+    const [jobToDelete, setJobToDelete] = useState<Application | null>(null);
     const {data: session} = useSession();
+    const {
+        applications,
+        loading,
+        error,
+        fetchApplications,
+        deleteApplication,
+        updateApplication
+    } = useJobApplicationsStore();
 
     useEffect(() => {
-        if (session) {
-            axios
-                .get('/api/applications')
-                .then((response) => {
-                    console.log('Fetched applications:', response.data);
-                    setJobApplications(response.data);
-                })
-                .catch((error) => {
-                    console.error('Error fetching applications:', error);
-                    toast.error(`Failed to fetch job applications: ${error.message}`);
-                });
-        }
-    }, [session]);
+        if (session) fetchApplications(session.accessToken);
+    }, [session, fetchApplications]);
 
-    const handleRemove = () => {
+    const handleRemove = async () => {
         if (jobToDelete) {
-            axios
-                .delete(`/api/applications/${jobToDelete._id}`)
-                .then(() => {
-                    toast.success('Job application deleted successfully');
-                    setJobApplications((prev) => prev.filter((job) => job._id !== jobToDelete._id));
-                })
-                .catch((error) => {
-                    toast.error(`Failed to delete job application: ${error.message}`);
-                });
-            setIsDeleteModalOpen(false);
-            setJobToDelete(null);
+            try {
+                if (session) await deleteApplication(jobToDelete.id, session.accessToken);
+                toast.success('Job application deleted successfully');
+                setIsDeleteModalOpen(false);
+                setJobToDelete(null);
+            } catch (error) {
+                toast.error(`Failed to delete job application: ${error}`);
+            }
         }
     };
 
-    const handleOpenInsightsModal = (jobApplication: JobApplication | null) => {
+    const handleOpenInsightsModal = (jobApplication: Application | null) => {
         setSelectedJobApplication(jobApplication);
         setIsInsightsModalOpen(true);
     };
 
-    const handleOpenDeleteModal = (jobApplication: JobApplication) => {
+    const handleOpenDeleteModal = (jobApplication: Application) => {
         setJobToDelete(jobApplication);
         setIsDeleteModalOpen(true);
     };
 
-    const handleDrop = (item: JobApplication, status: string) => {
-        if (item.status !== status) {
-            axios
-                .put(`/api/applications/${item._id}`, {status})
-                .then(() => {
-                    setJobApplications((prev) =>
-                        prev.map((job) => (job._id === item._id ? {...job, status} : job))
-                    );
-                    toast.success('Job application updated successfully');
-                })
-                .catch((error) => {
-                    toast.error(`Failed to update job application: ${error.message}`);
-                });
+    const handleDrop = async (item: Application, status: string) => {
+        if (session) {
+            try {
+                await updateApplication(item.id, {status}, session.accessToken);
+                toast.success('Job application status updated successfully');
+            } catch (error) {
+                toast.error(`Failed to update job application status: ${error}`);
+            }
         }
     };
 
@@ -107,11 +88,11 @@ const JobApplicationsKanban: React.FC<JobApplicationsKanbanProps> = ({onOpenModa
                                 key={column.status}
                                 status={column.status}
                                 title={column.title}
-                                applications={jobApplications.filter((job) => job.status === column.status)}
-                                onDrop={handleDrop}
+                                applications={applications?.filter((job) => job.status === column.status)}
                                 onOpenModal={onOpenModal}
                                 handleOpenInsightsModal={handleOpenInsightsModal}
                                 handleOpenDeleteModal={handleOpenDeleteModal}
+                                onDrop={handleDrop} // Pass the handleDrop function
                             />
                         ))}
                     </div>
@@ -133,18 +114,28 @@ const JobApplicationsKanban: React.FC<JobApplicationsKanbanProps> = ({onOpenModa
     );
 };
 
-const KanbanColumn: React.FC<{
+interface KanbanColumnProps {
     status: string;
     title: string;
-    applications: JobApplication[];
-    onDrop: (item: JobApplication, status: string) => void;
-    onOpenModal: (jobApplication: JobApplication | null) => void;
-    handleOpenInsightsModal: (jobApplication: JobApplication | null) => void;
-    handleOpenDeleteModal: (jobApplication: JobApplication) => void;
-}> = ({status, title, applications, onDrop, onOpenModal, handleOpenInsightsModal, handleOpenDeleteModal}) => {
+    applications: Application[];
+    onOpenModal: (jobApplication: Application | null) => void;
+    handleOpenInsightsModal: (jobApplication: Application | null) => void;
+    handleOpenDeleteModal: (jobApplication: Application) => void;
+    onDrop: (item: Application, status: string) => void;
+}
+
+const KanbanColumn: React.FC<KanbanColumnProps> = ({
+                                                       status,
+                                                       title,
+                                                       applications,
+                                                       onOpenModal,
+                                                       handleOpenInsightsModal,
+                                                       handleOpenDeleteModal,
+                                                       onDrop
+                                                   }) => {
     const [, drop] = useDrop({
         accept: 'application',
-        drop: (item: JobApplication) => onDrop(item, status),
+        drop: (item: Application) => onDrop(item, status),
     });
 
     return (
@@ -159,7 +150,7 @@ const KanbanColumn: React.FC<{
             <div className="p-4 space-y-4">
                 {applications.map((application) => (
                     <KanbanItem
-                        key={application._id}
+                        key={application.id}
                         application={application}
                         onOpenModal={onOpenModal}
                         handleOpenInsightsModal={handleOpenInsightsModal}
@@ -171,12 +162,19 @@ const KanbanColumn: React.FC<{
     );
 };
 
-const KanbanItem: React.FC<{
-    application: JobApplication;
-    onOpenModal: (jobApplication: JobApplication | null) => void;
-    handleOpenInsightsModal: (jobApplication: JobApplication | null) => void;
-    handleOpenDeleteModal: (jobApplication: JobApplication) => void;
-}> = ({application, onOpenModal, handleOpenInsightsModal, handleOpenDeleteModal}) => {
+interface KanbanItemProps {
+    application: Application;
+    onOpenModal: (jobApplication: Application | null) => void;
+    handleOpenInsightsModal: (jobApplication: Application | null) => void;
+    handleOpenDeleteModal: (jobApplication: Application) => void;
+}
+
+const KanbanItem: React.FC<KanbanItemProps> = ({
+                                                   application,
+                                                   onOpenModal,
+                                                   handleOpenInsightsModal,
+                                                   handleOpenDeleteModal
+                                               }) => {
     const [{isDragging}, drag] = useDrag({
         type: 'application',
         item: {...application},
@@ -227,8 +225,8 @@ const KanbanItem: React.FC<{
             <div className="mt-2 flex flex-wrap gap-2">
                 {application.tags?.map((tag) => (
                     <span key={tag} className="bg-blue-100 text-blue-800 rounded-full px-3 py-1">
-            {tag}
-          </span>
+                        {tag}
+                    </span>
                 ))}
             </div>
         </div>
