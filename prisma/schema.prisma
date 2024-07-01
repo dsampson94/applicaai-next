@@ -16,36 +16,6 @@ model User {
   role         UserRole    @default(USER)
   profiles     UserProfile[]
   applications Application[]
-  accounts     Account[]
-  sessions     Session[]
-}
-
-model Account {
-  id                String  @id @default(auto()) @map("_id") @db.ObjectId
-  userId            String  @db.ObjectId
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String?
-  access_token      String?
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String?
-  session_state     String?
-
-  user User @relation(fields: [userId], references: [id])
-
-  @@unique([provider, providerAccountId])
-}
-
-model Session {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  sessionToken String   @unique
-  userId       String   @db.ObjectId
-  expires      DateTime
-
-  user User @relation(fields: [userId], references: [id])
 }
 
 model Application {
@@ -82,12 +52,13 @@ model UserProfile {
 }
 
 model CV {
-  id       String @id @default(auto()) @map("_id") @db.ObjectId
-  name     String
-  url      String
-  profileId String @db.ObjectId
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  url       String
+  profileId String   @db.ObjectId
+  chunks    String[]
 
-  profile  UserProfile @relation(fields: [profileId], references: [id])
+  profile   UserProfile @relation(fields: [profileId], references: [id])
 }
 
 enum UserRole {

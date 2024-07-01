@@ -32,7 +32,7 @@ const Profile: React.FC = () => {
                     }));
                     toast.success('CV uploaded successfully');
                 } else {
-                    toast.error('Failed to upload CV');
+                    toast.error('Failed to uploadCV CV');
                 }
             });
         }

@@ -1,52 +1,54 @@
-import { useState } from 'react';
-import { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
+import { toast } from 'react-toastify';
 import InsightsModal from './InsightsModal';
 import DeleteConfirmationModal from './DeleteConfirmationModal';
-import { toast } from 'react-toastify';
-import axios from 'axios';
+import useJobApplicationsStore from '../lib/api/client/store/jobApplicationsStore';
+import {Application} from "../prisma/generated/prisma";
 
 interface JobApplicationsTableProps {
-    onOpenModal: (jobApplication: any | null) => void;
+    onOpenModal: (jobApplication: Application | null) => void;
 }
 
 const JobApplicationsTable: React.FC<JobApplicationsTableProps> = ({ onOpenModal }) => {
-    const [selectedJobApplication, setSelectedJobApplication] = useState<any | null>(null);
+    const [selectedJobApplication, setSelectedJobApplication] = useState<Application | null>(null);
     const [isInsightsModalOpen, setIsInsightsModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-    const [jobToDelete, setJobToDelete] = useState<any | null>(null);
-    const [jobApplications, setJobApplications] = useState<any[]>([]);
+    const [jobToDelete, setJobToDelete] = useState<Application | null>(null);
     const { data: session } = useSession();
+    const {
+        applications,
+        loading,
+        error,
+        fetchApplications,
+        deleteApplication,
+    } = useJobApplicationsStore();
 
     useEffect(() => {
         if (session) {
-            axios.get('/api/applications').then(response => {
-                setJobApplications(response.data);
-            });
+            fetchApplications(session.accessToken);
         }
-    }, [session]);
+    }, [session, fetchApplications]);
 
-    const handleRemove = () => {
-        if (jobToDelete) {
-            axios.delete(`/api/applications/${jobToDelete._id}`)
-                .then(() => {
-                    toast.success('Job application deleted successfully');
-                    setJobApplications(prev => prev.filter(job => job._id !== jobToDelete._id));
-                })
-                .catch(error => {
-                    toast.error(`Failed to delete job application: ${error.message}`);
-                });
-            setIsDeleteModalOpen(false);
-            setJobToDelete(null);
+    const handleRemove = async () => {
+        if (jobToDelete && session) {
+            try {
+                await deleteApplication(jobToDelete.id, session.accessToken);
+                toast.success('Job application deleted successfully');
+                setIsDeleteModalOpen(false);
+                setJobToDelete(null);
+            } catch (error) {
+                toast.error(`Failed to delete job application: ${error.message}`);
+            }
         }
     };
 
-    const handleOpenInsightsModal = (jobApplication: any | null) => {
+    const handleOpenInsightsModal = (jobApplication: Application | null) => {
         setSelectedJobApplication(jobApplication);
         setIsInsightsModalOpen(true);
     };
 
-    const handleOpenDeleteModal = (jobApplication: any) => {
+    const handleOpenDeleteModal = (jobApplication: Application) => {
         setJobToDelete(jobApplication);
         setIsDeleteModalOpen(true);
     };
@@ -68,8 +70,8 @@ const JobApplicationsTable: React.FC<JobApplicationsTableProps> = ({ onOpenModal
                         </tr>
                         </thead>
                         <tbody>
-                        {jobApplications.map((jobApplication) => (
-                            <tr key={jobApplication._id} className="hover:bg-gray-100">
+                        {applications.map((jobApplication) => (
+                            <tr key={jobApplication.id} className="hover:bg-gray-100">
                                 <td className="border px-4 py-2 max-w-xs truncate">{jobApplication.company}</td>
                                 <td className="border px-4 py-2 max-w-xs truncate">{jobApplication.role}</td>
                                 <td className="border px-4 py-2 max-w-xs truncate">{jobApplication.status}</td>

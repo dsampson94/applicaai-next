@@ -120,28 +120,6 @@ exports.Prisma.UserScalarFieldEnum = {
   role: 'role'
 };
 
-exports.Prisma.AccountScalarFieldEnum = {
-  id: 'id',
-  userId: 'userId',
-  type: 'type',
-  provider: 'provider',
-  providerAccountId: 'providerAccountId',
-  refresh_token: 'refresh_token',
-  access_token: 'access_token',
-  expires_at: 'expires_at',
-  token_type: 'token_type',
-  scope: 'scope',
-  id_token: 'id_token',
-  session_state: 'session_state'
-};
-
-exports.Prisma.SessionScalarFieldEnum = {
-  id: 'id',
-  sessionToken: 'sessionToken',
-  userId: 'userId',
-  expires: 'expires'
-};
-
 exports.Prisma.ApplicationScalarFieldEnum = {
   id: 'id',
   role: 'role',
@@ -174,7 +152,8 @@ exports.Prisma.CVScalarFieldEnum = {
   id: 'id',
   name: 'name',
   url: 'url',
-  profileId: 'profileId'
+  profileId: 'profileId',
+  chunks: 'chunks'
 };
 
 exports.Prisma.SortOrder = {
@@ -193,8 +172,6 @@ exports.UserRole = exports.$Enums.UserRole = {
 
 exports.Prisma.ModelName = {
   User: 'User',
-  Account: 'Account',
-  Session: 'Session',
   Application: 'Application',
   UserProfile: 'UserProfile',
   CV: 'CV'
