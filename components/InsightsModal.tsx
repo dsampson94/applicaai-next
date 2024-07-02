@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import axios from "axios";
-import {IApplication} from "../lib/models/Application";
+import {Application} from "../prisma/generated/prisma";
 
 const tabs = [
     { label: 'Mock Interview', value: 'mockInterview' },
@@ -22,7 +22,7 @@ const tabs = [
 ];
 
 interface InsightsModalProps {
-    application: IApplication | null;
+    application: Application | null;
     onClose: () => void;
 }
 
@@ -64,7 +64,7 @@ const InsightsModal: React.FC<InsightsModalProps> = ({ application, onClose }) =
         };
 
         try {
-            await axios.put(`/api/applications/${application._id}`, updates);
+            await axios.put(`/api/applications/${application.id}`, updates);
             toast.success('Response removed successfully');
             setResponses(updatedResponses); // Update local state
         } catch (error) {
@@ -85,7 +85,7 @@ const InsightsModal: React.FC<InsightsModalProps> = ({ application, onClose }) =
         };
 
         try {
-            await axios.put(`/api/applications/${application._id}`, updates);
+            await axios.put(`/api/applications/${application.id}`, updates);
             toast.success('Response saved successfully');
             setResponses(updatedResponses); // Update local state
             setInsights(null); // Clear the new response
