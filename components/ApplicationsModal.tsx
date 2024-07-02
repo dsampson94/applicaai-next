@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { IApplication } from '../lib/models/Application';
+import { Application } from '../prisma/generated/prisma';
 
 interface JobApplicationModalProps {
-    application?: IApplication | null;
+    application?: Application | null;
     onClose: () => void;
-    onSave: (application: IApplication) => void;
+    onSave: (application: Application) => void;
 }
 
 const statusOptions = [
@@ -68,7 +68,7 @@ const JobApplicationModal: React.FC<JobApplicationModalProps> = ({ application, 
         const updates = { role, company, status, jobSpec, jobSpecName, cvName, tags };
         try {
             if (application) {
-                const response = await axios.put(`/api/applications/${application._id}`, updates);
+                const response = await axios.put(`/api/applications/${application.id}`, updates);
                 onSave(response.data);
                 toast.success('Job application updated successfully');
             } else {
