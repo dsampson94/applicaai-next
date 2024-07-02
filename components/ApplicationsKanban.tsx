@@ -140,6 +140,7 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({
 
     return (
         <div
+            // @ts-ignore
             ref={drop}
             className="bg-gray-200 rounded-lg flex-1 min-w-[250px] max-h-[80vh] overflow-auto"
         >
@@ -188,6 +189,7 @@ const KanbanItem: React.FC<KanbanItemProps> = ({
 
     return (
         <div
+            // @ts-ignore
             ref={drag}
             style={style}
             className="bg-white rounded-lg p-4 mb-4 shadow-md hover:shadow-lg transition-shadow duration-300"
