@@ -56,8 +56,8 @@ const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
             <Toolbar
                 sx={{
                     display: 'flex',
-                    justifyContent: isOpen ? 'space-between' : 'center',
                     alignItems: 'center',
+                    justifyContent: isOpen ? 'space-between' : 'center',
                     padding: isOpen ? '0 16px' : '0 8px',
                 }}
             >
