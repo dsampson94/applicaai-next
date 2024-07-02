@@ -78,6 +78,7 @@ const JobApplicationsTable: React.FC<JobApplicationsTableProps> = ({ onOpenModal
                                 <td className="border px-4 py-2 max-w-[150px] truncate">
                                     {jobApplication.jobSpecName ? (
                                         <a
+                                            // @ts-ignore
                                             href={jobApplication.jobSpec}
                                             target="_blank"
                                             rel="noopener noreferrer"
@@ -92,7 +93,7 @@ const JobApplicationsTable: React.FC<JobApplicationsTableProps> = ({ onOpenModal
                                 <td className="border px-4 py-2 max-w-[150px] truncate">
                                     {jobApplication.cvName ? (
                                         <a
-                                            href={jobApplication.cvUrl || '#'}
+                                            href={'#'}
                                             download={jobApplication.cvName}
                                             className="text-blue-500 underline"
                                         >
