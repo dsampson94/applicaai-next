@@ -1,75 +1,67 @@
-// src/lib/api/client/store/jobApplicationsStore.ts
 import { create } from 'zustand';
 import axios from 'axios';
 import { Application } from '../../../../prisma/generated/prisma';
 import { ENDPOINT } from '../../../constants';
+import {getAuthHeaders} from "../../../auth";
 
 interface JobApplicationsState {
     applications: Application[];
     loading: boolean;
     error: string | null;
-    fetchApplications: (token: string) => Promise<void>;
-    addApplication: (application: Omit<Application, 'id'>, token: string) => Promise<void>;
-    updateApplication: (id: string, updates: Partial<Application>, token: string) => Promise<void>;
-    deleteApplication: (id: string, token: string) => Promise<void>;
+    fetchApplications: () => Promise<void>;
+    addApplication: (application: Omit<Application, 'id'>) => Promise<void>;
+    updateApplication: (id: string, updates: Partial<Application>) => Promise<void>;
+    deleteApplication: (id: string) => Promise<void>;
 }
 
 const useJobApplicationsStore = create<JobApplicationsState>((set) => ({
     applications: [],
     loading: false,
     error: null,
-    fetchApplications: async (token: string) => {
+    fetchApplications: async () => {
         set({ loading: true, error: null });
         try {
-            const response = await axios.get<Application[]>(`/api/${ENDPOINT.APPLICATIONS}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+            const headers = getAuthHeaders();
+            const response = await axios.get<Application[]>
+            (`/api/${ENDPOINT.APPLICATIONS}`, { headers });
             set({ applications: response.data, loading: false });
-        } catch (error) {
+        } catch (error: any) {
             set({ error: error.message, loading: false });
         }
     },
-    addApplication: async (application: Omit<Application, 'id'>, token: string) => {
+    addApplication: async (application: Omit<Application, 'id'>) => {
         set({ loading: true, error: null });
         try {
-            const response = await axios.post<Application>(`/api/${ENDPOINT.APPLICATIONS}`, application, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+            const headers = getAuthHeaders();
+            const response = await axios.post<Application>
+            (`/api/${ENDPOINT.APPLICATIONS}`, application, { headers });
             set((state) => ({
                 applications: [...state.applications, response.data],
                 loading: false,
             }));
-        } catch (error) {
+        } catch (error: any) {
             set({ error: error.message, loading: false });
         }
     },
-    updateApplication: async (id: string, updates: Partial<Application>, token: string) => {
+    updateApplication: async (id: string, updates: Partial<Application>) => {
         set({ loading: true, error: null });
         try {
-            const response = await axios.put<Application[]>(`/api/${ENDPOINT.APPLICATIONS}/${id}`, updates, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+            const headers = getAuthHeaders();
+            const response = await axios.put<Application[]>
+            (`/api/${ENDPOINT.APPLICATIONS}/${id}`, updates, { headers });
             set({ applications: response.data, loading: false });
-        } catch (error) {
+        } catch (error: any) {
             set({ error: error.message, loading: false });
         }
     },
-    deleteApplication: async (id: string, token: string) => {
+    deleteApplication: async (id: string) => {
         set({ loading: true, error: null });
         try {
-            const response = await axios.delete<Application[]>(`/api/${ENDPOINT.APPLICATIONS}/${id}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+            const headers = getAuthHeaders();
+            const response = await axios.delete<Application[]>
+            (`/api/${ENDPOINT.APPLICATIONS}/${id}`, { headers });
             set({ applications: response.data, loading: false });
-        } catch (error) {
+        } catch (error: any) {
             set({ error: error.message, loading: false });
         }
     },

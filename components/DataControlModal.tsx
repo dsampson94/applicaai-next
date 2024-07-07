@@ -1,25 +1,20 @@
-import React, { useState } from 'react';
-import { toast } from 'react-toastify';
-import { useSession } from 'next-auth/react';
+import React, {useState} from 'react';
+import {toast} from 'react-toastify';
 import useJobApplicationsStore from '../lib/api/client/store/jobApplicationsStore';
+import {getUserIdFromToken} from "../lib/auth";
 
 interface DataControlModalProps {
     onClose: () => void;
 }
 
-const DataControlModal: React.FC<DataControlModalProps> = ({ onClose }) => {
+const DataControlModal: React.FC<DataControlModalProps> = ({onClose}) => {
     const [isAdding, setIsAdding] = useState(false);
-    const { data: session } = useSession();
-    const { addApplication } = useJobApplicationsStore();
+    const {addApplication} = useJobApplicationsStore();
 
     const handleAddMockData = async () => {
-        if (!session) {
-            toast.error('You need to be logged in to add a job application');
-            return;
-        }
-
         setIsAdding(true);
         try {
+            const userId = getUserIdFromToken();
             const newApplication = {
                 company: 'Test Company',
                 role: 'Test Role',
@@ -29,7 +24,7 @@ const DataControlModal: React.FC<DataControlModalProps> = ({ onClose }) => {
                 cvName: 'Test CV Name',
                 isFavorite: false,
                 tags: ['Test Tag'],
-                userId: session.user.id,
+                userId: userId,
                 createdAt: new Date(),
                 updatedAt: new Date(),
                 appliedAt: new Date(),
@@ -41,7 +36,7 @@ const DataControlModal: React.FC<DataControlModalProps> = ({ onClose }) => {
                 tipsResponses: [],
             };
 
-            await addApplication(newApplication, session.accessToken);
+            await addApplication(newApplication);
             toast.success('Successfully added 1 mock job application');
         } catch (error: any) {
             toast.error(`Failed to add mock job application: ${error.message}`);

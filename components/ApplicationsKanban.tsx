@@ -1,6 +1,4 @@
-// src/components/JobApplicationsKanban.tsx
 import React, { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
 import { toast } from 'react-toastify';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -22,7 +20,6 @@ const JobApplicationsKanban: React.FC<JobApplicationsKanbanProps> = ({ onOpenMod
     const [isInsightsModalOpen, setIsInsightsModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [jobToDelete, setJobToDelete] = useState<Application | null>(null);
-    const { data: session } = useSession();
     const {
         applications = [],
         loading,
@@ -33,13 +30,13 @@ const JobApplicationsKanban: React.FC<JobApplicationsKanbanProps> = ({ onOpenMod
     } = useJobApplicationsStore();
 
     useEffect(() => {
-        if (session) fetchApplications(session.accessToken);
-    }, [session, fetchApplications]);
+        fetchApplications();
+    }, [fetchApplications]);
 
     const handleRemove = async () => {
         if (jobToDelete) {
             try {
-                if (session) await deleteApplication(jobToDelete.id, session.accessToken);
+                await deleteApplication(jobToDelete.id);
                 toast.success('Job application deleted successfully');
                 setIsDeleteModalOpen(false);
                 setJobToDelete(null);
@@ -60,13 +57,11 @@ const JobApplicationsKanban: React.FC<JobApplicationsKanbanProps> = ({ onOpenMod
     };
 
     const handleDrop = async (item: Application, status: string) => {
-        if (session) {
-            try {
-                await updateApplication(item.id, { status }, session.accessToken);
-                toast.success('Job application status updated successfully');
-            } catch (error) {
-                toast.error(`Failed to update job application status: ${error}`);
-            }
+        try {
+            await updateApplication(item.id, { status });
+            toast.success('Job application status updated successfully');
+        } catch (error) {
+            toast.error(`Failed to update job application status: ${error}`);
         }
     };
 

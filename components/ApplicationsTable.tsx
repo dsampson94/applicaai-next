@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
 import { toast } from 'react-toastify';
 import InsightsModal from './InsightsModal';
 import DeleteConfirmationModal from './DeleteConfirmationModal';
 import useJobApplicationsStore from '../lib/api/client/store/jobApplicationsStore';
-import {Application} from "../prisma/generated/prisma";
+import { Application } from '../prisma/generated/prisma';
 
 interface JobApplicationsTableProps {
     onOpenModal: (jobApplication: Application | null) => void;
@@ -15,7 +14,6 @@ const JobApplicationsTable: React.FC<JobApplicationsTableProps> = ({ onOpenModal
     const [isInsightsModalOpen, setIsInsightsModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [jobToDelete, setJobToDelete] = useState<Application | null>(null);
-    const { data: session } = useSession();
     const {
         applications,
         loading,
@@ -25,19 +23,17 @@ const JobApplicationsTable: React.FC<JobApplicationsTableProps> = ({ onOpenModal
     } = useJobApplicationsStore();
 
     useEffect(() => {
-        if (session) {
-            fetchApplications(session.accessToken);
-        }
-    }, [session, fetchApplications]);
+        fetchApplications();
+    }, [fetchApplications]);
 
     const handleRemove = async () => {
-        if (jobToDelete && session) {
+        if (jobToDelete) {
             try {
-                await deleteApplication(jobToDelete.id, session.accessToken);
+                await deleteApplication(jobToDelete.id);
                 toast.success('Job application deleted successfully');
                 setIsDeleteModalOpen(false);
                 setJobToDelete(null);
-            } catch (error) {
+            } catch (error: any) {
                 toast.error(`Failed to delete job application: ${error.message}`);
             }
         }
@@ -78,8 +74,7 @@ const JobApplicationsTable: React.FC<JobApplicationsTableProps> = ({ onOpenModal
                                 <td className="border px-4 py-2 max-w-[150px] truncate">
                                     {jobApplication.jobSpecName ? (
                                         <a
-                                            // @ts-ignore
-                                            href={jobApplication.jobSpec}
+                                            // href={jobApplication.jobSpec}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             className="text-blue-500 underline"

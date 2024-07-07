@@ -1,18 +1,25 @@
 'use client';
 
-import React, {MouseEvent, useState} from 'react';
-import {signOut, useSession} from 'next-auth/react';
+import React, {MouseEvent, useEffect, useState} from 'react';
+import {useRouter} from 'next/navigation';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Avatar from '@mui/material/Avatar';
+import {getUserFromToken} from "../lib/auth";
 
 const Header = () => {
-    const {data: session} = useSession();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const [user, setUser] = useState<null | { id: string; email: string; username: string }>(null);
     const open = Boolean(anchorEl);
+    const router = useRouter();
+
+    useEffect(() => {
+        const user = getUserFromToken();
+        setUser(user);
+    }, []);
 
     const handleMenuClick = (event: MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
@@ -23,7 +30,8 @@ const Header = () => {
     };
 
     const handleSignOut = () => {
-        signOut({callbackUrl: '/'});
+        localStorage.removeItem('token');
+        router.push('/');
     };
 
     return (
@@ -31,10 +39,10 @@ const Header = () => {
                 sx={{zIndex: (theme) => theme.zIndex.drawer + 1, backgroundColor: 'white', color: 'black'}}>
             <Toolbar sx={{display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap'}}>
                 <div/>
-                {session && (
+                {user && (
                     <>
                         <IconButton onClick={handleMenuClick} sx={{p: 0}}>
-                            <Avatar alt={session.user?.username || ''} src={''}/>
+                            <Avatar alt={user.username} src={''}/>
                         </IconButton>
                         <Menu
                             id="menu-appbar"

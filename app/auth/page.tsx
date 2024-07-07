@@ -1,137 +1,114 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { signIn } from 'next-auth/react';
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { useState, FormEvent } from 'react';
 import axios from 'axios';
-import Image from 'next/image';
-import { Box, Button, Container, Tab, Tabs, TextField, Typography } from '@mui/material';
-import WarningIcon from '@mui/icons-material/Warning';
-// import logo from '../../images/YCPdraft-.png';
+import { useRouter } from 'next/navigation';
 import AuthLayout from './layout';
+import { Container, Box, TextField, Button, Typography, Grid, Link } from '@mui/material';
+import Image from 'next/image';
+import aplicaLogo from '../../public/applica-logo.png';
 
-const Auth = () => {
+export default function Auth() {
+    const [isLogin, setIsLogin] = useState(true);
+    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [message, setMessage] = useState('');
     const router = useRouter();
-    const [tab, setTab] = useState<number>(0);
-    const [username, setUsername] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
-    const [email, setEmail] = useState<string>('');
-    const [error, setError] = useState<string>('');
 
-    const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
-        setTab(newValue);
-        setError('');
-        setUsername('');
-        setPassword('');
-        setEmail('');
-    };
-
-    const handleSubmit = async (event: FormEvent) => {
-        event.preventDefault();
-        setError('');
-
-        if (tab === 0) {
-            const result = await signIn('credentials', {
-                redirect: false,
-                username,
-                password,
-            });
-
-            if (result?.error) setError(result.error);
-            else router.push('/applications');
-        } else {
-            try {
-                await axios.post('/api/auth/signup', { username, password, email });
-                setTab(0);
-            } catch (error: any) {
-                setError(error.response?.data?.error || 'An error occurred. Please try again.');
+    const handleSubmit = async (e: FormEvent) => {
+        e.preventDefault();
+        setMessage('');
+        try {
+            const endpoint = isLogin ? '/api/auth/login' : '/api/auth/register';
+            const data = isLogin ? { username, password } : { username, email, password };
+            const response = await axios.post(endpoint, data);
+            if (isLogin) {
+                localStorage.setItem('token', response.data.token);
+                router.push('/applications');
+            } else {
+                setMessage(response.data.message);
             }
+        } catch (error: any) {
+            setMessage(error.response.data.message);
         }
     };
 
     return (
         <AuthLayout>
-            <Container sx={{ backgroundColor: 'white', borderRadius: '8px', boxShadow: 4 }} component="main"
-                       maxWidth="xs">
-                <Box sx={{ marginTop: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <Box sx={{
+            <Container component="main" maxWidth="xs">
+                <Box
+                    sx={{
+                        marginTop: 8,
                         display: 'flex',
+                        flexDirection: 'column',
                         alignItems: 'center',
-                        padding: 1,
-                        borderRadius: 1,
-                        mb: 2
-                    }}>
-                        <WarningIcon sx={{ color: '#ff9800', marginRight: 1 }} />
-                        <Typography
-                            component="div"
-                            sx={{ fontWeight: 'bold', color: 'black', fontSize: '12px', textAlign: 'center' }}
-                        >
-                            ADMIN GUI UNDER CONSTRUCTION
-                        </Typography>
-                        <WarningIcon sx={{ color: '#ff9800', marginLeft: 1 }} />
-                    </Box>
-                    {/*<Image src={logo} alt="Logo" width={80} height={80} style={{ marginTop: '16px' }} priority />*/}
+                    }}
+                >
+                    <Image src={aplicaLogo} alt="Applica Logo" width={80} height={80} />
                     <Typography component="h1" variant="h5">
-                        {tab === 0 ? 'Sign In' : 'Sign Up'}
+                        Applica
                     </Typography>
-                    <Tabs value={tab} onChange={handleTabChange} centered>
-                        <Tab label="Sign In" />
-                        <Tab label="Sign Up" />
-                    </Tabs>
+                    <Typography component="h1" variant="h5">
+                        {isLogin ? 'Login' : 'Register'}
+                    </Typography>
                     <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                         <TextField
-                            margin="dense"
-                            size="small"
+                            margin="normal"
                             required
                             fullWidth
                             id="username"
                             label="Username"
                             name="username"
-                            autoComplete={tab === 0 ? 'username' : 'new-username'}
+                            autoComplete="username"
                             autoFocus
                             value={username}
-                            onChange={(e: ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
+                            onChange={(e) => setUsername(e.target.value)}
                         />
-                        {tab === 1 && (
+                        {!isLogin && (
                             <TextField
-                                margin="dense"
-                                size="small"
+                                margin="normal"
                                 required
                                 fullWidth
                                 id="email"
                                 label="Email Address"
                                 name="email"
-                                autoComplete="new-email"
+                                autoComplete="email"
                                 value={email}
-                                onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+                                onChange={(e) => setEmail(e.target.value)}
                             />
                         )}
                         <TextField
-                            margin="dense"
-                            size="small"
+                            margin="normal"
                             required
                             fullWidth
                             name="password"
                             label="Password"
                             type="password"
                             id="password"
-                            autoComplete={tab === 0 ? 'current-password' : 'new-password'}
+                            autoComplete="current-password"
                             value={password}
-                            onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+                            onChange={(e) => setPassword(e.target.value)}
                         />
-                        {error && (
-                            <Typography color="error" sx={{ mt: 2 }}>
-                                {error}
-                            </Typography>
-                        )}
-                        <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-                            {tab === 0 ? 'Sign In' : 'Sign Up'}
+                        {message && <Typography color="error">{message}</Typography>}
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            sx={{ mt: 3, mb: 2 }}
+                        >
+                            {isLogin ? 'Login' : 'Register'}
                         </Button>
+                        <Grid container>
+                            <Grid item>
+                                <Link href="#" variant="body2" onClick={() => setIsLogin(!isLogin)}>
+                                    {isLogin ? 'Need an account? Register' : 'Already have an account? Login'}
+                                </Link>
+                            </Grid>
+                        </Grid>
                     </Box>
                 </Box>
             </Container>
         </AuthLayout>
     );
-};
-
-export default Auth;
+}

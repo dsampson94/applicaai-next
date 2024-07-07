@@ -32,11 +32,11 @@ exports.$Enums = {}
 
 /**
  * Prisma Client JS version: 5.16.1
- * Query Engine version: 12e25d8d06f6ea5a0252864dd9a03b1bb51f3022
+ * Query Engine version: 34ace0eb2704183d2c05b60b52fba5c43c13f303
  */
 Prisma.prismaVersion = {
   client: "5.16.1",
-  engine: "12e25d8d06f6ea5a0252864dd9a03b1bb51f3022"
+  engine: "34ace0eb2704183d2c05b60b52fba5c43c13f303"
 }
 
 Prisma.PrismaClientKnownRequestError = PrismaClientKnownRequestError;
@@ -155,7 +155,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\daves\\IdeaProjects\\applicaai-next\\prisma\\generated\\prisma",
+      "value": "C:\\Users\\daves\\WebstormProjects\\applicaai-next\\prisma\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -169,14 +169,16 @@ const config = {
       }
     ],
     "previewFeatures": [],
+    "sourceFilePath": "C:\\Users\\daves\\WebstormProjects\\applicaai-next\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null
+    "rootEnvPath": null,
+    "schemaEnvPath": "../../../.env"
   },
   "relativePath": "../..",
   "clientVersion": "5.16.1",
-  "engineVersion": "12e25d8d06f6ea5a0252864dd9a03b1bb51f3022",
+  "engineVersion": "34ace0eb2704183d2c05b60b52fba5c43c13f303",
   "datasourceNames": [
     "db"
   ],
