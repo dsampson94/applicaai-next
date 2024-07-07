@@ -1,11 +1,12 @@
 'use client';
 
-import React, {ChangeEvent, useEffect, useState} from 'react';
-import {toast} from 'react-toastify';
+import React, { ChangeEvent, useEffect, useState, useCallback } from 'react';
+import { toast } from 'react-toastify';
+import { useDropzone } from 'react-dropzone';
 import useUserStore from '../../lib/api/client/store/userStore';
 
 const Profile: React.FC = () => {
-    const {user, fetchUser, updateUser} = useUserStore();
+    const { user, fetchUser, updateUser } = useUserStore();
     const initialProfile = {
         username: user?.username || '',
         email: user?.email || '',
@@ -31,28 +32,27 @@ const Profile: React.FC = () => {
         }
     }, [user]);
 
-    const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
+    const onDrop = useCallback((acceptedFiles: File[]) => {
+        const file = acceptedFiles[0];
         if (file) {
             const reader = new FileReader();
-            reader.onloadend = () => {
+            reader.onloadend = async () => {
                 const base64String = reader.result as string;
+                // @ts-ignore
                 setNewCV({name: file.name, url: base64String});
+                setProfile((prevState) => ({
+                    ...prevState,
+                    userCVName: file.name,
+                    userCVUrl: base64String,
+                }));
+                await updateUser({...profile});
             };
             reader.readAsDataURL(file);
         }
-    };
+    }, []);
 
-    const handleAddCV = () => {
-        if (newCV) {
-            setProfile((prevState) => ({
-                ...prevState,
-                userCVName: newCV.name,
-                userCVUrl: newCV.url,
-            }));
-            setNewCV(null);
-        }
-    };
+    // @ts-ignore
+    const { getRootProps, getInputProps } = useDropzone({ onDrop, accept: 'application/pdf' });
 
     const handleRemoveCV = () => {
         setProfile((prevState) => ({
@@ -60,16 +60,17 @@ const Profile: React.FC = () => {
             userCVName: '',
             userCVUrl: '',
         }));
+        toast.info('CV removed');
     };
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-        const {name, value} = event.target;
-        setProfile((prevState) => ({...prevState, [name]: value}));
+        const { name, value } = event.target;
+        setProfile((prevState) => ({ ...prevState, [name]: value }));
     };
 
     const handleSubmit = async () => {
         try {
-            await updateUser({...profile});
+            await updateUser({ ...profile });
             toast.success('Profile updated successfully');
         } catch (error: any) {
             toast.error(`Failed to update profile: ${error.message}`);
@@ -79,8 +80,8 @@ const Profile: React.FC = () => {
     return (
         <div className="mb-8">
             <h1 className="text-4xl font-bold mb-4">My Profile</h1>
-            <div className="bg-white p-2 rounded w-full flex flex-1 flex-wrap overflow-hidden">
-                <div className="w-full lg:w-1/3 flex flex-col">
+            <div className="bg-white p-2 rounded w-full flex flex-1 flex-col overflow-hidden">
+                <div className="w-full flex flex-col mb-4">
                     <input
                         type="text"
                         name="username"
@@ -97,29 +98,22 @@ const Profile: React.FC = () => {
                         placeholder="Email"
                         className="mb-2 p-2 border border-gray-300 rounded w-full"
                     />
-                    <input
-                        type="file"
-                        onChange={handleFileUpload}
-                        className="mb-4 p-2 border border-gray-300 rounded w-full"
-                    />
+                    <div {...getRootProps({ className: 'dropzone' })} className="mb-4 p-2 border border-gray-300 rounded w-full text-center cursor-pointer">
+                        <input {...getInputProps()} />
+                        <p>Drag & drop a CV here, or click to select a file</p>
+                    </div>
                     <div className="flex justify-between items-center w-full">
                         <button
-                            onClick={handleAddCV}
-                            className="bg-blue-500 text-white px-4 py-2 rounded mb-4 w-1/2 mr-2 border-2 border-transparent hover:bg-blue-600 hover:border-blue-600 active:bg-transparent active:text-blue-500 active:border-blue-500"
-                        >
-                            Add CV
-                        </button>
-                        <button
                             onClick={handleSubmit}
-                            className="bg-blue-500 text-white px-4 py-2 rounded mb-4 w-1/2 ml-2 border-2 border-transparent hover:bg-blue-600 hover:border-blue-600 active:bg-transparent active:text-blue-500 active:border-blue-500"
+                            className="bg-blue-500 text-white px-4 py-2 rounded w-full ml-2 border-2 border-transparent hover:bg-blue-600 hover:border-blue-600 active:bg-transparent active:text-blue-500 active:border-blue-500"
                         >
                             Update Profile
                         </button>
                     </div>
                 </div>
-                <div className="w-full lg:w-2/3 pl-8 h-full overflow-y-auto">
+                <div className="w-full h-full overflow-y-auto">
                     {profile.userCVName && profile.userCVUrl && (
-                        <div className="mb-4 border p-2 rounded overflow-hidden">
+                        <div className="mb-4 border p-2 rounded overflow-hidden w-full">
                             <div className="flex justify-between items-center mb-2">
                                 <span className="text-blue-500">{profile.userCVName}</span>
                                 <button
@@ -129,7 +123,7 @@ const Profile: React.FC = () => {
                                     Remove
                                 </button>
                             </div>
-                            <div className="h-64 overflow-y-auto">
+                            <div className="h-96 overflow-y-auto">
                                 <iframe
                                     src={profile.userCVUrl}
                                     className="w-full h-full border border-gray-300"
