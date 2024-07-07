@@ -117,7 +117,9 @@ exports.Prisma.UserScalarFieldEnum = {
   username: 'username',
   email: 'email',
   password: 'password',
-  role: 'role'
+  role: 'role',
+  userCVName: 'userCVName',
+  userCVUrl: 'userCVUrl'
 };
 
 exports.Prisma.ApplicationScalarFieldEnum = {
@@ -132,7 +134,7 @@ exports.Prisma.ApplicationScalarFieldEnum = {
   interviewDate: 'interviewDate',
   offerDate: 'offerDate',
   unsuccessfulDate: 'unsuccessfulDate',
-  jobSpec: 'jobSpec',
+  jobSpecUrl: 'jobSpecUrl',
   jobSpecName: 'jobSpecName',
   cvName: 'cvName',
   tags: 'tags',
@@ -140,20 +142,6 @@ exports.Prisma.ApplicationScalarFieldEnum = {
   suitabilityResponses: 'suitabilityResponses',
   tipsResponses: 'tipsResponses',
   isFavorite: 'isFavorite'
-};
-
-exports.Prisma.UserProfileScalarFieldEnum = {
-  id: 'id',
-  userId: 'userId',
-  name: 'name'
-};
-
-exports.Prisma.CVScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  url: 'url',
-  profileId: 'profileId',
-  chunks: 'chunks'
 };
 
 exports.Prisma.SortOrder = {
@@ -172,9 +160,7 @@ exports.UserRole = exports.$Enums.UserRole = {
 
 exports.Prisma.ModelName = {
   User: 'User',
-  Application: 'Application',
-  UserProfile: 'UserProfile',
-  CV: 'CV'
+  Application: 'Application'
 };
 
 /**

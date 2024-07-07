@@ -25,14 +25,6 @@ export async function POST(req: NextRequest) {
                 username,
                 email,
                 password: hashedPassword,
-                profiles: {
-                    create: {
-                        name: username,
-                    },
-                },
-            },
-            include: {
-                profiles: true,
             },
         });
 

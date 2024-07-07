@@ -1,38 +1,45 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { getToken } from 'next-auth/jwt';
+import {NextRequest} from 'next/server';
 import prisma from '../../../lib/prisma';
+import {handleResponse, verifyToken} from '../../../lib/api/server';
 
-const RESOURCE_NAME = 'users';
+const RESOURCE_NAME = 'user';
 
 export async function GET(req: NextRequest) {
-    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-    if (!token) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
     try {
-        const users = await prisma.user.findMany();
-        return NextResponse.json(users);
+        const {id: userId} = verifyToken(req);
+        const user = await prisma.user.findUnique({
+            where: {id: userId},
+        });
+        return handleResponse(RESOURCE_NAME, '', user);
     } catch (error: any) {
-        console.error(`Error fetching ${RESOURCE_NAME}: ${error.message}`);
-        return NextResponse.json({ error: `Error fetching ${RESOURCE_NAME}` }, { status: 500 });
+        return handleResponse(RESOURCE_NAME, error.message);
     }
 }
 
-export async function POST(req: NextRequest) {
-    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-    if (!token) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
+export async function PUT(req: NextRequest) {
     try {
+        const {id: userId} = verifyToken(req);
         const data = await req.json();
-        const newUser = await prisma.user.create({
+
+        const updatedUser = await prisma.user.update({
+            where: {id: userId},
             data,
         });
-        return NextResponse.json(newUser, { status: 201 });
+        return handleResponse(RESOURCE_NAME, '', updatedUser);
     } catch (error: any) {
-        console.error(`Error creating ${RESOURCE_NAME}: ${error.message}`);
-        return NextResponse.json({ error: `Error creating ${RESOURCE_NAME}` }, { status: 500 });
+        return handleResponse(RESOURCE_NAME, error.message);
+    }
+}
+
+export async function DELETE(req: NextRequest) {
+    try {
+        const {id: userId} = verifyToken(req);
+
+        await prisma.user.delete({
+            where: {id: userId}
+        });
+        return handleResponse(RESOURCE_NAME, '', {});
+    } catch (error: any) {
+        return handleResponse(RESOURCE_NAME, error.message);
     }
 }

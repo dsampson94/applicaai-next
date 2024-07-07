@@ -23,16 +23,6 @@ export type User = $Result.DefaultSelection<Prisma.$UserPayload>
  * 
  */
 export type Application = $Result.DefaultSelection<Prisma.$ApplicationPayload>
-/**
- * Model UserProfile
- * 
- */
-export type UserProfile = $Result.DefaultSelection<Prisma.$UserProfilePayload>
-/**
- * Model CV
- * 
- */
-export type CV = $Result.DefaultSelection<Prisma.$CVPayload>
 
 /**
  * Enums
@@ -160,26 +150,6 @@ export class PrismaClient<
     * ```
     */
   get application(): Prisma.ApplicationDelegate<ExtArgs>;
-
-  /**
-   * `prisma.userProfile`: Exposes CRUD operations for the **UserProfile** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more UserProfiles
-    * const userProfiles = await prisma.userProfile.findMany()
-    * ```
-    */
-  get userProfile(): Prisma.UserProfileDelegate<ExtArgs>;
-
-  /**
-   * `prisma.cV`: Exposes CRUD operations for the **CV** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more CVS
-    * const cVS = await prisma.cV.findMany()
-    * ```
-    */
-  get cV(): Prisma.CVDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -658,9 +628,7 @@ export namespace Prisma {
 
   export const ModelName: {
     User: 'User',
-    Application: 'Application',
-    UserProfile: 'UserProfile',
-    CV: 'CV'
+    Application: 'Application'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -676,7 +644,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "application" | "userProfile" | "cV"
+      modelProps: "user" | "application"
       txIsolationLevel: never
     }
     model: {
@@ -828,154 +796,6 @@ export namespace Prisma {
           }
         }
       }
-      UserProfile: {
-        payload: Prisma.$UserProfilePayload<ExtArgs>
-        fields: Prisma.UserProfileFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.UserProfileFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UserProfilePayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.UserProfileFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UserProfilePayload>
-          }
-          findFirst: {
-            args: Prisma.UserProfileFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UserProfilePayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.UserProfileFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UserProfilePayload>
-          }
-          findMany: {
-            args: Prisma.UserProfileFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UserProfilePayload>[]
-          }
-          create: {
-            args: Prisma.UserProfileCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UserProfilePayload>
-          }
-          createMany: {
-            args: Prisma.UserProfileCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          delete: {
-            args: Prisma.UserProfileDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UserProfilePayload>
-          }
-          update: {
-            args: Prisma.UserProfileUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UserProfilePayload>
-          }
-          deleteMany: {
-            args: Prisma.UserProfileDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.UserProfileUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          upsert: {
-            args: Prisma.UserProfileUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UserProfilePayload>
-          }
-          aggregate: {
-            args: Prisma.UserProfileAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateUserProfile>
-          }
-          groupBy: {
-            args: Prisma.UserProfileGroupByArgs<ExtArgs>
-            result: $Utils.Optional<UserProfileGroupByOutputType>[]
-          }
-          findRaw: {
-            args: Prisma.UserProfileFindRawArgs<ExtArgs>
-            result: JsonObject
-          }
-          aggregateRaw: {
-            args: Prisma.UserProfileAggregateRawArgs<ExtArgs>
-            result: JsonObject
-          }
-          count: {
-            args: Prisma.UserProfileCountArgs<ExtArgs>
-            result: $Utils.Optional<UserProfileCountAggregateOutputType> | number
-          }
-        }
-      }
-      CV: {
-        payload: Prisma.$CVPayload<ExtArgs>
-        fields: Prisma.CVFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.CVFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CVPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.CVFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CVPayload>
-          }
-          findFirst: {
-            args: Prisma.CVFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CVPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.CVFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CVPayload>
-          }
-          findMany: {
-            args: Prisma.CVFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CVPayload>[]
-          }
-          create: {
-            args: Prisma.CVCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CVPayload>
-          }
-          createMany: {
-            args: Prisma.CVCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          delete: {
-            args: Prisma.CVDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CVPayload>
-          }
-          update: {
-            args: Prisma.CVUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CVPayload>
-          }
-          deleteMany: {
-            args: Prisma.CVDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.CVUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          upsert: {
-            args: Prisma.CVUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CVPayload>
-          }
-          aggregate: {
-            args: Prisma.CVAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateCV>
-          }
-          groupBy: {
-            args: Prisma.CVGroupByArgs<ExtArgs>
-            result: $Utils.Optional<CVGroupByOutputType>[]
-          }
-          findRaw: {
-            args: Prisma.CVFindRawArgs<ExtArgs>
-            result: JsonObject
-          }
-          aggregateRaw: {
-            args: Prisma.CVAggregateRawArgs<ExtArgs>
-            result: JsonObject
-          }
-          count: {
-            args: Prisma.CVCountArgs<ExtArgs>
-            result: $Utils.Optional<CVCountAggregateOutputType> | number
-          }
-        }
-      }
     }
   } & {
     other: {
@@ -1124,13 +944,11 @@ export namespace Prisma {
    */
 
   export type UserCountOutputType = {
-    profiles: number
-    applications: number
+    Application: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    profiles?: boolean | UserCountOutputTypeCountProfilesArgs
-    applications?: boolean | UserCountOutputTypeCountApplicationsArgs
+    Application?: boolean | UserCountOutputTypeCountApplicationArgs
   }
 
   // Custom InputTypes
@@ -1147,46 +965,8 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
-  export type UserCountOutputTypeCountProfilesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: UserProfileWhereInput
-  }
-
-  /**
-   * UserCountOutputType without action
-   */
-  export type UserCountOutputTypeCountApplicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserCountOutputTypeCountApplicationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ApplicationWhereInput
-  }
-
-
-  /**
-   * Count Type UserProfileCountOutputType
-   */
-
-  export type UserProfileCountOutputType = {
-    cvs: number
-  }
-
-  export type UserProfileCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    cvs?: boolean | UserProfileCountOutputTypeCountCvsArgs
-  }
-
-  // Custom InputTypes
-  /**
-   * UserProfileCountOutputType without action
-   */
-  export type UserProfileCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the UserProfileCountOutputType
-     */
-    select?: UserProfileCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * UserProfileCountOutputType without action
-   */
-  export type UserProfileCountOutputTypeCountCvsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: CVWhereInput
   }
 
 
@@ -1210,6 +990,8 @@ export namespace Prisma {
     email: string | null
     password: string | null
     role: $Enums.UserRole | null
+    userCVName: string | null
+    userCVUrl: string | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -1218,6 +1000,8 @@ export namespace Prisma {
     email: string | null
     password: string | null
     role: $Enums.UserRole | null
+    userCVName: string | null
+    userCVUrl: string | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -1226,6 +1010,8 @@ export namespace Prisma {
     email: number
     password: number
     role: number
+    userCVName: number
+    userCVUrl: number
     _all: number
   }
 
@@ -1236,6 +1022,8 @@ export namespace Prisma {
     email?: true
     password?: true
     role?: true
+    userCVName?: true
+    userCVUrl?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -1244,6 +1032,8 @@ export namespace Prisma {
     email?: true
     password?: true
     role?: true
+    userCVName?: true
+    userCVUrl?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -1252,6 +1042,8 @@ export namespace Prisma {
     email?: true
     password?: true
     role?: true
+    userCVName?: true
+    userCVUrl?: true
     _all?: true
   }
 
@@ -1333,6 +1125,8 @@ export namespace Prisma {
     email: string
     password: string
     role: $Enums.UserRole
+    userCVName: string | null
+    userCVUrl: string | null
     _count: UserCountAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
@@ -1358,8 +1152,9 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     role?: boolean
-    profiles?: boolean | User$profilesArgs<ExtArgs>
-    applications?: boolean | User$applicationsArgs<ExtArgs>
+    userCVName?: boolean
+    userCVUrl?: boolean
+    Application?: boolean | User$ApplicationArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -1370,19 +1165,19 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     role?: boolean
+    userCVName?: boolean
+    userCVUrl?: boolean
   }
 
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    profiles?: boolean | User$profilesArgs<ExtArgs>
-    applications?: boolean | User$applicationsArgs<ExtArgs>
+    Application?: boolean | User$ApplicationArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
 
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
     objects: {
-      profiles: Prisma.$UserProfilePayload<ExtArgs>[]
-      applications: Prisma.$ApplicationPayload<ExtArgs>[]
+      Application: Prisma.$ApplicationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -1390,6 +1185,8 @@ export namespace Prisma {
       email: string
       password: string
       role: $Enums.UserRole
+      userCVName: string | null
+      userCVUrl: string | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -1753,8 +1550,7 @@ export namespace Prisma {
    */
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    profiles<T extends User$profilesArgs<ExtArgs> = {}>(args?: Subset<T, User$profilesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findMany"> | Null>
-    applications<T extends User$applicationsArgs<ExtArgs> = {}>(args?: Subset<T, User$applicationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "findMany"> | Null>
+    Application<T extends User$ApplicationArgs<ExtArgs> = {}>(args?: Subset<T, User$ApplicationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1789,6 +1585,8 @@ export namespace Prisma {
     readonly email: FieldRef<"User", 'String'>
     readonly password: FieldRef<"User", 'String'>
     readonly role: FieldRef<"User", 'UserRole'>
+    readonly userCVName: FieldRef<"User", 'String'>
+    readonly userCVUrl: FieldRef<"User", 'String'>
   }
     
 
@@ -2115,29 +1913,9 @@ export namespace Prisma {
   }
 
   /**
-   * User.profiles
+   * User.Application
    */
-  export type User$profilesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the UserProfile
-     */
-    select?: UserProfileSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UserProfileInclude<ExtArgs> | null
-    where?: UserProfileWhereInput
-    orderBy?: UserProfileOrderByWithRelationInput | UserProfileOrderByWithRelationInput[]
-    cursor?: UserProfileWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: UserProfileScalarFieldEnum | UserProfileScalarFieldEnum[]
-  }
-
-  /**
-   * User.applications
-   */
-  export type User$applicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type User$ApplicationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Application
      */
@@ -2191,7 +1969,7 @@ export namespace Prisma {
     interviewDate: Date | null
     offerDate: Date | null
     unsuccessfulDate: Date | null
-    jobSpec: string | null
+    jobSpecUrl: string | null
     jobSpecName: string | null
     cvName: string | null
     isFavorite: boolean | null
@@ -2209,7 +1987,7 @@ export namespace Prisma {
     interviewDate: Date | null
     offerDate: Date | null
     unsuccessfulDate: Date | null
-    jobSpec: string | null
+    jobSpecUrl: string | null
     jobSpecName: string | null
     cvName: string | null
     isFavorite: boolean | null
@@ -2227,7 +2005,7 @@ export namespace Prisma {
     interviewDate: number
     offerDate: number
     unsuccessfulDate: number
-    jobSpec: number
+    jobSpecUrl: number
     jobSpecName: number
     cvName: number
     tags: number
@@ -2251,7 +2029,7 @@ export namespace Prisma {
     interviewDate?: true
     offerDate?: true
     unsuccessfulDate?: true
-    jobSpec?: true
+    jobSpecUrl?: true
     jobSpecName?: true
     cvName?: true
     isFavorite?: true
@@ -2269,7 +2047,7 @@ export namespace Prisma {
     interviewDate?: true
     offerDate?: true
     unsuccessfulDate?: true
-    jobSpec?: true
+    jobSpecUrl?: true
     jobSpecName?: true
     cvName?: true
     isFavorite?: true
@@ -2287,7 +2065,7 @@ export namespace Prisma {
     interviewDate?: true
     offerDate?: true
     unsuccessfulDate?: true
-    jobSpec?: true
+    jobSpecUrl?: true
     jobSpecName?: true
     cvName?: true
     tags?: true
@@ -2382,7 +2160,7 @@ export namespace Prisma {
     interviewDate: Date | null
     offerDate: Date | null
     unsuccessfulDate: Date | null
-    jobSpec: string | null
+    jobSpecUrl: string | null
     jobSpecName: string | null
     cvName: string | null
     tags: string[]
@@ -2421,7 +2199,7 @@ export namespace Prisma {
     interviewDate?: boolean
     offerDate?: boolean
     unsuccessfulDate?: boolean
-    jobSpec?: boolean
+    jobSpecUrl?: boolean
     jobSpecName?: boolean
     cvName?: boolean
     tags?: boolean
@@ -2445,7 +2223,7 @@ export namespace Prisma {
     interviewDate?: boolean
     offerDate?: boolean
     unsuccessfulDate?: boolean
-    jobSpec?: boolean
+    jobSpecUrl?: boolean
     jobSpecName?: boolean
     cvName?: boolean
     tags?: boolean
@@ -2476,7 +2254,7 @@ export namespace Prisma {
       interviewDate: Date | null
       offerDate: Date | null
       unsuccessfulDate: Date | null
-      jobSpec: string | null
+      jobSpecUrl: string | null
       jobSpecName: string | null
       cvName: string | null
       tags: string[]
@@ -2888,7 +2666,7 @@ export namespace Prisma {
     readonly interviewDate: FieldRef<"Application", 'DateTime'>
     readonly offerDate: FieldRef<"Application", 'DateTime'>
     readonly unsuccessfulDate: FieldRef<"Application", 'DateTime'>
-    readonly jobSpec: FieldRef<"Application", 'String'>
+    readonly jobSpecUrl: FieldRef<"Application", 'String'>
     readonly jobSpecName: FieldRef<"Application", 'String'>
     readonly cvName: FieldRef<"Application", 'String'>
     readonly tags: FieldRef<"Application", 'String[]'>
@@ -3237,1864 +3015,6 @@ export namespace Prisma {
 
 
   /**
-   * Model UserProfile
-   */
-
-  export type AggregateUserProfile = {
-    _count: UserProfileCountAggregateOutputType | null
-    _min: UserProfileMinAggregateOutputType | null
-    _max: UserProfileMaxAggregateOutputType | null
-  }
-
-  export type UserProfileMinAggregateOutputType = {
-    id: string | null
-    userId: string | null
-    name: string | null
-  }
-
-  export type UserProfileMaxAggregateOutputType = {
-    id: string | null
-    userId: string | null
-    name: string | null
-  }
-
-  export type UserProfileCountAggregateOutputType = {
-    id: number
-    userId: number
-    name: number
-    _all: number
-  }
-
-
-  export type UserProfileMinAggregateInputType = {
-    id?: true
-    userId?: true
-    name?: true
-  }
-
-  export type UserProfileMaxAggregateInputType = {
-    id?: true
-    userId?: true
-    name?: true
-  }
-
-  export type UserProfileCountAggregateInputType = {
-    id?: true
-    userId?: true
-    name?: true
-    _all?: true
-  }
-
-  export type UserProfileAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which UserProfile to aggregate.
-     */
-    where?: UserProfileWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of UserProfiles to fetch.
-     */
-    orderBy?: UserProfileOrderByWithRelationInput | UserProfileOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: UserProfileWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` UserProfiles from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` UserProfiles.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned UserProfiles
-    **/
-    _count?: true | UserProfileCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: UserProfileMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: UserProfileMaxAggregateInputType
-  }
-
-  export type GetUserProfileAggregateType<T extends UserProfileAggregateArgs> = {
-        [P in keyof T & keyof AggregateUserProfile]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateUserProfile[P]>
-      : GetScalarType<T[P], AggregateUserProfile[P]>
-  }
-
-
-
-
-  export type UserProfileGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: UserProfileWhereInput
-    orderBy?: UserProfileOrderByWithAggregationInput | UserProfileOrderByWithAggregationInput[]
-    by: UserProfileScalarFieldEnum[] | UserProfileScalarFieldEnum
-    having?: UserProfileScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: UserProfileCountAggregateInputType | true
-    _min?: UserProfileMinAggregateInputType
-    _max?: UserProfileMaxAggregateInputType
-  }
-
-  export type UserProfileGroupByOutputType = {
-    id: string
-    userId: string
-    name: string
-    _count: UserProfileCountAggregateOutputType | null
-    _min: UserProfileMinAggregateOutputType | null
-    _max: UserProfileMaxAggregateOutputType | null
-  }
-
-  type GetUserProfileGroupByPayload<T extends UserProfileGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<UserProfileGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof UserProfileGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], UserProfileGroupByOutputType[P]>
-            : GetScalarType<T[P], UserProfileGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type UserProfileSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    userId?: boolean
-    name?: boolean
-    cvs?: boolean | UserProfile$cvsArgs<ExtArgs>
-    user?: boolean | UserDefaultArgs<ExtArgs>
-    _count?: boolean | UserProfileCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["userProfile"]>
-
-
-  export type UserProfileSelectScalar = {
-    id?: boolean
-    userId?: boolean
-    name?: boolean
-  }
-
-  export type UserProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    cvs?: boolean | UserProfile$cvsArgs<ExtArgs>
-    user?: boolean | UserDefaultArgs<ExtArgs>
-    _count?: boolean | UserProfileCountOutputTypeDefaultArgs<ExtArgs>
-  }
-
-  export type $UserProfilePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "UserProfile"
-    objects: {
-      cvs: Prisma.$CVPayload<ExtArgs>[]
-      user: Prisma.$UserPayload<ExtArgs>
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      userId: string
-      name: string
-    }, ExtArgs["result"]["userProfile"]>
-    composites: {}
-  }
-
-  type UserProfileGetPayload<S extends boolean | null | undefined | UserProfileDefaultArgs> = $Result.GetResult<Prisma.$UserProfilePayload, S>
-
-  type UserProfileCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<UserProfileFindManyArgs, 'select' | 'include' | 'distinct'> & {
-      select?: UserProfileCountAggregateInputType | true
-    }
-
-  export interface UserProfileDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['UserProfile'], meta: { name: 'UserProfile' } }
-    /**
-     * Find zero or one UserProfile that matches the filter.
-     * @param {UserProfileFindUniqueArgs} args - Arguments to find a UserProfile
-     * @example
-     * // Get one UserProfile
-     * const userProfile = await prisma.userProfile.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends UserProfileFindUniqueArgs>(args: SelectSubset<T, UserProfileFindUniqueArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
-
-    /**
-     * Find one UserProfile that matches the filter or throw an error with `error.code='P2025'` 
-     * if no matches were found.
-     * @param {UserProfileFindUniqueOrThrowArgs} args - Arguments to find a UserProfile
-     * @example
-     * // Get one UserProfile
-     * const userProfile = await prisma.userProfile.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends UserProfileFindUniqueOrThrowArgs>(args: SelectSubset<T, UserProfileFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
-
-    /**
-     * Find the first UserProfile that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {UserProfileFindFirstArgs} args - Arguments to find a UserProfile
-     * @example
-     * // Get one UserProfile
-     * const userProfile = await prisma.userProfile.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends UserProfileFindFirstArgs>(args?: SelectSubset<T, UserProfileFindFirstArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
-
-    /**
-     * Find the first UserProfile that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {UserProfileFindFirstOrThrowArgs} args - Arguments to find a UserProfile
-     * @example
-     * // Get one UserProfile
-     * const userProfile = await prisma.userProfile.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends UserProfileFindFirstOrThrowArgs>(args?: SelectSubset<T, UserProfileFindFirstOrThrowArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
-
-    /**
-     * Find zero or more UserProfiles that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {UserProfileFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all UserProfiles
-     * const userProfiles = await prisma.userProfile.findMany()
-     * 
-     * // Get first 10 UserProfiles
-     * const userProfiles = await prisma.userProfile.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const userProfileWithIdOnly = await prisma.userProfile.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends UserProfileFindManyArgs>(args?: SelectSubset<T, UserProfileFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findMany">>
-
-    /**
-     * Create a UserProfile.
-     * @param {UserProfileCreateArgs} args - Arguments to create a UserProfile.
-     * @example
-     * // Create one UserProfile
-     * const UserProfile = await prisma.userProfile.create({
-     *   data: {
-     *     // ... data to create a UserProfile
-     *   }
-     * })
-     * 
-     */
-    create<T extends UserProfileCreateArgs>(args: SelectSubset<T, UserProfileCreateArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "create">, never, ExtArgs>
-
-    /**
-     * Create many UserProfiles.
-     * @param {UserProfileCreateManyArgs} args - Arguments to create many UserProfiles.
-     * @example
-     * // Create many UserProfiles
-     * const userProfile = await prisma.userProfile.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends UserProfileCreateManyArgs>(args?: SelectSubset<T, UserProfileCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Delete a UserProfile.
-     * @param {UserProfileDeleteArgs} args - Arguments to delete one UserProfile.
-     * @example
-     * // Delete one UserProfile
-     * const UserProfile = await prisma.userProfile.delete({
-     *   where: {
-     *     // ... filter to delete one UserProfile
-     *   }
-     * })
-     * 
-     */
-    delete<T extends UserProfileDeleteArgs>(args: SelectSubset<T, UserProfileDeleteArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "delete">, never, ExtArgs>
-
-    /**
-     * Update one UserProfile.
-     * @param {UserProfileUpdateArgs} args - Arguments to update one UserProfile.
-     * @example
-     * // Update one UserProfile
-     * const userProfile = await prisma.userProfile.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends UserProfileUpdateArgs>(args: SelectSubset<T, UserProfileUpdateArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "update">, never, ExtArgs>
-
-    /**
-     * Delete zero or more UserProfiles.
-     * @param {UserProfileDeleteManyArgs} args - Arguments to filter UserProfiles to delete.
-     * @example
-     * // Delete a few UserProfiles
-     * const { count } = await prisma.userProfile.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends UserProfileDeleteManyArgs>(args?: SelectSubset<T, UserProfileDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more UserProfiles.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {UserProfileUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many UserProfiles
-     * const userProfile = await prisma.userProfile.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends UserProfileUpdateManyArgs>(args: SelectSubset<T, UserProfileUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create or update one UserProfile.
-     * @param {UserProfileUpsertArgs} args - Arguments to update or create a UserProfile.
-     * @example
-     * // Update or create a UserProfile
-     * const userProfile = await prisma.userProfile.upsert({
-     *   create: {
-     *     // ... data to create a UserProfile
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the UserProfile we want to update
-     *   }
-     * })
-     */
-    upsert<T extends UserProfileUpsertArgs>(args: SelectSubset<T, UserProfileUpsertArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
-
-    /**
-     * Find zero or more UserProfiles that matches the filter.
-     * @param {UserProfileFindRawArgs} args - Select which filters you would like to apply.
-     * @example
-     * const userProfile = await prisma.userProfile.findRaw({
-     *   filter: { age: { $gt: 25 } } 
-     * })
-     */
-    findRaw(args?: UserProfileFindRawArgs): Prisma.PrismaPromise<JsonObject>
-
-    /**
-     * Perform aggregation operations on a UserProfile.
-     * @param {UserProfileAggregateRawArgs} args - Select which aggregations you would like to apply.
-     * @example
-     * const userProfile = await prisma.userProfile.aggregateRaw({
-     *   pipeline: [
-     *     { $match: { status: "registered" } },
-     *     { $group: { _id: "$country", total: { $sum: 1 } } }
-     *   ]
-     * })
-     */
-    aggregateRaw(args?: UserProfileAggregateRawArgs): Prisma.PrismaPromise<JsonObject>
-
-
-    /**
-     * Count the number of UserProfiles.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {UserProfileCountArgs} args - Arguments to filter UserProfiles to count.
-     * @example
-     * // Count the number of UserProfiles
-     * const count = await prisma.userProfile.count({
-     *   where: {
-     *     // ... the filter for the UserProfiles we want to count
-     *   }
-     * })
-    **/
-    count<T extends UserProfileCountArgs>(
-      args?: Subset<T, UserProfileCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], UserProfileCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a UserProfile.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {UserProfileAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends UserProfileAggregateArgs>(args: Subset<T, UserProfileAggregateArgs>): Prisma.PrismaPromise<GetUserProfileAggregateType<T>>
-
-    /**
-     * Group by UserProfile.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {UserProfileGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends UserProfileGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: UserProfileGroupByArgs['orderBy'] }
-        : { orderBy?: UserProfileGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, UserProfileGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUserProfileGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the UserProfile model
-   */
-  readonly fields: UserProfileFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for UserProfile.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__UserProfileClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    cvs<T extends UserProfile$cvsArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$cvsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CVPayload<ExtArgs>, T, "findMany"> | Null>
-    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the UserProfile model
-   */ 
-  interface UserProfileFieldRefs {
-    readonly id: FieldRef<"UserProfile", 'String'>
-    readonly userId: FieldRef<"UserProfile", 'String'>
-    readonly name: FieldRef<"UserProfile", 'String'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * UserProfile findUnique
-   */
-  export type UserProfileFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the UserProfile
-     */
-    select?: UserProfileSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UserProfileInclude<ExtArgs> | null
-    /**
-     * Filter, which UserProfile to fetch.
-     */
-    where: UserProfileWhereUniqueInput
-  }
-
-  /**
-   * UserProfile findUniqueOrThrow
-   */
-  export type UserProfileFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the UserProfile
-     */
-    select?: UserProfileSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UserProfileInclude<ExtArgs> | null
-    /**
-     * Filter, which UserProfile to fetch.
-     */
-    where: UserProfileWhereUniqueInput
-  }
-
-  /**
-   * UserProfile findFirst
-   */
-  export type UserProfileFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the UserProfile
-     */
-    select?: UserProfileSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UserProfileInclude<ExtArgs> | null
-    /**
-     * Filter, which UserProfile to fetch.
-     */
-    where?: UserProfileWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of UserProfiles to fetch.
-     */
-    orderBy?: UserProfileOrderByWithRelationInput | UserProfileOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for UserProfiles.
-     */
-    cursor?: UserProfileWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` UserProfiles from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` UserProfiles.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of UserProfiles.
-     */
-    distinct?: UserProfileScalarFieldEnum | UserProfileScalarFieldEnum[]
-  }
-
-  /**
-   * UserProfile findFirstOrThrow
-   */
-  export type UserProfileFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the UserProfile
-     */
-    select?: UserProfileSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UserProfileInclude<ExtArgs> | null
-    /**
-     * Filter, which UserProfile to fetch.
-     */
-    where?: UserProfileWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of UserProfiles to fetch.
-     */
-    orderBy?: UserProfileOrderByWithRelationInput | UserProfileOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for UserProfiles.
-     */
-    cursor?: UserProfileWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` UserProfiles from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` UserProfiles.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of UserProfiles.
-     */
-    distinct?: UserProfileScalarFieldEnum | UserProfileScalarFieldEnum[]
-  }
-
-  /**
-   * UserProfile findMany
-   */
-  export type UserProfileFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the UserProfile
-     */
-    select?: UserProfileSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UserProfileInclude<ExtArgs> | null
-    /**
-     * Filter, which UserProfiles to fetch.
-     */
-    where?: UserProfileWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of UserProfiles to fetch.
-     */
-    orderBy?: UserProfileOrderByWithRelationInput | UserProfileOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing UserProfiles.
-     */
-    cursor?: UserProfileWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` UserProfiles from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` UserProfiles.
-     */
-    skip?: number
-    distinct?: UserProfileScalarFieldEnum | UserProfileScalarFieldEnum[]
-  }
-
-  /**
-   * UserProfile create
-   */
-  export type UserProfileCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the UserProfile
-     */
-    select?: UserProfileSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UserProfileInclude<ExtArgs> | null
-    /**
-     * The data needed to create a UserProfile.
-     */
-    data: XOR<UserProfileCreateInput, UserProfileUncheckedCreateInput>
-  }
-
-  /**
-   * UserProfile createMany
-   */
-  export type UserProfileCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many UserProfiles.
-     */
-    data: UserProfileCreateManyInput | UserProfileCreateManyInput[]
-  }
-
-  /**
-   * UserProfile update
-   */
-  export type UserProfileUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the UserProfile
-     */
-    select?: UserProfileSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UserProfileInclude<ExtArgs> | null
-    /**
-     * The data needed to update a UserProfile.
-     */
-    data: XOR<UserProfileUpdateInput, UserProfileUncheckedUpdateInput>
-    /**
-     * Choose, which UserProfile to update.
-     */
-    where: UserProfileWhereUniqueInput
-  }
-
-  /**
-   * UserProfile updateMany
-   */
-  export type UserProfileUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update UserProfiles.
-     */
-    data: XOR<UserProfileUpdateManyMutationInput, UserProfileUncheckedUpdateManyInput>
-    /**
-     * Filter which UserProfiles to update
-     */
-    where?: UserProfileWhereInput
-  }
-
-  /**
-   * UserProfile upsert
-   */
-  export type UserProfileUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the UserProfile
-     */
-    select?: UserProfileSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UserProfileInclude<ExtArgs> | null
-    /**
-     * The filter to search for the UserProfile to update in case it exists.
-     */
-    where: UserProfileWhereUniqueInput
-    /**
-     * In case the UserProfile found by the `where` argument doesn't exist, create a new UserProfile with this data.
-     */
-    create: XOR<UserProfileCreateInput, UserProfileUncheckedCreateInput>
-    /**
-     * In case the UserProfile was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<UserProfileUpdateInput, UserProfileUncheckedUpdateInput>
-  }
-
-  /**
-   * UserProfile delete
-   */
-  export type UserProfileDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the UserProfile
-     */
-    select?: UserProfileSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UserProfileInclude<ExtArgs> | null
-    /**
-     * Filter which UserProfile to delete.
-     */
-    where: UserProfileWhereUniqueInput
-  }
-
-  /**
-   * UserProfile deleteMany
-   */
-  export type UserProfileDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which UserProfiles to delete
-     */
-    where?: UserProfileWhereInput
-  }
-
-  /**
-   * UserProfile findRaw
-   */
-  export type UserProfileFindRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The query predicate filter. If unspecified, then all documents in the collection will match the predicate. ${@link https://docs.mongodb.com/manual/reference/operator/query MongoDB Docs}.
-     */
-    filter?: InputJsonValue
-    /**
-     * Additional options to pass to the `find` command ${@link https://docs.mongodb.com/manual/reference/command/find/#command-fields MongoDB Docs}.
-     */
-    options?: InputJsonValue
-  }
-
-  /**
-   * UserProfile aggregateRaw
-   */
-  export type UserProfileAggregateRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * An array of aggregation stages to process and transform the document stream via the aggregation pipeline. ${@link https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline MongoDB Docs}.
-     */
-    pipeline?: InputJsonValue[]
-    /**
-     * Additional options to pass to the `aggregate` command ${@link https://docs.mongodb.com/manual/reference/command/aggregate/#command-fields MongoDB Docs}.
-     */
-    options?: InputJsonValue
-  }
-
-  /**
-   * UserProfile.cvs
-   */
-  export type UserProfile$cvsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the CV
-     */
-    select?: CVSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CVInclude<ExtArgs> | null
-    where?: CVWhereInput
-    orderBy?: CVOrderByWithRelationInput | CVOrderByWithRelationInput[]
-    cursor?: CVWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: CVScalarFieldEnum | CVScalarFieldEnum[]
-  }
-
-  /**
-   * UserProfile without action
-   */
-  export type UserProfileDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the UserProfile
-     */
-    select?: UserProfileSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UserProfileInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model CV
-   */
-
-  export type AggregateCV = {
-    _count: CVCountAggregateOutputType | null
-    _min: CVMinAggregateOutputType | null
-    _max: CVMaxAggregateOutputType | null
-  }
-
-  export type CVMinAggregateOutputType = {
-    id: string | null
-    name: string | null
-    url: string | null
-    profileId: string | null
-  }
-
-  export type CVMaxAggregateOutputType = {
-    id: string | null
-    name: string | null
-    url: string | null
-    profileId: string | null
-  }
-
-  export type CVCountAggregateOutputType = {
-    id: number
-    name: number
-    url: number
-    profileId: number
-    chunks: number
-    _all: number
-  }
-
-
-  export type CVMinAggregateInputType = {
-    id?: true
-    name?: true
-    url?: true
-    profileId?: true
-  }
-
-  export type CVMaxAggregateInputType = {
-    id?: true
-    name?: true
-    url?: true
-    profileId?: true
-  }
-
-  export type CVCountAggregateInputType = {
-    id?: true
-    name?: true
-    url?: true
-    profileId?: true
-    chunks?: true
-    _all?: true
-  }
-
-  export type CVAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which CV to aggregate.
-     */
-    where?: CVWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of CVS to fetch.
-     */
-    orderBy?: CVOrderByWithRelationInput | CVOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: CVWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` CVS from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` CVS.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned CVS
-    **/
-    _count?: true | CVCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: CVMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: CVMaxAggregateInputType
-  }
-
-  export type GetCVAggregateType<T extends CVAggregateArgs> = {
-        [P in keyof T & keyof AggregateCV]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateCV[P]>
-      : GetScalarType<T[P], AggregateCV[P]>
-  }
-
-
-
-
-  export type CVGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: CVWhereInput
-    orderBy?: CVOrderByWithAggregationInput | CVOrderByWithAggregationInput[]
-    by: CVScalarFieldEnum[] | CVScalarFieldEnum
-    having?: CVScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: CVCountAggregateInputType | true
-    _min?: CVMinAggregateInputType
-    _max?: CVMaxAggregateInputType
-  }
-
-  export type CVGroupByOutputType = {
-    id: string
-    name: string
-    url: string
-    profileId: string
-    chunks: string[]
-    _count: CVCountAggregateOutputType | null
-    _min: CVMinAggregateOutputType | null
-    _max: CVMaxAggregateOutputType | null
-  }
-
-  type GetCVGroupByPayload<T extends CVGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<CVGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof CVGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], CVGroupByOutputType[P]>
-            : GetScalarType<T[P], CVGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type CVSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    name?: boolean
-    url?: boolean
-    profileId?: boolean
-    chunks?: boolean
-    profile?: boolean | UserProfileDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["cV"]>
-
-
-  export type CVSelectScalar = {
-    id?: boolean
-    name?: boolean
-    url?: boolean
-    profileId?: boolean
-    chunks?: boolean
-  }
-
-  export type CVInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    profile?: boolean | UserProfileDefaultArgs<ExtArgs>
-  }
-
-  export type $CVPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "CV"
-    objects: {
-      profile: Prisma.$UserProfilePayload<ExtArgs>
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      name: string
-      url: string
-      profileId: string
-      chunks: string[]
-    }, ExtArgs["result"]["cV"]>
-    composites: {}
-  }
-
-  type CVGetPayload<S extends boolean | null | undefined | CVDefaultArgs> = $Result.GetResult<Prisma.$CVPayload, S>
-
-  type CVCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<CVFindManyArgs, 'select' | 'include' | 'distinct'> & {
-      select?: CVCountAggregateInputType | true
-    }
-
-  export interface CVDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CV'], meta: { name: 'CV' } }
-    /**
-     * Find zero or one CV that matches the filter.
-     * @param {CVFindUniqueArgs} args - Arguments to find a CV
-     * @example
-     * // Get one CV
-     * const cV = await prisma.cV.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends CVFindUniqueArgs>(args: SelectSubset<T, CVFindUniqueArgs<ExtArgs>>): Prisma__CVClient<$Result.GetResult<Prisma.$CVPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
-
-    /**
-     * Find one CV that matches the filter or throw an error with `error.code='P2025'` 
-     * if no matches were found.
-     * @param {CVFindUniqueOrThrowArgs} args - Arguments to find a CV
-     * @example
-     * // Get one CV
-     * const cV = await prisma.cV.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends CVFindUniqueOrThrowArgs>(args: SelectSubset<T, CVFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CVClient<$Result.GetResult<Prisma.$CVPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
-
-    /**
-     * Find the first CV that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {CVFindFirstArgs} args - Arguments to find a CV
-     * @example
-     * // Get one CV
-     * const cV = await prisma.cV.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends CVFindFirstArgs>(args?: SelectSubset<T, CVFindFirstArgs<ExtArgs>>): Prisma__CVClient<$Result.GetResult<Prisma.$CVPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
-
-    /**
-     * Find the first CV that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {CVFindFirstOrThrowArgs} args - Arguments to find a CV
-     * @example
-     * // Get one CV
-     * const cV = await prisma.cV.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends CVFindFirstOrThrowArgs>(args?: SelectSubset<T, CVFindFirstOrThrowArgs<ExtArgs>>): Prisma__CVClient<$Result.GetResult<Prisma.$CVPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
-
-    /**
-     * Find zero or more CVS that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {CVFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all CVS
-     * const cVS = await prisma.cV.findMany()
-     * 
-     * // Get first 10 CVS
-     * const cVS = await prisma.cV.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const cVWithIdOnly = await prisma.cV.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends CVFindManyArgs>(args?: SelectSubset<T, CVFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CVPayload<ExtArgs>, T, "findMany">>
-
-    /**
-     * Create a CV.
-     * @param {CVCreateArgs} args - Arguments to create a CV.
-     * @example
-     * // Create one CV
-     * const CV = await prisma.cV.create({
-     *   data: {
-     *     // ... data to create a CV
-     *   }
-     * })
-     * 
-     */
-    create<T extends CVCreateArgs>(args: SelectSubset<T, CVCreateArgs<ExtArgs>>): Prisma__CVClient<$Result.GetResult<Prisma.$CVPayload<ExtArgs>, T, "create">, never, ExtArgs>
-
-    /**
-     * Create many CVS.
-     * @param {CVCreateManyArgs} args - Arguments to create many CVS.
-     * @example
-     * // Create many CVS
-     * const cV = await prisma.cV.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends CVCreateManyArgs>(args?: SelectSubset<T, CVCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Delete a CV.
-     * @param {CVDeleteArgs} args - Arguments to delete one CV.
-     * @example
-     * // Delete one CV
-     * const CV = await prisma.cV.delete({
-     *   where: {
-     *     // ... filter to delete one CV
-     *   }
-     * })
-     * 
-     */
-    delete<T extends CVDeleteArgs>(args: SelectSubset<T, CVDeleteArgs<ExtArgs>>): Prisma__CVClient<$Result.GetResult<Prisma.$CVPayload<ExtArgs>, T, "delete">, never, ExtArgs>
-
-    /**
-     * Update one CV.
-     * @param {CVUpdateArgs} args - Arguments to update one CV.
-     * @example
-     * // Update one CV
-     * const cV = await prisma.cV.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends CVUpdateArgs>(args: SelectSubset<T, CVUpdateArgs<ExtArgs>>): Prisma__CVClient<$Result.GetResult<Prisma.$CVPayload<ExtArgs>, T, "update">, never, ExtArgs>
-
-    /**
-     * Delete zero or more CVS.
-     * @param {CVDeleteManyArgs} args - Arguments to filter CVS to delete.
-     * @example
-     * // Delete a few CVS
-     * const { count } = await prisma.cV.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends CVDeleteManyArgs>(args?: SelectSubset<T, CVDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more CVS.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {CVUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many CVS
-     * const cV = await prisma.cV.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends CVUpdateManyArgs>(args: SelectSubset<T, CVUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create or update one CV.
-     * @param {CVUpsertArgs} args - Arguments to update or create a CV.
-     * @example
-     * // Update or create a CV
-     * const cV = await prisma.cV.upsert({
-     *   create: {
-     *     // ... data to create a CV
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the CV we want to update
-     *   }
-     * })
-     */
-    upsert<T extends CVUpsertArgs>(args: SelectSubset<T, CVUpsertArgs<ExtArgs>>): Prisma__CVClient<$Result.GetResult<Prisma.$CVPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
-
-    /**
-     * Find zero or more CVS that matches the filter.
-     * @param {CVFindRawArgs} args - Select which filters you would like to apply.
-     * @example
-     * const cV = await prisma.cV.findRaw({
-     *   filter: { age: { $gt: 25 } } 
-     * })
-     */
-    findRaw(args?: CVFindRawArgs): Prisma.PrismaPromise<JsonObject>
-
-    /**
-     * Perform aggregation operations on a CV.
-     * @param {CVAggregateRawArgs} args - Select which aggregations you would like to apply.
-     * @example
-     * const cV = await prisma.cV.aggregateRaw({
-     *   pipeline: [
-     *     { $match: { status: "registered" } },
-     *     { $group: { _id: "$country", total: { $sum: 1 } } }
-     *   ]
-     * })
-     */
-    aggregateRaw(args?: CVAggregateRawArgs): Prisma.PrismaPromise<JsonObject>
-
-
-    /**
-     * Count the number of CVS.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {CVCountArgs} args - Arguments to filter CVS to count.
-     * @example
-     * // Count the number of CVS
-     * const count = await prisma.cV.count({
-     *   where: {
-     *     // ... the filter for the CVS we want to count
-     *   }
-     * })
-    **/
-    count<T extends CVCountArgs>(
-      args?: Subset<T, CVCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], CVCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a CV.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {CVAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends CVAggregateArgs>(args: Subset<T, CVAggregateArgs>): Prisma.PrismaPromise<GetCVAggregateType<T>>
-
-    /**
-     * Group by CV.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {CVGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends CVGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: CVGroupByArgs['orderBy'] }
-        : { orderBy?: CVGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, CVGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCVGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the CV model
-   */
-  readonly fields: CVFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for CV.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__CVClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    profile<T extends UserProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserProfileDefaultArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the CV model
-   */ 
-  interface CVFieldRefs {
-    readonly id: FieldRef<"CV", 'String'>
-    readonly name: FieldRef<"CV", 'String'>
-    readonly url: FieldRef<"CV", 'String'>
-    readonly profileId: FieldRef<"CV", 'String'>
-    readonly chunks: FieldRef<"CV", 'String[]'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * CV findUnique
-   */
-  export type CVFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the CV
-     */
-    select?: CVSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CVInclude<ExtArgs> | null
-    /**
-     * Filter, which CV to fetch.
-     */
-    where: CVWhereUniqueInput
-  }
-
-  /**
-   * CV findUniqueOrThrow
-   */
-  export type CVFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the CV
-     */
-    select?: CVSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CVInclude<ExtArgs> | null
-    /**
-     * Filter, which CV to fetch.
-     */
-    where: CVWhereUniqueInput
-  }
-
-  /**
-   * CV findFirst
-   */
-  export type CVFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the CV
-     */
-    select?: CVSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CVInclude<ExtArgs> | null
-    /**
-     * Filter, which CV to fetch.
-     */
-    where?: CVWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of CVS to fetch.
-     */
-    orderBy?: CVOrderByWithRelationInput | CVOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for CVS.
-     */
-    cursor?: CVWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` CVS from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` CVS.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of CVS.
-     */
-    distinct?: CVScalarFieldEnum | CVScalarFieldEnum[]
-  }
-
-  /**
-   * CV findFirstOrThrow
-   */
-  export type CVFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the CV
-     */
-    select?: CVSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CVInclude<ExtArgs> | null
-    /**
-     * Filter, which CV to fetch.
-     */
-    where?: CVWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of CVS to fetch.
-     */
-    orderBy?: CVOrderByWithRelationInput | CVOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for CVS.
-     */
-    cursor?: CVWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` CVS from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` CVS.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of CVS.
-     */
-    distinct?: CVScalarFieldEnum | CVScalarFieldEnum[]
-  }
-
-  /**
-   * CV findMany
-   */
-  export type CVFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the CV
-     */
-    select?: CVSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CVInclude<ExtArgs> | null
-    /**
-     * Filter, which CVS to fetch.
-     */
-    where?: CVWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of CVS to fetch.
-     */
-    orderBy?: CVOrderByWithRelationInput | CVOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing CVS.
-     */
-    cursor?: CVWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` CVS from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` CVS.
-     */
-    skip?: number
-    distinct?: CVScalarFieldEnum | CVScalarFieldEnum[]
-  }
-
-  /**
-   * CV create
-   */
-  export type CVCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the CV
-     */
-    select?: CVSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CVInclude<ExtArgs> | null
-    /**
-     * The data needed to create a CV.
-     */
-    data: XOR<CVCreateInput, CVUncheckedCreateInput>
-  }
-
-  /**
-   * CV createMany
-   */
-  export type CVCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many CVS.
-     */
-    data: CVCreateManyInput | CVCreateManyInput[]
-  }
-
-  /**
-   * CV update
-   */
-  export type CVUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the CV
-     */
-    select?: CVSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CVInclude<ExtArgs> | null
-    /**
-     * The data needed to update a CV.
-     */
-    data: XOR<CVUpdateInput, CVUncheckedUpdateInput>
-    /**
-     * Choose, which CV to update.
-     */
-    where: CVWhereUniqueInput
-  }
-
-  /**
-   * CV updateMany
-   */
-  export type CVUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update CVS.
-     */
-    data: XOR<CVUpdateManyMutationInput, CVUncheckedUpdateManyInput>
-    /**
-     * Filter which CVS to update
-     */
-    where?: CVWhereInput
-  }
-
-  /**
-   * CV upsert
-   */
-  export type CVUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the CV
-     */
-    select?: CVSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CVInclude<ExtArgs> | null
-    /**
-     * The filter to search for the CV to update in case it exists.
-     */
-    where: CVWhereUniqueInput
-    /**
-     * In case the CV found by the `where` argument doesn't exist, create a new CV with this data.
-     */
-    create: XOR<CVCreateInput, CVUncheckedCreateInput>
-    /**
-     * In case the CV was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<CVUpdateInput, CVUncheckedUpdateInput>
-  }
-
-  /**
-   * CV delete
-   */
-  export type CVDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the CV
-     */
-    select?: CVSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CVInclude<ExtArgs> | null
-    /**
-     * Filter which CV to delete.
-     */
-    where: CVWhereUniqueInput
-  }
-
-  /**
-   * CV deleteMany
-   */
-  export type CVDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which CVS to delete
-     */
-    where?: CVWhereInput
-  }
-
-  /**
-   * CV findRaw
-   */
-  export type CVFindRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The query predicate filter. If unspecified, then all documents in the collection will match the predicate. ${@link https://docs.mongodb.com/manual/reference/operator/query MongoDB Docs}.
-     */
-    filter?: InputJsonValue
-    /**
-     * Additional options to pass to the `find` command ${@link https://docs.mongodb.com/manual/reference/command/find/#command-fields MongoDB Docs}.
-     */
-    options?: InputJsonValue
-  }
-
-  /**
-   * CV aggregateRaw
-   */
-  export type CVAggregateRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * An array of aggregation stages to process and transform the document stream via the aggregation pipeline. ${@link https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline MongoDB Docs}.
-     */
-    pipeline?: InputJsonValue[]
-    /**
-     * Additional options to pass to the `aggregate` command ${@link https://docs.mongodb.com/manual/reference/command/aggregate/#command-fields MongoDB Docs}.
-     */
-    options?: InputJsonValue
-  }
-
-  /**
-   * CV without action
-   */
-  export type CVDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the CV
-     */
-    select?: CVSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CVInclude<ExtArgs> | null
-  }
-
-
-  /**
    * Enums
    */
 
@@ -5103,7 +3023,9 @@ export namespace Prisma {
     username: 'username',
     email: 'email',
     password: 'password',
-    role: 'role'
+    role: 'role',
+    userCVName: 'userCVName',
+    userCVUrl: 'userCVUrl'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -5121,7 +3043,7 @@ export namespace Prisma {
     interviewDate: 'interviewDate',
     offerDate: 'offerDate',
     unsuccessfulDate: 'unsuccessfulDate',
-    jobSpec: 'jobSpec',
+    jobSpecUrl: 'jobSpecUrl',
     jobSpecName: 'jobSpecName',
     cvName: 'cvName',
     tags: 'tags',
@@ -5132,26 +3054,6 @@ export namespace Prisma {
   };
 
   export type ApplicationScalarFieldEnum = (typeof ApplicationScalarFieldEnum)[keyof typeof ApplicationScalarFieldEnum]
-
-
-  export const UserProfileScalarFieldEnum: {
-    id: 'id',
-    userId: 'userId',
-    name: 'name'
-  };
-
-  export type UserProfileScalarFieldEnum = (typeof UserProfileScalarFieldEnum)[keyof typeof UserProfileScalarFieldEnum]
-
-
-  export const CVScalarFieldEnum: {
-    id: 'id',
-    name: 'name',
-    url: 'url',
-    profileId: 'profileId',
-    chunks: 'chunks'
-  };
-
-  export type CVScalarFieldEnum = (typeof CVScalarFieldEnum)[keyof typeof CVScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -5250,8 +3152,9 @@ export namespace Prisma {
     email?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
     role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
-    profiles?: UserProfileListRelationFilter
-    applications?: ApplicationListRelationFilter
+    userCVName?: StringNullableFilter<"User"> | string | null
+    userCVUrl?: StringNullableFilter<"User"> | string | null
+    Application?: ApplicationListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -5260,8 +3163,9 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     role?: SortOrder
-    profiles?: UserProfileOrderByRelationAggregateInput
-    applications?: ApplicationOrderByRelationAggregateInput
+    userCVName?: SortOrder
+    userCVUrl?: SortOrder
+    Application?: ApplicationOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -5273,8 +3177,9 @@ export namespace Prisma {
     NOT?: UserWhereInput | UserWhereInput[]
     password?: StringFilter<"User"> | string
     role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
-    profiles?: UserProfileListRelationFilter
-    applications?: ApplicationListRelationFilter
+    userCVName?: StringNullableFilter<"User"> | string | null
+    userCVUrl?: StringNullableFilter<"User"> | string | null
+    Application?: ApplicationListRelationFilter
   }, "id" | "username" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -5283,6 +3188,8 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     role?: SortOrder
+    userCVName?: SortOrder
+    userCVUrl?: SortOrder
     _count?: UserCountOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
@@ -5297,6 +3204,8 @@ export namespace Prisma {
     email?: StringWithAggregatesFilter<"User"> | string
     password?: StringWithAggregatesFilter<"User"> | string
     role?: EnumUserRoleWithAggregatesFilter<"User"> | $Enums.UserRole
+    userCVName?: StringNullableWithAggregatesFilter<"User"> | string | null
+    userCVUrl?: StringNullableWithAggregatesFilter<"User"> | string | null
   }
 
   export type ApplicationWhereInput = {
@@ -5314,7 +3223,7 @@ export namespace Prisma {
     interviewDate?: DateTimeNullableFilter<"Application"> | Date | string | null
     offerDate?: DateTimeNullableFilter<"Application"> | Date | string | null
     unsuccessfulDate?: DateTimeNullableFilter<"Application"> | Date | string | null
-    jobSpec?: StringNullableFilter<"Application"> | string | null
+    jobSpecUrl?: StringNullableFilter<"Application"> | string | null
     jobSpecName?: StringNullableFilter<"Application"> | string | null
     cvName?: StringNullableFilter<"Application"> | string | null
     tags?: StringNullableListFilter<"Application">
@@ -5337,7 +3246,7 @@ export namespace Prisma {
     interviewDate?: SortOrder
     offerDate?: SortOrder
     unsuccessfulDate?: SortOrder
-    jobSpec?: SortOrder
+    jobSpecUrl?: SortOrder
     jobSpecName?: SortOrder
     cvName?: SortOrder
     tags?: SortOrder
@@ -5363,7 +3272,7 @@ export namespace Prisma {
     interviewDate?: DateTimeNullableFilter<"Application"> | Date | string | null
     offerDate?: DateTimeNullableFilter<"Application"> | Date | string | null
     unsuccessfulDate?: DateTimeNullableFilter<"Application"> | Date | string | null
-    jobSpec?: StringNullableFilter<"Application"> | string | null
+    jobSpecUrl?: StringNullableFilter<"Application"> | string | null
     jobSpecName?: StringNullableFilter<"Application"> | string | null
     cvName?: StringNullableFilter<"Application"> | string | null
     tags?: StringNullableListFilter<"Application">
@@ -5386,7 +3295,7 @@ export namespace Prisma {
     interviewDate?: SortOrder
     offerDate?: SortOrder
     unsuccessfulDate?: SortOrder
-    jobSpec?: SortOrder
+    jobSpecUrl?: SortOrder
     jobSpecName?: SortOrder
     cvName?: SortOrder
     tags?: SortOrder
@@ -5414,7 +3323,7 @@ export namespace Prisma {
     interviewDate?: DateTimeNullableWithAggregatesFilter<"Application"> | Date | string | null
     offerDate?: DateTimeNullableWithAggregatesFilter<"Application"> | Date | string | null
     unsuccessfulDate?: DateTimeNullableWithAggregatesFilter<"Application"> | Date | string | null
-    jobSpec?: StringNullableWithAggregatesFilter<"Application"> | string | null
+    jobSpecUrl?: StringNullableWithAggregatesFilter<"Application"> | string | null
     jobSpecName?: StringNullableWithAggregatesFilter<"Application"> | string | null
     cvName?: StringNullableWithAggregatesFilter<"Application"> | string | null
     tags?: StringNullableListFilter<"Application">
@@ -5424,117 +3333,15 @@ export namespace Prisma {
     isFavorite?: BoolWithAggregatesFilter<"Application"> | boolean
   }
 
-  export type UserProfileWhereInput = {
-    AND?: UserProfileWhereInput | UserProfileWhereInput[]
-    OR?: UserProfileWhereInput[]
-    NOT?: UserProfileWhereInput | UserProfileWhereInput[]
-    id?: StringFilter<"UserProfile"> | string
-    userId?: StringFilter<"UserProfile"> | string
-    name?: StringFilter<"UserProfile"> | string
-    cvs?: CVListRelationFilter
-    user?: XOR<UserRelationFilter, UserWhereInput>
-  }
-
-  export type UserProfileOrderByWithRelationInput = {
-    id?: SortOrder
-    userId?: SortOrder
-    name?: SortOrder
-    cvs?: CVOrderByRelationAggregateInput
-    user?: UserOrderByWithRelationInput
-  }
-
-  export type UserProfileWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    userId?: string
-    AND?: UserProfileWhereInput | UserProfileWhereInput[]
-    OR?: UserProfileWhereInput[]
-    NOT?: UserProfileWhereInput | UserProfileWhereInput[]
-    name?: StringFilter<"UserProfile"> | string
-    cvs?: CVListRelationFilter
-    user?: XOR<UserRelationFilter, UserWhereInput>
-  }, "id" | "userId">
-
-  export type UserProfileOrderByWithAggregationInput = {
-    id?: SortOrder
-    userId?: SortOrder
-    name?: SortOrder
-    _count?: UserProfileCountOrderByAggregateInput
-    _max?: UserProfileMaxOrderByAggregateInput
-    _min?: UserProfileMinOrderByAggregateInput
-  }
-
-  export type UserProfileScalarWhereWithAggregatesInput = {
-    AND?: UserProfileScalarWhereWithAggregatesInput | UserProfileScalarWhereWithAggregatesInput[]
-    OR?: UserProfileScalarWhereWithAggregatesInput[]
-    NOT?: UserProfileScalarWhereWithAggregatesInput | UserProfileScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"UserProfile"> | string
-    userId?: StringWithAggregatesFilter<"UserProfile"> | string
-    name?: StringWithAggregatesFilter<"UserProfile"> | string
-  }
-
-  export type CVWhereInput = {
-    AND?: CVWhereInput | CVWhereInput[]
-    OR?: CVWhereInput[]
-    NOT?: CVWhereInput | CVWhereInput[]
-    id?: StringFilter<"CV"> | string
-    name?: StringFilter<"CV"> | string
-    url?: StringFilter<"CV"> | string
-    profileId?: StringFilter<"CV"> | string
-    chunks?: StringNullableListFilter<"CV">
-    profile?: XOR<UserProfileRelationFilter, UserProfileWhereInput>
-  }
-
-  export type CVOrderByWithRelationInput = {
-    id?: SortOrder
-    name?: SortOrder
-    url?: SortOrder
-    profileId?: SortOrder
-    chunks?: SortOrder
-    profile?: UserProfileOrderByWithRelationInput
-  }
-
-  export type CVWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    AND?: CVWhereInput | CVWhereInput[]
-    OR?: CVWhereInput[]
-    NOT?: CVWhereInput | CVWhereInput[]
-    name?: StringFilter<"CV"> | string
-    url?: StringFilter<"CV"> | string
-    profileId?: StringFilter<"CV"> | string
-    chunks?: StringNullableListFilter<"CV">
-    profile?: XOR<UserProfileRelationFilter, UserProfileWhereInput>
-  }, "id">
-
-  export type CVOrderByWithAggregationInput = {
-    id?: SortOrder
-    name?: SortOrder
-    url?: SortOrder
-    profileId?: SortOrder
-    chunks?: SortOrder
-    _count?: CVCountOrderByAggregateInput
-    _max?: CVMaxOrderByAggregateInput
-    _min?: CVMinOrderByAggregateInput
-  }
-
-  export type CVScalarWhereWithAggregatesInput = {
-    AND?: CVScalarWhereWithAggregatesInput | CVScalarWhereWithAggregatesInput[]
-    OR?: CVScalarWhereWithAggregatesInput[]
-    NOT?: CVScalarWhereWithAggregatesInput | CVScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"CV"> | string
-    name?: StringWithAggregatesFilter<"CV"> | string
-    url?: StringWithAggregatesFilter<"CV"> | string
-    profileId?: StringWithAggregatesFilter<"CV"> | string
-    chunks?: StringNullableListFilter<"CV">
-  }
-
   export type UserCreateInput = {
     id?: string
     username: string
     email: string
     password: string
     role?: $Enums.UserRole
-    profiles?: UserProfileCreateNestedManyWithoutUserInput
-    applications?: ApplicationCreateNestedManyWithoutUserInput
+    userCVName?: string | null
+    userCVUrl?: string | null
+    Application?: ApplicationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -5543,8 +3350,9 @@ export namespace Prisma {
     email: string
     password: string
     role?: $Enums.UserRole
-    profiles?: UserProfileUncheckedCreateNestedManyWithoutUserInput
-    applications?: ApplicationUncheckedCreateNestedManyWithoutUserInput
+    userCVName?: string | null
+    userCVUrl?: string | null
+    Application?: ApplicationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -5552,8 +3360,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    profiles?: UserProfileUpdateManyWithoutUserNestedInput
-    applications?: ApplicationUpdateManyWithoutUserNestedInput
+    userCVName?: NullableStringFieldUpdateOperationsInput | string | null
+    userCVUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    Application?: ApplicationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -5561,8 +3370,9 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    profiles?: UserProfileUncheckedUpdateManyWithoutUserNestedInput
-    applications?: ApplicationUncheckedUpdateManyWithoutUserNestedInput
+    userCVName?: NullableStringFieldUpdateOperationsInput | string | null
+    userCVUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    Application?: ApplicationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -5571,6 +3381,8 @@ export namespace Prisma {
     email: string
     password: string
     role?: $Enums.UserRole
+    userCVName?: string | null
+    userCVUrl?: string | null
   }
 
   export type UserUpdateManyMutationInput = {
@@ -5578,6 +3390,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    userCVName?: NullableStringFieldUpdateOperationsInput | string | null
+    userCVUrl?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -5585,6 +3399,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    userCVName?: NullableStringFieldUpdateOperationsInput | string | null
+    userCVUrl?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ApplicationCreateInput = {
@@ -5598,7 +3414,7 @@ export namespace Prisma {
     interviewDate?: Date | string | null
     offerDate?: Date | string | null
     unsuccessfulDate?: Date | string | null
-    jobSpec?: string | null
+    jobSpecUrl?: string | null
     jobSpecName?: string | null
     cvName?: string | null
     tags?: ApplicationCreatetagsInput | string[]
@@ -5606,7 +3422,7 @@ export namespace Prisma {
     suitabilityResponses?: ApplicationCreatesuitabilityResponsesInput | string[]
     tipsResponses?: ApplicationCreatetipsResponsesInput | string[]
     isFavorite?: boolean
-    user: UserCreateNestedOneWithoutApplicationsInput
+    user: UserCreateNestedOneWithoutApplicationInput
   }
 
   export type ApplicationUncheckedCreateInput = {
@@ -5621,7 +3437,7 @@ export namespace Prisma {
     interviewDate?: Date | string | null
     offerDate?: Date | string | null
     unsuccessfulDate?: Date | string | null
-    jobSpec?: string | null
+    jobSpecUrl?: string | null
     jobSpecName?: string | null
     cvName?: string | null
     tags?: ApplicationCreatetagsInput | string[]
@@ -5641,7 +3457,7 @@ export namespace Prisma {
     interviewDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     offerDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsuccessfulDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    jobSpec?: NullableStringFieldUpdateOperationsInput | string | null
+    jobSpecUrl?: NullableStringFieldUpdateOperationsInput | string | null
     jobSpecName?: NullableStringFieldUpdateOperationsInput | string | null
     cvName?: NullableStringFieldUpdateOperationsInput | string | null
     tags?: ApplicationUpdatetagsInput | string[]
@@ -5649,7 +3465,7 @@ export namespace Prisma {
     suitabilityResponses?: ApplicationUpdatesuitabilityResponsesInput | string[]
     tipsResponses?: ApplicationUpdatetipsResponsesInput | string[]
     isFavorite?: BoolFieldUpdateOperationsInput | boolean
-    user?: UserUpdateOneRequiredWithoutApplicationsNestedInput
+    user?: UserUpdateOneRequiredWithoutApplicationNestedInput
   }
 
   export type ApplicationUncheckedUpdateInput = {
@@ -5663,7 +3479,7 @@ export namespace Prisma {
     interviewDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     offerDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsuccessfulDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    jobSpec?: NullableStringFieldUpdateOperationsInput | string | null
+    jobSpecUrl?: NullableStringFieldUpdateOperationsInput | string | null
     jobSpecName?: NullableStringFieldUpdateOperationsInput | string | null
     cvName?: NullableStringFieldUpdateOperationsInput | string | null
     tags?: ApplicationUpdatetagsInput | string[]
@@ -5685,7 +3501,7 @@ export namespace Prisma {
     interviewDate?: Date | string | null
     offerDate?: Date | string | null
     unsuccessfulDate?: Date | string | null
-    jobSpec?: string | null
+    jobSpecUrl?: string | null
     jobSpecName?: string | null
     cvName?: string | null
     tags?: ApplicationCreatetagsInput | string[]
@@ -5705,7 +3521,7 @@ export namespace Prisma {
     interviewDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     offerDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsuccessfulDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    jobSpec?: NullableStringFieldUpdateOperationsInput | string | null
+    jobSpecUrl?: NullableStringFieldUpdateOperationsInput | string | null
     jobSpecName?: NullableStringFieldUpdateOperationsInput | string | null
     cvName?: NullableStringFieldUpdateOperationsInput | string | null
     tags?: ApplicationUpdatetagsInput | string[]
@@ -5726,7 +3542,7 @@ export namespace Prisma {
     interviewDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     offerDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsuccessfulDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    jobSpec?: NullableStringFieldUpdateOperationsInput | string | null
+    jobSpecUrl?: NullableStringFieldUpdateOperationsInput | string | null
     jobSpecName?: NullableStringFieldUpdateOperationsInput | string | null
     cvName?: NullableStringFieldUpdateOperationsInput | string | null
     tags?: ApplicationUpdatetagsInput | string[]
@@ -5734,98 +3550,6 @@ export namespace Prisma {
     suitabilityResponses?: ApplicationUpdatesuitabilityResponsesInput | string[]
     tipsResponses?: ApplicationUpdatetipsResponsesInput | string[]
     isFavorite?: BoolFieldUpdateOperationsInput | boolean
-  }
-
-  export type UserProfileCreateInput = {
-    id?: string
-    name: string
-    cvs?: CVCreateNestedManyWithoutProfileInput
-    user: UserCreateNestedOneWithoutProfilesInput
-  }
-
-  export type UserProfileUncheckedCreateInput = {
-    id?: string
-    userId: string
-    name: string
-    cvs?: CVUncheckedCreateNestedManyWithoutProfileInput
-  }
-
-  export type UserProfileUpdateInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    cvs?: CVUpdateManyWithoutProfileNestedInput
-    user?: UserUpdateOneRequiredWithoutProfilesNestedInput
-  }
-
-  export type UserProfileUncheckedUpdateInput = {
-    userId?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    cvs?: CVUncheckedUpdateManyWithoutProfileNestedInput
-  }
-
-  export type UserProfileCreateManyInput = {
-    id?: string
-    userId: string
-    name: string
-  }
-
-  export type UserProfileUpdateManyMutationInput = {
-    name?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type UserProfileUncheckedUpdateManyInput = {
-    userId?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type CVCreateInput = {
-    id?: string
-    name: string
-    url: string
-    chunks?: CVCreatechunksInput | string[]
-    profile: UserProfileCreateNestedOneWithoutCvsInput
-  }
-
-  export type CVUncheckedCreateInput = {
-    id?: string
-    name: string
-    url: string
-    profileId: string
-    chunks?: CVCreatechunksInput | string[]
-  }
-
-  export type CVUpdateInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    url?: StringFieldUpdateOperationsInput | string
-    chunks?: CVUpdatechunksInput | string[]
-    profile?: UserProfileUpdateOneRequiredWithoutCvsNestedInput
-  }
-
-  export type CVUncheckedUpdateInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    url?: StringFieldUpdateOperationsInput | string
-    profileId?: StringFieldUpdateOperationsInput | string
-    chunks?: CVUpdatechunksInput | string[]
-  }
-
-  export type CVCreateManyInput = {
-    id?: string
-    name: string
-    url: string
-    profileId: string
-    chunks?: CVCreatechunksInput | string[]
-  }
-
-  export type CVUpdateManyMutationInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    url?: StringFieldUpdateOperationsInput | string
-    chunks?: CVUpdatechunksInput | string[]
-  }
-
-  export type CVUncheckedUpdateManyInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    url?: StringFieldUpdateOperationsInput | string
-    profileId?: StringFieldUpdateOperationsInput | string
-    chunks?: CVUpdatechunksInput | string[]
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -5850,20 +3574,26 @@ export namespace Prisma {
     not?: NestedEnumUserRoleFilter<$PrismaModel> | $Enums.UserRole
   }
 
-  export type UserProfileListRelationFilter = {
-    every?: UserProfileWhereInput
-    some?: UserProfileWhereInput
-    none?: UserProfileWhereInput
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+    isSet?: boolean
   }
 
   export type ApplicationListRelationFilter = {
     every?: ApplicationWhereInput
     some?: ApplicationWhereInput
     none?: ApplicationWhereInput
-  }
-
-  export type UserProfileOrderByRelationAggregateInput = {
-    _count?: SortOrder
   }
 
   export type ApplicationOrderByRelationAggregateInput = {
@@ -5876,6 +3606,8 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     role?: SortOrder
+    userCVName?: SortOrder
+    userCVUrl?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -5884,6 +3616,8 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     role?: SortOrder
+    userCVName?: SortOrder
+    userCVUrl?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -5892,6 +3626,8 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     role?: SortOrder
+    userCVName?: SortOrder
+    userCVUrl?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -5922,6 +3658,25 @@ export namespace Prisma {
     _max?: NestedEnumUserRoleFilter<$PrismaModel>
   }
 
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+    isSet?: boolean
+  }
+
   export type DateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -5942,22 +3697,6 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-    isSet?: boolean
-  }
-
-  export type StringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
     isSet?: boolean
   }
 
@@ -5991,7 +3730,7 @@ export namespace Prisma {
     interviewDate?: SortOrder
     offerDate?: SortOrder
     unsuccessfulDate?: SortOrder
-    jobSpec?: SortOrder
+    jobSpecUrl?: SortOrder
     jobSpecName?: SortOrder
     cvName?: SortOrder
     tags?: SortOrder
@@ -6013,7 +3752,7 @@ export namespace Prisma {
     interviewDate?: SortOrder
     offerDate?: SortOrder
     unsuccessfulDate?: SortOrder
-    jobSpec?: SortOrder
+    jobSpecUrl?: SortOrder
     jobSpecName?: SortOrder
     cvName?: SortOrder
     isFavorite?: SortOrder
@@ -6031,7 +3770,7 @@ export namespace Prisma {
     interviewDate?: SortOrder
     offerDate?: SortOrder
     unsuccessfulDate?: SortOrder
-    jobSpec?: SortOrder
+    jobSpecUrl?: SortOrder
     jobSpecName?: SortOrder
     cvName?: SortOrder
     isFavorite?: SortOrder
@@ -6066,25 +3805,6 @@ export namespace Prisma {
     isSet?: boolean
   }
 
-  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
-    isSet?: boolean
-  }
-
   export type BoolWithAggregatesFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
@@ -6093,80 +3813,11 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
-  export type CVListRelationFilter = {
-    every?: CVWhereInput
-    some?: CVWhereInput
-    none?: CVWhereInput
-  }
-
-  export type CVOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type UserProfileCountOrderByAggregateInput = {
-    id?: SortOrder
-    userId?: SortOrder
-    name?: SortOrder
-  }
-
-  export type UserProfileMaxOrderByAggregateInput = {
-    id?: SortOrder
-    userId?: SortOrder
-    name?: SortOrder
-  }
-
-  export type UserProfileMinOrderByAggregateInput = {
-    id?: SortOrder
-    userId?: SortOrder
-    name?: SortOrder
-  }
-
-  export type UserProfileRelationFilter = {
-    is?: UserProfileWhereInput
-    isNot?: UserProfileWhereInput
-  }
-
-  export type CVCountOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    url?: SortOrder
-    profileId?: SortOrder
-    chunks?: SortOrder
-  }
-
-  export type CVMaxOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    url?: SortOrder
-    profileId?: SortOrder
-  }
-
-  export type CVMinOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    url?: SortOrder
-    profileId?: SortOrder
-  }
-
-  export type UserProfileCreateNestedManyWithoutUserInput = {
-    create?: XOR<UserProfileCreateWithoutUserInput, UserProfileUncheckedCreateWithoutUserInput> | UserProfileCreateWithoutUserInput[] | UserProfileUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: UserProfileCreateOrConnectWithoutUserInput | UserProfileCreateOrConnectWithoutUserInput[]
-    createMany?: UserProfileCreateManyUserInputEnvelope
-    connect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
-  }
-
   export type ApplicationCreateNestedManyWithoutUserInput = {
     create?: XOR<ApplicationCreateWithoutUserInput, ApplicationUncheckedCreateWithoutUserInput> | ApplicationCreateWithoutUserInput[] | ApplicationUncheckedCreateWithoutUserInput[]
     connectOrCreate?: ApplicationCreateOrConnectWithoutUserInput | ApplicationCreateOrConnectWithoutUserInput[]
     createMany?: ApplicationCreateManyUserInputEnvelope
     connect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-  }
-
-  export type UserProfileUncheckedCreateNestedManyWithoutUserInput = {
-    create?: XOR<UserProfileCreateWithoutUserInput, UserProfileUncheckedCreateWithoutUserInput> | UserProfileCreateWithoutUserInput[] | UserProfileUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: UserProfileCreateOrConnectWithoutUserInput | UserProfileCreateOrConnectWithoutUserInput[]
-    createMany?: UserProfileCreateManyUserInputEnvelope
-    connect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
   }
 
   export type ApplicationUncheckedCreateNestedManyWithoutUserInput = {
@@ -6184,18 +3835,9 @@ export namespace Prisma {
     set?: $Enums.UserRole
   }
 
-  export type UserProfileUpdateManyWithoutUserNestedInput = {
-    create?: XOR<UserProfileCreateWithoutUserInput, UserProfileUncheckedCreateWithoutUserInput> | UserProfileCreateWithoutUserInput[] | UserProfileUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: UserProfileCreateOrConnectWithoutUserInput | UserProfileCreateOrConnectWithoutUserInput[]
-    upsert?: UserProfileUpsertWithWhereUniqueWithoutUserInput | UserProfileUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: UserProfileCreateManyUserInputEnvelope
-    set?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
-    disconnect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
-    delete?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
-    connect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
-    update?: UserProfileUpdateWithWhereUniqueWithoutUserInput | UserProfileUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: UserProfileUpdateManyWithWhereWithoutUserInput | UserProfileUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: UserProfileScalarWhereInput | UserProfileScalarWhereInput[]
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
+    unset?: boolean
   }
 
   export type ApplicationUpdateManyWithoutUserNestedInput = {
@@ -6210,20 +3852,6 @@ export namespace Prisma {
     update?: ApplicationUpdateWithWhereUniqueWithoutUserInput | ApplicationUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: ApplicationUpdateManyWithWhereWithoutUserInput | ApplicationUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: ApplicationScalarWhereInput | ApplicationScalarWhereInput[]
-  }
-
-  export type UserProfileUncheckedUpdateManyWithoutUserNestedInput = {
-    create?: XOR<UserProfileCreateWithoutUserInput, UserProfileUncheckedCreateWithoutUserInput> | UserProfileCreateWithoutUserInput[] | UserProfileUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: UserProfileCreateOrConnectWithoutUserInput | UserProfileCreateOrConnectWithoutUserInput[]
-    upsert?: UserProfileUpsertWithWhereUniqueWithoutUserInput | UserProfileUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: UserProfileCreateManyUserInputEnvelope
-    set?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
-    disconnect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
-    delete?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
-    connect?: UserProfileWhereUniqueInput | UserProfileWhereUniqueInput[]
-    update?: UserProfileUpdateWithWhereUniqueWithoutUserInput | UserProfileUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: UserProfileUpdateManyWithWhereWithoutUserInput | UserProfileUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: UserProfileScalarWhereInput | UserProfileScalarWhereInput[]
   }
 
   export type ApplicationUncheckedUpdateManyWithoutUserNestedInput = {
@@ -6256,9 +3884,9 @@ export namespace Prisma {
     set: string[]
   }
 
-  export type UserCreateNestedOneWithoutApplicationsInput = {
-    create?: XOR<UserCreateWithoutApplicationsInput, UserUncheckedCreateWithoutApplicationsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutApplicationsInput
+  export type UserCreateNestedOneWithoutApplicationInput = {
+    create?: XOR<UserCreateWithoutApplicationInput, UserUncheckedCreateWithoutApplicationInput>
+    connectOrCreate?: UserCreateOrConnectWithoutApplicationInput
     connect?: UserWhereUniqueInput
   }
 
@@ -6268,11 +3896,6 @@ export namespace Prisma {
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
     set?: Date | string | null
-    unset?: boolean
-  }
-
-  export type NullableStringFieldUpdateOperationsInput = {
-    set?: string | null
     unset?: boolean
   }
 
@@ -6300,91 +3923,12 @@ export namespace Prisma {
     set?: boolean
   }
 
-  export type UserUpdateOneRequiredWithoutApplicationsNestedInput = {
-    create?: XOR<UserCreateWithoutApplicationsInput, UserUncheckedCreateWithoutApplicationsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutApplicationsInput
-    upsert?: UserUpsertWithoutApplicationsInput
+  export type UserUpdateOneRequiredWithoutApplicationNestedInput = {
+    create?: XOR<UserCreateWithoutApplicationInput, UserUncheckedCreateWithoutApplicationInput>
+    connectOrCreate?: UserCreateOrConnectWithoutApplicationInput
+    upsert?: UserUpsertWithoutApplicationInput
     connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutApplicationsInput, UserUpdateWithoutApplicationsInput>, UserUncheckedUpdateWithoutApplicationsInput>
-  }
-
-  export type CVCreateNestedManyWithoutProfileInput = {
-    create?: XOR<CVCreateWithoutProfileInput, CVUncheckedCreateWithoutProfileInput> | CVCreateWithoutProfileInput[] | CVUncheckedCreateWithoutProfileInput[]
-    connectOrCreate?: CVCreateOrConnectWithoutProfileInput | CVCreateOrConnectWithoutProfileInput[]
-    createMany?: CVCreateManyProfileInputEnvelope
-    connect?: CVWhereUniqueInput | CVWhereUniqueInput[]
-  }
-
-  export type UserCreateNestedOneWithoutProfilesInput = {
-    create?: XOR<UserCreateWithoutProfilesInput, UserUncheckedCreateWithoutProfilesInput>
-    connectOrCreate?: UserCreateOrConnectWithoutProfilesInput
-    connect?: UserWhereUniqueInput
-  }
-
-  export type CVUncheckedCreateNestedManyWithoutProfileInput = {
-    create?: XOR<CVCreateWithoutProfileInput, CVUncheckedCreateWithoutProfileInput> | CVCreateWithoutProfileInput[] | CVUncheckedCreateWithoutProfileInput[]
-    connectOrCreate?: CVCreateOrConnectWithoutProfileInput | CVCreateOrConnectWithoutProfileInput[]
-    createMany?: CVCreateManyProfileInputEnvelope
-    connect?: CVWhereUniqueInput | CVWhereUniqueInput[]
-  }
-
-  export type CVUpdateManyWithoutProfileNestedInput = {
-    create?: XOR<CVCreateWithoutProfileInput, CVUncheckedCreateWithoutProfileInput> | CVCreateWithoutProfileInput[] | CVUncheckedCreateWithoutProfileInput[]
-    connectOrCreate?: CVCreateOrConnectWithoutProfileInput | CVCreateOrConnectWithoutProfileInput[]
-    upsert?: CVUpsertWithWhereUniqueWithoutProfileInput | CVUpsertWithWhereUniqueWithoutProfileInput[]
-    createMany?: CVCreateManyProfileInputEnvelope
-    set?: CVWhereUniqueInput | CVWhereUniqueInput[]
-    disconnect?: CVWhereUniqueInput | CVWhereUniqueInput[]
-    delete?: CVWhereUniqueInput | CVWhereUniqueInput[]
-    connect?: CVWhereUniqueInput | CVWhereUniqueInput[]
-    update?: CVUpdateWithWhereUniqueWithoutProfileInput | CVUpdateWithWhereUniqueWithoutProfileInput[]
-    updateMany?: CVUpdateManyWithWhereWithoutProfileInput | CVUpdateManyWithWhereWithoutProfileInput[]
-    deleteMany?: CVScalarWhereInput | CVScalarWhereInput[]
-  }
-
-  export type UserUpdateOneRequiredWithoutProfilesNestedInput = {
-    create?: XOR<UserCreateWithoutProfilesInput, UserUncheckedCreateWithoutProfilesInput>
-    connectOrCreate?: UserCreateOrConnectWithoutProfilesInput
-    upsert?: UserUpsertWithoutProfilesInput
-    connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutProfilesInput, UserUpdateWithoutProfilesInput>, UserUncheckedUpdateWithoutProfilesInput>
-  }
-
-  export type CVUncheckedUpdateManyWithoutProfileNestedInput = {
-    create?: XOR<CVCreateWithoutProfileInput, CVUncheckedCreateWithoutProfileInput> | CVCreateWithoutProfileInput[] | CVUncheckedCreateWithoutProfileInput[]
-    connectOrCreate?: CVCreateOrConnectWithoutProfileInput | CVCreateOrConnectWithoutProfileInput[]
-    upsert?: CVUpsertWithWhereUniqueWithoutProfileInput | CVUpsertWithWhereUniqueWithoutProfileInput[]
-    createMany?: CVCreateManyProfileInputEnvelope
-    set?: CVWhereUniqueInput | CVWhereUniqueInput[]
-    disconnect?: CVWhereUniqueInput | CVWhereUniqueInput[]
-    delete?: CVWhereUniqueInput | CVWhereUniqueInput[]
-    connect?: CVWhereUniqueInput | CVWhereUniqueInput[]
-    update?: CVUpdateWithWhereUniqueWithoutProfileInput | CVUpdateWithWhereUniqueWithoutProfileInput[]
-    updateMany?: CVUpdateManyWithWhereWithoutProfileInput | CVUpdateManyWithWhereWithoutProfileInput[]
-    deleteMany?: CVScalarWhereInput | CVScalarWhereInput[]
-  }
-
-  export type CVCreatechunksInput = {
-    set: string[]
-  }
-
-  export type UserProfileCreateNestedOneWithoutCvsInput = {
-    create?: XOR<UserProfileCreateWithoutCvsInput, UserProfileUncheckedCreateWithoutCvsInput>
-    connectOrCreate?: UserProfileCreateOrConnectWithoutCvsInput
-    connect?: UserProfileWhereUniqueInput
-  }
-
-  export type CVUpdatechunksInput = {
-    set?: string[]
-    push?: string | string[]
-  }
-
-  export type UserProfileUpdateOneRequiredWithoutCvsNestedInput = {
-    create?: XOR<UserProfileCreateWithoutCvsInput, UserProfileUncheckedCreateWithoutCvsInput>
-    connectOrCreate?: UserProfileCreateOrConnectWithoutCvsInput
-    upsert?: UserProfileUpsertWithoutCvsInput
-    connect?: UserProfileWhereUniqueInput
-    update?: XOR<XOR<UserProfileUpdateToOneWithWhereWithoutCvsInput, UserProfileUpdateWithoutCvsInput>, UserProfileUncheckedUpdateWithoutCvsInput>
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutApplicationInput, UserUpdateWithoutApplicationInput>, UserUncheckedUpdateWithoutApplicationInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -6406,6 +3950,21 @@ export namespace Prisma {
     in?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
     notIn?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
     not?: NestedEnumUserRoleFilter<$PrismaModel> | $Enums.UserRole
+  }
+
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+    isSet?: boolean
   }
 
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
@@ -6446,6 +4005,36 @@ export namespace Prisma {
     _max?: NestedEnumUserRoleFilter<$PrismaModel>
   }
 
+  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+    isSet?: boolean
+  }
+
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+    isSet?: boolean
+  }
+
   export type NestedDateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -6466,21 +4055,6 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-    isSet?: boolean
-  }
-
-  export type NestedStringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
     isSet?: boolean
   }
 
@@ -6518,63 +4092,12 @@ export namespace Prisma {
     isSet?: boolean
   }
 
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-    isSet?: boolean
-  }
-
-  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
-    isSet?: boolean
-  }
-
   export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
-  }
-
-  export type UserProfileCreateWithoutUserInput = {
-    id?: string
-    name: string
-    cvs?: CVCreateNestedManyWithoutProfileInput
-  }
-
-  export type UserProfileUncheckedCreateWithoutUserInput = {
-    id?: string
-    name: string
-    cvs?: CVUncheckedCreateNestedManyWithoutProfileInput
-  }
-
-  export type UserProfileCreateOrConnectWithoutUserInput = {
-    where: UserProfileWhereUniqueInput
-    create: XOR<UserProfileCreateWithoutUserInput, UserProfileUncheckedCreateWithoutUserInput>
-  }
-
-  export type UserProfileCreateManyUserInputEnvelope = {
-    data: UserProfileCreateManyUserInput | UserProfileCreateManyUserInput[]
   }
 
   export type ApplicationCreateWithoutUserInput = {
@@ -6588,7 +4111,7 @@ export namespace Prisma {
     interviewDate?: Date | string | null
     offerDate?: Date | string | null
     unsuccessfulDate?: Date | string | null
-    jobSpec?: string | null
+    jobSpecUrl?: string | null
     jobSpecName?: string | null
     cvName?: string | null
     tags?: ApplicationCreatetagsInput | string[]
@@ -6609,7 +4132,7 @@ export namespace Prisma {
     interviewDate?: Date | string | null
     offerDate?: Date | string | null
     unsuccessfulDate?: Date | string | null
-    jobSpec?: string | null
+    jobSpecUrl?: string | null
     jobSpecName?: string | null
     cvName?: string | null
     tags?: ApplicationCreatetagsInput | string[]
@@ -6626,31 +4149,6 @@ export namespace Prisma {
 
   export type ApplicationCreateManyUserInputEnvelope = {
     data: ApplicationCreateManyUserInput | ApplicationCreateManyUserInput[]
-  }
-
-  export type UserProfileUpsertWithWhereUniqueWithoutUserInput = {
-    where: UserProfileWhereUniqueInput
-    update: XOR<UserProfileUpdateWithoutUserInput, UserProfileUncheckedUpdateWithoutUserInput>
-    create: XOR<UserProfileCreateWithoutUserInput, UserProfileUncheckedCreateWithoutUserInput>
-  }
-
-  export type UserProfileUpdateWithWhereUniqueWithoutUserInput = {
-    where: UserProfileWhereUniqueInput
-    data: XOR<UserProfileUpdateWithoutUserInput, UserProfileUncheckedUpdateWithoutUserInput>
-  }
-
-  export type UserProfileUpdateManyWithWhereWithoutUserInput = {
-    where: UserProfileScalarWhereInput
-    data: XOR<UserProfileUpdateManyMutationInput, UserProfileUncheckedUpdateManyWithoutUserInput>
-  }
-
-  export type UserProfileScalarWhereInput = {
-    AND?: UserProfileScalarWhereInput | UserProfileScalarWhereInput[]
-    OR?: UserProfileScalarWhereInput[]
-    NOT?: UserProfileScalarWhereInput | UserProfileScalarWhereInput[]
-    id?: StringFilter<"UserProfile"> | string
-    userId?: StringFilter<"UserProfile"> | string
-    name?: StringFilter<"UserProfile"> | string
   }
 
   export type ApplicationUpsertWithWhereUniqueWithoutUserInput = {
@@ -6684,7 +4182,7 @@ export namespace Prisma {
     interviewDate?: DateTimeNullableFilter<"Application"> | Date | string | null
     offerDate?: DateTimeNullableFilter<"Application"> | Date | string | null
     unsuccessfulDate?: DateTimeNullableFilter<"Application"> | Date | string | null
-    jobSpec?: StringNullableFilter<"Application"> | string | null
+    jobSpecUrl?: StringNullableFilter<"Application"> | string | null
     jobSpecName?: StringNullableFilter<"Application"> | string | null
     cvName?: StringNullableFilter<"Application"> | string | null
     tags?: StringNullableListFilter<"Application">
@@ -6694,197 +4192,58 @@ export namespace Prisma {
     isFavorite?: BoolFilter<"Application"> | boolean
   }
 
-  export type UserCreateWithoutApplicationsInput = {
+  export type UserCreateWithoutApplicationInput = {
     id?: string
     username: string
     email: string
     password: string
     role?: $Enums.UserRole
-    profiles?: UserProfileCreateNestedManyWithoutUserInput
+    userCVName?: string | null
+    userCVUrl?: string | null
   }
 
-  export type UserUncheckedCreateWithoutApplicationsInput = {
+  export type UserUncheckedCreateWithoutApplicationInput = {
     id?: string
     username: string
     email: string
     password: string
     role?: $Enums.UserRole
-    profiles?: UserProfileUncheckedCreateNestedManyWithoutUserInput
+    userCVName?: string | null
+    userCVUrl?: string | null
   }
 
-  export type UserCreateOrConnectWithoutApplicationsInput = {
+  export type UserCreateOrConnectWithoutApplicationInput = {
     where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutApplicationsInput, UserUncheckedCreateWithoutApplicationsInput>
+    create: XOR<UserCreateWithoutApplicationInput, UserUncheckedCreateWithoutApplicationInput>
   }
 
-  export type UserUpsertWithoutApplicationsInput = {
-    update: XOR<UserUpdateWithoutApplicationsInput, UserUncheckedUpdateWithoutApplicationsInput>
-    create: XOR<UserCreateWithoutApplicationsInput, UserUncheckedCreateWithoutApplicationsInput>
+  export type UserUpsertWithoutApplicationInput = {
+    update: XOR<UserUpdateWithoutApplicationInput, UserUncheckedUpdateWithoutApplicationInput>
+    create: XOR<UserCreateWithoutApplicationInput, UserUncheckedCreateWithoutApplicationInput>
     where?: UserWhereInput
   }
 
-  export type UserUpdateToOneWithWhereWithoutApplicationsInput = {
+  export type UserUpdateToOneWithWhereWithoutApplicationInput = {
     where?: UserWhereInput
-    data: XOR<UserUpdateWithoutApplicationsInput, UserUncheckedUpdateWithoutApplicationsInput>
+    data: XOR<UserUpdateWithoutApplicationInput, UserUncheckedUpdateWithoutApplicationInput>
   }
 
-  export type UserUpdateWithoutApplicationsInput = {
+  export type UserUpdateWithoutApplicationInput = {
     username?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    profiles?: UserProfileUpdateManyWithoutUserNestedInput
+    userCVName?: NullableStringFieldUpdateOperationsInput | string | null
+    userCVUrl?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type UserUncheckedUpdateWithoutApplicationsInput = {
+  export type UserUncheckedUpdateWithoutApplicationInput = {
     username?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    profiles?: UserProfileUncheckedUpdateManyWithoutUserNestedInput
-  }
-
-  export type CVCreateWithoutProfileInput = {
-    id?: string
-    name: string
-    url: string
-    chunks?: CVCreatechunksInput | string[]
-  }
-
-  export type CVUncheckedCreateWithoutProfileInput = {
-    id?: string
-    name: string
-    url: string
-    chunks?: CVCreatechunksInput | string[]
-  }
-
-  export type CVCreateOrConnectWithoutProfileInput = {
-    where: CVWhereUniqueInput
-    create: XOR<CVCreateWithoutProfileInput, CVUncheckedCreateWithoutProfileInput>
-  }
-
-  export type CVCreateManyProfileInputEnvelope = {
-    data: CVCreateManyProfileInput | CVCreateManyProfileInput[]
-  }
-
-  export type UserCreateWithoutProfilesInput = {
-    id?: string
-    username: string
-    email: string
-    password: string
-    role?: $Enums.UserRole
-    applications?: ApplicationCreateNestedManyWithoutUserInput
-  }
-
-  export type UserUncheckedCreateWithoutProfilesInput = {
-    id?: string
-    username: string
-    email: string
-    password: string
-    role?: $Enums.UserRole
-    applications?: ApplicationUncheckedCreateNestedManyWithoutUserInput
-  }
-
-  export type UserCreateOrConnectWithoutProfilesInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutProfilesInput, UserUncheckedCreateWithoutProfilesInput>
-  }
-
-  export type CVUpsertWithWhereUniqueWithoutProfileInput = {
-    where: CVWhereUniqueInput
-    update: XOR<CVUpdateWithoutProfileInput, CVUncheckedUpdateWithoutProfileInput>
-    create: XOR<CVCreateWithoutProfileInput, CVUncheckedCreateWithoutProfileInput>
-  }
-
-  export type CVUpdateWithWhereUniqueWithoutProfileInput = {
-    where: CVWhereUniqueInput
-    data: XOR<CVUpdateWithoutProfileInput, CVUncheckedUpdateWithoutProfileInput>
-  }
-
-  export type CVUpdateManyWithWhereWithoutProfileInput = {
-    where: CVScalarWhereInput
-    data: XOR<CVUpdateManyMutationInput, CVUncheckedUpdateManyWithoutProfileInput>
-  }
-
-  export type CVScalarWhereInput = {
-    AND?: CVScalarWhereInput | CVScalarWhereInput[]
-    OR?: CVScalarWhereInput[]
-    NOT?: CVScalarWhereInput | CVScalarWhereInput[]
-    id?: StringFilter<"CV"> | string
-    name?: StringFilter<"CV"> | string
-    url?: StringFilter<"CV"> | string
-    profileId?: StringFilter<"CV"> | string
-    chunks?: StringNullableListFilter<"CV">
-  }
-
-  export type UserUpsertWithoutProfilesInput = {
-    update: XOR<UserUpdateWithoutProfilesInput, UserUncheckedUpdateWithoutProfilesInput>
-    create: XOR<UserCreateWithoutProfilesInput, UserUncheckedCreateWithoutProfilesInput>
-    where?: UserWhereInput
-  }
-
-  export type UserUpdateToOneWithWhereWithoutProfilesInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutProfilesInput, UserUncheckedUpdateWithoutProfilesInput>
-  }
-
-  export type UserUpdateWithoutProfilesInput = {
-    username?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    applications?: ApplicationUpdateManyWithoutUserNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutProfilesInput = {
-    username?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    applications?: ApplicationUncheckedUpdateManyWithoutUserNestedInput
-  }
-
-  export type UserProfileCreateWithoutCvsInput = {
-    id?: string
-    name: string
-    user: UserCreateNestedOneWithoutProfilesInput
-  }
-
-  export type UserProfileUncheckedCreateWithoutCvsInput = {
-    id?: string
-    userId: string
-    name: string
-  }
-
-  export type UserProfileCreateOrConnectWithoutCvsInput = {
-    where: UserProfileWhereUniqueInput
-    create: XOR<UserProfileCreateWithoutCvsInput, UserProfileUncheckedCreateWithoutCvsInput>
-  }
-
-  export type UserProfileUpsertWithoutCvsInput = {
-    update: XOR<UserProfileUpdateWithoutCvsInput, UserProfileUncheckedUpdateWithoutCvsInput>
-    create: XOR<UserProfileCreateWithoutCvsInput, UserProfileUncheckedCreateWithoutCvsInput>
-    where?: UserProfileWhereInput
-  }
-
-  export type UserProfileUpdateToOneWithWhereWithoutCvsInput = {
-    where?: UserProfileWhereInput
-    data: XOR<UserProfileUpdateWithoutCvsInput, UserProfileUncheckedUpdateWithoutCvsInput>
-  }
-
-  export type UserProfileUpdateWithoutCvsInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    user?: UserUpdateOneRequiredWithoutProfilesNestedInput
-  }
-
-  export type UserProfileUncheckedUpdateWithoutCvsInput = {
-    userId?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type UserProfileCreateManyUserInput = {
-    id?: string
-    name: string
+    userCVName?: NullableStringFieldUpdateOperationsInput | string | null
+    userCVUrl?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ApplicationCreateManyUserInput = {
@@ -6898,7 +4257,7 @@ export namespace Prisma {
     interviewDate?: Date | string | null
     offerDate?: Date | string | null
     unsuccessfulDate?: Date | string | null
-    jobSpec?: string | null
+    jobSpecUrl?: string | null
     jobSpecName?: string | null
     cvName?: string | null
     tags?: ApplicationCreatetagsInput | string[]
@@ -6906,20 +4265,6 @@ export namespace Prisma {
     suitabilityResponses?: ApplicationCreatesuitabilityResponsesInput | string[]
     tipsResponses?: ApplicationCreatetipsResponsesInput | string[]
     isFavorite?: boolean
-  }
-
-  export type UserProfileUpdateWithoutUserInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    cvs?: CVUpdateManyWithoutProfileNestedInput
-  }
-
-  export type UserProfileUncheckedUpdateWithoutUserInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    cvs?: CVUncheckedUpdateManyWithoutProfileNestedInput
-  }
-
-  export type UserProfileUncheckedUpdateManyWithoutUserInput = {
-    name?: StringFieldUpdateOperationsInput | string
   }
 
   export type ApplicationUpdateWithoutUserInput = {
@@ -6932,7 +4277,7 @@ export namespace Prisma {
     interviewDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     offerDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsuccessfulDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    jobSpec?: NullableStringFieldUpdateOperationsInput | string | null
+    jobSpecUrl?: NullableStringFieldUpdateOperationsInput | string | null
     jobSpecName?: NullableStringFieldUpdateOperationsInput | string | null
     cvName?: NullableStringFieldUpdateOperationsInput | string | null
     tags?: ApplicationUpdatetagsInput | string[]
@@ -6952,7 +4297,7 @@ export namespace Prisma {
     interviewDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     offerDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsuccessfulDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    jobSpec?: NullableStringFieldUpdateOperationsInput | string | null
+    jobSpecUrl?: NullableStringFieldUpdateOperationsInput | string | null
     jobSpecName?: NullableStringFieldUpdateOperationsInput | string | null
     cvName?: NullableStringFieldUpdateOperationsInput | string | null
     tags?: ApplicationUpdatetagsInput | string[]
@@ -6972,7 +4317,7 @@ export namespace Prisma {
     interviewDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     offerDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     unsuccessfulDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    jobSpec?: NullableStringFieldUpdateOperationsInput | string | null
+    jobSpecUrl?: NullableStringFieldUpdateOperationsInput | string | null
     jobSpecName?: NullableStringFieldUpdateOperationsInput | string | null
     cvName?: NullableStringFieldUpdateOperationsInput | string | null
     tags?: ApplicationUpdatetagsInput | string[]
@@ -6980,31 +4325,6 @@ export namespace Prisma {
     suitabilityResponses?: ApplicationUpdatesuitabilityResponsesInput | string[]
     tipsResponses?: ApplicationUpdatetipsResponsesInput | string[]
     isFavorite?: BoolFieldUpdateOperationsInput | boolean
-  }
-
-  export type CVCreateManyProfileInput = {
-    id?: string
-    name: string
-    url: string
-    chunks?: CVCreatechunksInput | string[]
-  }
-
-  export type CVUpdateWithoutProfileInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    url?: StringFieldUpdateOperationsInput | string
-    chunks?: CVUpdatechunksInput | string[]
-  }
-
-  export type CVUncheckedUpdateWithoutProfileInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    url?: StringFieldUpdateOperationsInput | string
-    chunks?: CVUpdatechunksInput | string[]
-  }
-
-  export type CVUncheckedUpdateManyWithoutProfileInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    url?: StringFieldUpdateOperationsInput | string
-    chunks?: CVUpdatechunksInput | string[]
   }
 
 
@@ -7017,10 +4337,6 @@ export namespace Prisma {
      */
     export type UserCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = UserCountOutputTypeDefaultArgs<ExtArgs>
     /**
-     * @deprecated Use UserProfileCountOutputTypeDefaultArgs instead
-     */
-    export type UserProfileCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = UserProfileCountOutputTypeDefaultArgs<ExtArgs>
-    /**
      * @deprecated Use UserDefaultArgs instead
      */
     export type UserArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = UserDefaultArgs<ExtArgs>
@@ -7028,14 +4344,6 @@ export namespace Prisma {
      * @deprecated Use ApplicationDefaultArgs instead
      */
     export type ApplicationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ApplicationDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use UserProfileDefaultArgs instead
-     */
-    export type UserProfileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = UserProfileDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use CVDefaultArgs instead
-     */
-    export type CVArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CVDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany
