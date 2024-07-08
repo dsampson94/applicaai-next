@@ -24,6 +24,7 @@
     "filepond-plugin-file-encode": "^2.1.14",
     "jsonwebtoken": "^9.0.2",
     "jwt-decode": "^4.0.0",
+    "mongodb": "^5.9.2",
     "next": "14.2.4",
     "pdf-parse": "^1.1.1",
     "react": "^18",
