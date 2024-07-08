@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import InsightsModal from './InsightsModal';
 import DeleteConfirmationModal from './DeleteConfirmationModal';
-import useJobApplicationsStore from '../lib/api/client/store/jobApplicationsStore';
+import useJobApplicationsStore from '../lib/store/jobApplicationsStore';
 import { Application } from '../prisma/generated/prisma';
 
 interface JobApplicationsTableProps {

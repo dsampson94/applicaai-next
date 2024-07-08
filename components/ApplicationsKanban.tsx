@@ -9,7 +9,7 @@ import MagicIcon from '@mui/icons-material/AutoAwesome';
 import EyeIcon from '@mui/icons-material/Visibility';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Application } from '../prisma/generated/prisma';
-import useJobApplicationsStore from '../lib/api/client/store/jobApplicationsStore';
+import useJobApplicationsStore from '../lib/store/jobApplicationsStore';
 
 interface JobApplicationsKanbanProps {
     onOpenModal: (jobApplication: Application | null) => void;

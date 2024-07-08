@@ -1,7 +1,7 @@
 import {create} from 'zustand';
 import axios from 'axios';
-import {getAuthHeaders} from '../../../auth';
-import {User} from '../../../types';
+import {getAuthHeaders} from '../auth';
+import {User} from '../types';
 
 interface UserStore {
     user: User | null;

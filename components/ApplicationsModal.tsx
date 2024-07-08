@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import { Application } from '../prisma/generated/prisma';
+import useJobApplicationsStore from '../lib/store/jobApplicationsStore';
 
 interface JobApplicationModalProps {
     application?: Application | null;
     onClose: () => void;
-    onSave: (application: Application) => void;
 }
 
 const statusOptions = [
@@ -18,29 +17,35 @@ const statusOptions = [
     { value: 'Rejected', label: 'Rejected' },
 ];
 
-const JobApplicationModal: React.FC<JobApplicationModalProps> = ({ application, onClose, onSave }) => {
+const JobApplicationModal: React.FC<JobApplicationModalProps> = ({ application, onClose }) => {
     const [role, setRole] = useState(application?.role || '');
     const [company, setCompany] = useState(application?.company || '');
     const [status, setStatus] = useState(application?.status || 'Not Applied');
-    const [jobSpec, setJobSpec] = useState<string | null>(application?.jobSpec || null);
+    const [jobSpecUrl, setJobSpecUrl] = useState<string | null>(application?.jobSpecUrl || null);
     const [jobSpecName, setJobSpecName] = useState<string | null>(application?.jobSpecName || '');
     const [cvName, setCvName] = useState<string | null>(application?.cvName || '');
     const [tags, setTags] = useState<string[]>(application?.tags || []);
     const [newTag, setNewTag] = useState<string>('');
+
+    const { addApplication, updateApplication } = useJobApplicationsStore();
 
     useEffect(() => {
         if (application) {
             setRole(application.role || '');
             setCompany(application.company || '');
             setStatus(application.status || 'Not Applied');
-            setJobSpec(application.jobSpec || null);
+            setJobSpecUrl(application.jobSpecUrl || null);
             setJobSpecName(application.jobSpecName || '');
             setCvName(application.cvName || null);
             setTags(application.tags || []);
         }
     }, [application]);
 
-    const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>, setFile: React.Dispatch<React.SetStateAction<string | null>>, setName: React.Dispatch<React.SetStateAction<string | null>>) => {
+    const handleFileUpload = (
+        event: React.ChangeEvent<HTMLInputElement>,
+        setFile: React.Dispatch<React.SetStateAction<string | null>>,
+        setName: React.Dispatch<React.SetStateAction<string | null>>
+    ) => {
         const file = event.target.files?.[0];
         if (file) {
             const reader = new FileReader();
@@ -61,19 +66,17 @@ const JobApplicationModal: React.FC<JobApplicationModalProps> = ({ application, 
     };
 
     const handleRemoveTag = (tag: string) => {
-        setTags(tags.filter(t => t !== tag));
+        setTags(tags.filter((t) => t !== tag));
     };
 
     const handleSubmit = async () => {
-        const updates = { role, company, status, jobSpec, jobSpecName, cvName, tags };
+        const updates = { role, company, status, jobSpec: jobSpecUrl, jobSpecName, cvName, tags };
         try {
             if (application) {
-                const response = await axios.put(`/api/applications/${application.id}`, updates);
-                onSave(response.data);
+                await updateApplication(application.id, updates);
                 toast.success('Job application updated successfully');
             } else {
-                const response = await axios.post('/api/applications', updates);
-                onSave(response.data);
+                await addApplication(updates as unknown as Omit<Application, 'id'>);
                 toast.success('Job application created successfully');
             }
             onClose();
@@ -85,7 +88,7 @@ const JobApplicationModal: React.FC<JobApplicationModalProps> = ({ application, 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-10">
             <div className="bg-white p-8 rounded shadow-md w-full max-w-4xl grid grid-cols-2 gap-8">
-                <div className="col-span-1">
+                <div className="col-span-2 sm:col-span-1">
                     <h2 className="text-2xl mb-4">{application ? 'Update Job Application' : 'Create Job Application'}</h2>
                     <input
                         type="text"
@@ -106,8 +109,10 @@ const JobApplicationModal: React.FC<JobApplicationModalProps> = ({ application, 
                         onChange={(e) => setStatus(e.target.value)}
                         className="mb-4 p-2 border border-gray-300 rounded w-full"
                     >
-                        {statusOptions.map(option => (
-                            <option key={option.value} value={option.value}>{option.label}</option>
+                        {statusOptions.map((option) => (
+                            <option key={option.value} value={option.value}>
+                                {option.label}
+                            </option>
                         ))}
                     </select>
                     <label className="block mb-2">CV:</label>
@@ -121,7 +126,7 @@ const JobApplicationModal: React.FC<JobApplicationModalProps> = ({ application, 
                     <label className="block mb-2">Job Spec:</label>
                     <input
                         type="file"
-                        onChange={(e) => handleFileUpload(e, setJobSpec, setJobSpecName)}
+                        onChange={(e) => handleFileUpload(e, setJobSpecUrl, setJobSpecName)}
                         className="mb-4 p-2 border border-gray-300 rounded w-full"
                     />
                     <input
@@ -134,7 +139,7 @@ const JobApplicationModal: React.FC<JobApplicationModalProps> = ({ application, 
                     <div className="mb-4">
                         <label className="block mb-2">Tags:</label>
                         <div className="flex flex-wrap mb-2">
-                            {tags.map(tag => (
+                            {tags.map((tag) => (
                                 <div key={tag} className="bg-blue-100 text-blue-800 rounded-full px-3 py-1 mr-2 mb-2 flex items-center">
                                     <span>{tag}</span>
                                     <button
@@ -169,12 +174,12 @@ const JobApplicationModal: React.FC<JobApplicationModalProps> = ({ application, 
                         </button>
                     </div>
                 </div>
-                <div className="col-span-1 flex flex-col space-y-4 ">
-                    {jobSpec && (
+                <div className="col-span-2 sm:col-span-1 flex flex-col space-y-4">
+                    {jobSpecUrl && (
                         <div>
                             <h3 className="mb-2">Job Spec:</h3>
                             <iframe
-                                src={jobSpec}
+                                src={jobSpecUrl}
                                 title="Job Spec Preview"
                                 className="w-full h-64 mb-4 border border-gray-300"
                             />

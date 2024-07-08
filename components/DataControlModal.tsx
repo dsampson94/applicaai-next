@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {toast} from 'react-toastify';
-import useJobApplicationsStore from '../lib/api/client/store/jobApplicationsStore';
+import useJobApplicationsStore from '../lib/store/jobApplicationsStore';
 import {getUserIdFromToken} from "../lib/auth";
 
 interface DataControlModalProps {

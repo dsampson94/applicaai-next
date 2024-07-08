@@ -3,7 +3,7 @@
 import React, { ChangeEvent, useEffect, useState, useCallback } from 'react';
 import { toast } from 'react-toastify';
 import { useDropzone } from 'react-dropzone';
-import useUserStore from '../../lib/api/client/store/userStore';
+import useUserStore from '../../lib/store/userStore';
 
 const Profile: React.FC = () => {
     const { user, fetchUser, updateUser } = useUserStore();

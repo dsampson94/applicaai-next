@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '../../../../lib/prisma';
-import { verifyToken } from '../../../../lib/api/server';
+import { verifyToken } from '../../../../lib/server';
 
 type Params = { params: { id: string } };
 

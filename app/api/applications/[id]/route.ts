@@ -1,6 +1,6 @@
 import {NextRequest} from 'next/server';
 import prisma from '../../../../lib/prisma';
-import {handleResponse, verifyToken} from '../../../../lib/api/server';
+import {handleResponse, verifyToken} from '../../../../lib/server';
 
 const RESOURCE_NAME = 'application';
 
