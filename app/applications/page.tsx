@@ -53,10 +53,6 @@ const JobApplicationsDashboard = () => {
                 <JobApplicationModal
                     application={selectedJobApplication}
                     onClose={() => setIsJobApplicationModalOpen(false)}
-                    onSave={() => {
-                        setSelectedJobApplication(null);
-                        setIsJobApplicationModalOpen(false);
-                    }}
                 />
             )}
         </div>
