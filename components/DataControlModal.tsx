@@ -36,6 +36,7 @@ const DataControlModal: React.FC<DataControlModalProps> = ({onClose}) => {
                 tipsResponses: [],
             };
 
+            // @ts-ignore
             await addApplication(newApplication);
             toast.success('Successfully added 1 mock job application');
         } catch (error: any) {
