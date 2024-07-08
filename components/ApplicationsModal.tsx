@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { toast } from 'react-toastify';
-import { Application } from '../prisma/generated/prisma';
+import React, {useCallback, useEffect, useState} from 'react';
+import {toast} from 'react-toastify';
+import {Application} from '../prisma/generated/prisma';
 import useJobApplicationsStore from '../lib/store/jobApplicationsStore';
+import useUserStore from '../lib/store/userStore';
+import {getUserIdFromToken} from '../lib/auth';
+import {useDropzone} from 'react-dropzone';
 
 interface JobApplicationModalProps {
     application?: Application | null;
@@ -9,15 +12,15 @@ interface JobApplicationModalProps {
 }
 
 const statusOptions = [
-    { value: '', label: 'Select Status' },
-    { value: 'Not Applied', label: 'Not Applied' },
-    { value: 'Applied', label: 'Applied' },
-    { value: 'Interviewing', label: 'Interviewing' },
-    { value: 'Offered', label: 'Offered' },
-    { value: 'Rejected', label: 'Rejected' },
+    {value: '', label: 'Select Status'},
+    {value: 'Not Applied', label: 'Not Applied'},
+    {value: 'Applied', label: 'Applied'},
+    {value: 'Interviewing', label: 'Interviewing'},
+    {value: 'Offered', label: 'Offered'},
+    {value: 'Rejected', label: 'Rejected'},
 ];
 
-const JobApplicationModal: React.FC<JobApplicationModalProps> = ({ application, onClose }) => {
+const JobApplicationModal: React.FC<JobApplicationModalProps> = ({application, onClose}) => {
     const [role, setRole] = useState(application?.role || '');
     const [company, setCompany] = useState(application?.company || '');
     const [status, setStatus] = useState(application?.status || 'Not Applied');
@@ -27,9 +30,12 @@ const JobApplicationModal: React.FC<JobApplicationModalProps> = ({ application, 
     const [tags, setTags] = useState<string[]>(application?.tags || []);
     const [newTag, setNewTag] = useState<string>('');
 
-    const { addApplication, updateApplication } = useJobApplicationsStore();
+    const {user, fetchUser} = useUserStore();
+    const {addApplication, updateApplication} = useJobApplicationsStore();
 
     useEffect(() => {
+        fetchUser();
+
         if (application) {
             setRole(application.role || '');
             setCompany(application.company || '');
@@ -39,24 +45,24 @@ const JobApplicationModal: React.FC<JobApplicationModalProps> = ({ application, 
             setCvName(application.cvName || null);
             setTags(application.tags || []);
         }
-    }, [application]);
+    }, [application, fetchUser]);
 
-    const handleFileUpload = (
-        event: React.ChangeEvent<HTMLInputElement>,
-        setFile: React.Dispatch<React.SetStateAction<string | null>>,
-        setName: React.Dispatch<React.SetStateAction<string | null>>
-    ) => {
-        const file = event.target.files?.[0];
+    const onDrop = useCallback((acceptedFiles: File[]) => {
+        const file = acceptedFiles[0];
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
                 const base64String = reader.result as string;
-                setFile(base64String);
-                setName(file.name);
+                setJobSpecUrl(base64String);
+                setJobSpecName(file.name);
             };
             reader.readAsDataURL(file);
         }
-    };
+    }, []);
+
+    // @ts-ignore
+    const { getRootProps, getInputProps } = useDropzone({ onDrop, accept: 'application/pdf' });
+
 
     const handleAddTag = () => {
         if (newTag.trim() !== '') {
@@ -70,7 +76,7 @@ const JobApplicationModal: React.FC<JobApplicationModalProps> = ({ application, 
     };
 
     const handleSubmit = async () => {
-        const updates = { role, company, status, jobSpec: jobSpecUrl, jobSpecName, cvName, tags };
+        const updates = {role, company, status, jobSpecUrl, jobSpecName, cvName, tags};
         try {
             if (application) {
                 await updateApplication(application.id, updates);
@@ -121,14 +127,17 @@ const JobApplicationModal: React.FC<JobApplicationModalProps> = ({ application, 
                         onChange={(e) => setCvName(e.target.value)}
                         className="mb-4 p-2 border border-gray-300 rounded w-full"
                     >
-                        {/* Add options for CVs if you have them */}
+                        <option value={user?.userCVName || ''}>
+                            {user?.userCVName || 'Select CV'}
+                        </option>
+                        {/* Add more options for CVs if you have them */}
                     </select>
                     <label className="block mb-2">Job Spec:</label>
-                    <input
-                        type="file"
-                        onChange={(e) => handleFileUpload(e, setJobSpecUrl, setJobSpecName)}
-                        className="mb-4 p-2 border border-gray-300 rounded w-full"
-                    />
+                    <div {...getRootProps({className: 'dropzone'})}
+                         className="mb-4 p-2 border border-gray-300 rounded w-full text-center cursor-pointer">
+                        <input {...getInputProps()} />
+                        <p>Drag & drop a CV here, or click to select a file</p>
+                    </div>
                     <input
                         type="text"
                         value={jobSpecName || ''}
@@ -140,7 +149,8 @@ const JobApplicationModal: React.FC<JobApplicationModalProps> = ({ application, 
                         <label className="block mb-2">Tags:</label>
                         <div className="flex flex-wrap mb-2">
                             {tags.map((tag) => (
-                                <div key={tag} className="bg-blue-100 text-blue-800 rounded-full px-3 py-1 mr-2 mb-2 flex items-center">
+                                <div key={tag}
+                                     className="bg-blue-100 text-blue-800 rounded-full px-3 py-1 mr-2 mb-2 flex items-center">
                                     <span>{tag}</span>
                                     <button
                                         onClick={() => handleRemoveTag(tag)}
@@ -166,15 +176,27 @@ const JobApplicationModal: React.FC<JobApplicationModalProps> = ({ application, 
                         </button>
                     </div>
                     <div className="flex justify-end">
-                        <button onClick={onClose} className="bg-gray-500 text-white px-4 py-2 rounded mr-2 border-2 border-transparent hover:bg-gray-600 hover:border-gray-600 active:bg-transparent active:text-gray-500 active:border-gray-500">
+                        <button onClick={onClose}
+                                className="bg-gray-500 text-white px-4 py-2 rounded mr-2 border-2 border-transparent hover:bg-gray-600 hover:border-gray-600 active:bg-transparent active:text-gray-500 active:border-gray-500">
                             Cancel
                         </button>
-                        <button onClick={handleSubmit} className="bg-blue-500 text-white px-4 py-2 rounded border-2 border-transparent hover:bg-blue-600 hover:border-blue-600 active:bg-transparent active:text-blue-500 active:border-blue-500">
+                        <button onClick={handleSubmit}
+                                className="bg-blue-500 text-white px-4 py-2 rounded border-2 border-transparent hover:bg-blue-600 hover:border-blue-600 active:bg-transparent active:text-blue-500 active:border-blue-500">
                             {application ? 'Update' : 'Create'}
                         </button>
                     </div>
                 </div>
                 <div className="col-span-2 sm:col-span-1 flex flex-col space-y-4">
+                    {user?.userCVUrl && (
+                        <div>
+                            <h3 className="mb-2">User CV:</h3>
+                            <iframe
+                                src={user.userCVUrl}
+                                title="User CV"
+                                className="w-full h-64 mb-4 border border-gray-300"
+                            />
+                        </div>
+                    )}
                     {jobSpecUrl && (
                         <div>
                             <h3 className="mb-2">Job Spec:</h3>
@@ -185,7 +207,6 @@ const JobApplicationModal: React.FC<JobApplicationModalProps> = ({ application, 
                             />
                         </div>
                     )}
-                    {/* Add CV preview if available */}
                 </div>
             </div>
         </div>
