@@ -34,10 +34,10 @@ const InsightsModal: React.FC<InsightsModalProps> = ({ application, onClose }) =
     const [responses, setResponses] = useState<string[]>(application?.[`${requestType}Responses`] || []);
 
     const fetchInsights = async (type: string) => {
-        if (application && application.jobSpec && application.cvName) {
+        if (application && application.jobSpecUrl && application.cvName) {
             setLoading(true);
             try {
-                const response = await axios.post('/api/getInsights', { jobSpec: application.jobSpec, cvName: application.cvName, type });
+                const response = await axios.post('/api/getInsights', { jobSpec: application.jobSpecUrl, cvName: application.cvName, type });
                 setLoading(false);
                 setInsights(response.data);
             } catch (error) {
