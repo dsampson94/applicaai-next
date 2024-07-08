@@ -1,19 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { Typewriter } from 'react-simple-typewriter';
-import {
-    Box,
-    Button,
-    Typography,
-    Tabs,
-    Tab,
-    Paper,
-    IconButton,
-    Modal,
-} from '@mui/material';
+import { Box, Button, IconButton, Modal, Paper, Tab, Tabs, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import axios from "axios";
-import {Application} from "../prisma/generated/prisma";
+import axios from 'axios';
+import { Application } from '../prisma/generated/prisma';
+import useUserStore from '../lib/store/userStore';
 
 const tabs = [
     { label: 'Mock Interview', value: 'mockInterview' },
@@ -32,12 +24,24 @@ const InsightsModal: React.FC<InsightsModalProps> = ({ application, onClose }) =
     const [requestType, setRequestType] = useState<string>('mockInterview');
     const responseContainerRef = useRef<HTMLDivElement>(null);
     const [responses, setResponses] = useState<string[]>(application?.[`${requestType}Responses`] || []);
+    const { user, fetchUser } = useUserStore();
+
+    useEffect(() => {
+        fetchUser();
+    }, [fetchUser]);
 
     const fetchInsights = async (type: string) => {
-        if (application && application.jobSpecUrl && application.cvName) {
+        if (application && application.jobSpecUrl && user?.userCVUrl) {
             setLoading(true);
             try {
-                const response = await axios.post('/api/getInsights', { jobSpec: application.jobSpecUrl, cvName: application.cvName, type });
+                const dataToSend = {
+                    jobSpecUrl: application.jobSpecUrl,
+                    userCvUrl: user.userCVUrl,
+                    type
+                };
+                console.log('Sending data to /api/insights:', dataToSend);
+                const response = await axios.post('/api/insights', dataToSend);
+                console.log('Received response from /api/insights:', response.data);
                 setLoading(false);
                 setInsights(response.data);
             } catch (error) {
@@ -106,15 +110,15 @@ const InsightsModal: React.FC<InsightsModalProps> = ({ application, onClose }) =
                 <Box className="grid grid-cols-2 gap-4 mb-4">
                     <Box className="grid grid-cols-4 gap-72 mb-4">
                         <Box className="space-y-2">
-                            <Typography variant="h6" className="font-semibold">My AI Insights for Application:</Typography>
+                            <Typography variant="h6" className="font-semibold whitespace-nowrap">My AI Insights for Application:</Typography>
                         </Box>
                         <Box className="space-y-2">
-                            <Typography variant="h6" className="font-semibold">Company: {application?.company || 'N/A'}</Typography>
-                            <Typography variant="h6" className="font-semibold">Role: {application?.role || 'N/A'}</Typography>
+                            <Typography variant="h6" className="font-semibold whitespace-nowrap">Company: {application?.company || 'N/A'}</Typography>
+                            <Typography variant="h6" className="font-semibold whitespace-nowrap">Role: {application?.role || 'N/A'}</Typography>
                         </Box>
                         <Box className="space-y-2">
-                            <Typography variant="h6" className="font-semibold">CV: {application?.cvName || 'N/A'}</Typography>
-                            <Typography variant="h6" className="font-semibold">Job Spec: {application?.jobSpecName || 'N/A'}</Typography>
+                            <Typography variant="h6" className="font-semibold whitespace-nowrap">CV: {user?.userCVName || 'N/A'}</Typography>
+                            <Typography variant="h6" className="font-semibold whitespace-nowrap">Job Spec: {application?.jobSpecName || 'N/A'}</Typography>
                         </Box>
                     </Box>
                     <Box className="flex justify-end items-start">
@@ -148,15 +152,17 @@ const InsightsModal: React.FC<InsightsModalProps> = ({ application, onClose }) =
                             insights && (
                                 <Box className="p-2 border border-gray-300 rounded bg-white relative">
                                     <pre className="whitespace-pre-wrap">
-                                        <Typewriter
-                                            words={[insights]}
-                                            loop={false}
-                                            cursor
-                                            cursorStyle="_"
-                                            typeSpeed={20}
-                                            deleteSpeed={0}
-                                            delaySpeed={0}
-                                        />
+                                        {typeof insights === 'string' && (
+                                            <Typewriter
+                                                words={[insights]}
+                                                loop={false}
+                                                cursor
+                                                cursorStyle="_"
+                                                typeSpeed={20}
+                                                deleteSpeed={0}
+                                                delaySpeed={0}
+                                            />
+                                        )}
                                     </pre>
                                     <IconButton onClick={handleAddResponse} className="absolute top-0 right-0 p-1 bg-green-500 text-white rounded-full hover:bg-green-600">
                                         Add

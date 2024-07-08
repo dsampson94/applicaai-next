@@ -39,7 +39,7 @@ export default function Login() {
             <div className="flex justify-center mb-6">
                 <Image src={aplicaLogo} alt="Applica Logo" width={150} height={200} />
             </div>
-            <h2 className="mt-20 text-lg font-semibold text-gray-900 text-center">
+            <h2 className="text-lg font-semibold text-gray-900 text-center">
                 {isLogin ? 'Sign in to your account' : 'Register for an account'}
             </h2>
             <p className="mt-2 text-sm text-gray-700 text-center">

@@ -26,7 +26,7 @@ const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
     ];
 
     return (
-        <div className={`flex flex-col h-full bg-[#1e293b] text-white shadow-lg transition-width duration-300 ${isOpen ? 'w-60' : 'w-12'}`}>
+        <div className={`flex flex-col h-full bg-[#1e293b] text-white shadow-lg transition-width duration-300 ${isOpen ? 'min-w-60' : 'w-12'}`}>
             <div className="flex items-center justify-between p-4">
                 <button onClick={toggleSidebar} className="text-white focus:outline-none">
                     {isOpen ? <FaChevronLeft /> : <FaChevronRight />}

@@ -37,7 +37,7 @@ export default function Register() {
                     <Image src={aplicaLogo} alt="Applica Logo" width={150} height={200}/>
                 </Link>
             </div>
-            <h2 className="mt-20 text-lg font-semibold text-gray-900 text-center">
+            <h2 className="text-lg font-semibold text-gray-900 text-center">
                 Get started for free
             </h2>
             <p className="mt-2 text-sm text-gray-700 text-center">

@@ -92,8 +92,8 @@ const JobApplicationModal: React.FC<JobApplicationModalProps> = ({application, o
     };
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-10">
-            <div className="bg-white p-8 rounded shadow-md w-full max-w-4xl grid grid-cols-2 gap-8">
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-51">
+            <div className="bg-white p-8 rounded shadow-md w-full max-w-4xl my-12 grid grid-cols-2 gap-8">
                 <div className="col-span-2 sm:col-span-1">
                     <h2 className="text-2xl mb-4">{application ? 'Update Job Application' : 'Create Job Application'}</h2>
                     <input
