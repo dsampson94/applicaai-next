@@ -1,14 +1,8 @@
 'use client';
 
-import React, {MouseEvent, useEffect, useState} from 'react';
-import {useRouter} from 'next/navigation';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import Avatar from '@mui/material/Avatar';
-import {getUserFromToken} from "../lib/auth";
+import React, { MouseEvent, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { getUserFromToken } from '../lib/auth';
 
 const Header = () => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -22,7 +16,11 @@ const Header = () => {
     }, []);
 
     const handleMenuClick = (event: MouseEvent<HTMLElement>) => {
-        setAnchorEl(event.currentTarget);
+        if (anchorEl) {
+            setAnchorEl(null);
+        } else {
+            setAnchorEl(event.currentTarget);
+        }
     };
 
     const handleMenuClose = () => {
@@ -34,39 +32,64 @@ const Header = () => {
         router.push('/');
     };
 
+    const getInitial = (email: string) => {
+        return email?.charAt(0)?.toUpperCase();
+    };
+
     return (
-        <AppBar position="sticky"
-                sx={{zIndex: (theme) => theme.zIndex.drawer + 1, backgroundColor: 'white', color: 'black'}}>
-            <Toolbar sx={{display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap'}}>
-                <div/>
+        <header className="sticky top-0 z-50 bg-white text-black shadow-md">
+            <div className="flex justify-between items-center p-1 md:p-2">
+                <div className="flex items-center">
+                </div>
                 {user && (
-                    <>
-                        <IconButton onClick={handleMenuClick} sx={{p: 0}}>
-                            <Avatar alt={user.username} src={''}/>
-                        </IconButton>
-                        <Menu
-                            id="menu-appbar"
-                            anchorEl={anchorEl}
-                            anchorOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            open={open}
-                            onClose={handleMenuClose}
-                        >
-                            <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-                            <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-                            <MenuItem onClick={handleSignOut}>Logout</MenuItem>
-                        </Menu>
-                    </>
+                    <div className="relative">
+                        <button onClick={handleMenuClick} className="focus:outline-none">
+                            {/*{user.avatarUrl ? (*/}
+                            {/*    <img*/}
+                            {/*        className="w-8 h-8 md:w-10 md:h-10 rounded-full"*/}
+                            {/*        src={user.avatarUrl}*/}
+                            {/*        alt={user.email}*/}
+                            {/*    />*/}
+                            {/*) : (*/}
+                                <div className="flex items-center justify-center w-8 mt-1.5 h-8 md:w-10 md:h-10 rounded-full bg-blue-500 text-white text-lg font-semibold">
+                                    {getInitial(user?.email)}
+                                </div>
+                            {/*)}*/}
+                        </button>
+                        {open && (
+                            <div
+                                className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-2"
+                                role="menu"
+                                aria-orientation="vertical"
+                                aria-labelledby="menu-button"
+                            >
+                                <a
+                                    href="#"
+                                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors"
+                                    onClick={handleMenuClose}
+                                >
+                                    Profile
+                                </a>
+                                <a
+                                    href="#"
+                                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors"
+                                    onClick={handleMenuClose}
+                                >
+                                    My account
+                                </a>
+                                <a
+                                    href="#"
+                                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors"
+                                    onClick={handleSignOut}
+                                >
+                                    Logout
+                                </a>
+                            </div>
+                        )}
+                    </div>
                 )}
-            </Toolbar>
-        </AppBar>
+            </div>
+        </header>
     );
 };
 

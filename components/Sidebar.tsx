@@ -1,24 +1,10 @@
 'use client';
 
 import React from 'react';
-import {
-    Box,
-    ButtonBase,
-    Divider,
-    IconButton,
-    List,
-    ListItem,
-    ListItemIcon,
-    ListItemText,
-    Toolbar,
-    Tooltip,
-    Typography
-} from '@mui/material';
 import { usePathname, useRouter } from 'next/navigation';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { FaUserCircle, FaChevronLeft, FaChevronRight, FaTachometerAlt } from 'react-icons/fa';
+import Image from 'next/image';
+import aplicaLogo from '../public/applica-nobg-white.png';
 
 interface SidebarProps {
     isOpen: boolean;
@@ -34,78 +20,35 @@ const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
     };
 
     const menuItems = [
-        { text: 'Profile', icon: <AccountCircleIcon />, path: '/profile' },
-        { text: 'Applications', icon: <DashboardIcon />, path: '/applications' },
-        { text: 'Users', icon: <AccountCircleIcon />, path: '/users' }
+        { text: 'Profile', icon: <FaUserCircle />, path: '/profile' },
+        { text: 'Applications', icon: <FaTachometerAlt />, path: '/applications' },
+        { text: 'Users', icon: <FaUserCircle />, path: '/users' }
     ];
 
     return (
-        <Box
-            sx={{
-                minWidth: isOpen ? 240 : 70,
-                transition: 'width 0.3s',
-                overflow: 'hidden',
-                display: 'flex',
-                flexDirection: 'column',
-                height: '100vh',
-                backgroundColor: '#1e293b',
-                color: 'white',
-                boxShadow: '2px 0 5px rgba(0,0,0,0.1)'
-            }}
-        >
-            <Toolbar
-                sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: isOpen ? 'space-between' : 'center',
-                    padding: isOpen ? '0 16px' : '0 8px',
-                }}
-            >
-                <IconButton onClick={toggleSidebar} edge="start" color="inherit" aria-label="toggle sidebar">
-                    {isOpen ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-                </IconButton>
-                {isOpen && <Typography variant="h5" sx={{ mr: 5, fontWeight: 'bold' }}>ApplicaAi</Typography>}
-            </Toolbar>
-            <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.12)' }} />
-            <List>
+        <div className={`flex flex-col h-full bg-[#1e293b] text-white shadow-lg transition-width duration-300 ${isOpen ? 'w-60' : 'w-12'}`}>
+            <div className="flex items-center justify-between p-4">
+                <button onClick={toggleSidebar} className="text-white focus:outline-none">
+                    {isOpen ? <FaChevronLeft /> : <FaChevronRight />}
+                </button>
+                {isOpen && <Image src={aplicaLogo} alt="Applica Logo" width={150} height={200} className="mr-2" />}
+            </div>
+            <div className="flex flex-col flex-1 overflow-y-auto">
                 {menuItems.map(({ text, icon, path }) => (
-                    <Tooltip title={!isOpen ? text : ''} key={text} placement="right">
-                        <ListItem
-                            sx={{
-                                backgroundColor: pathname === path ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
-                                '&:hover': {
-                                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                                },
-                                padding: '10px 16px',
-                                margin: '4px 0',
-                                borderRadius: '8px'
-                            }}
-                        >
-                            <ButtonBase
-                                sx={{
-                                    width: '100%',
-                                    display: 'flex',
-                                    justifyContent: 'flex-start',
-                                    alignItems: 'center',
-                                    textAlign: 'left',
-                                    color: pathname === path ? '#EF4444' : 'white',
-                                }}
-                                onClick={() => handleNavigation(path)}
-                            >
-                                <ListItemIcon sx={{ color: 'white' }}>
-                                    {icon}
-                                </ListItemIcon>
-                                {isOpen && (
-                                    <Typography sx={{ textAlign: 'left', fontWeight: 'bold', fontSize: '1rem' }}>
-                                        {text}
-                                    </Typography>
-                                )}
-                            </ButtonBase>
-                        </ListItem>
-                    </Tooltip>
+                    <div
+                        key={text}
+                        className={`flex items-center p-4 cursor-pointer hover:bg-opacity-20 rounded-md transition-colors duration-200 ${pathname === path ? 'bg-opacity-10 bg-white' : ''}`}
+                        onClick={() => handleNavigation(path)}
+                        title={!isOpen ? text : ''}
+                    >
+                        <div className="text-white">{icon}</div>
+                        {isOpen && (
+                            <span className="ml-4 text-base font-semibold">{text}</span>
+                        )}
+                    </div>
                 ))}
-            </List>
-        </Box>
+            </div>
+        </div>
     );
 };
 
