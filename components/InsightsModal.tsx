@@ -1,11 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { Typewriter } from 'react-simple-typewriter';
-import { Box, Button, IconButton, Modal, Paper, Tab, Tabs, Typography } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
 import axios from 'axios';
-import { Application } from '../prisma/generated/prisma';
+import useJobApplicationsStore from '../lib/store/jobApplicationsStore';
 import useUserStore from '../lib/store/userStore';
+import { Application } from '../lib/types';
 
 const tabs = [
     { label: 'Mock Interview', value: 'mockInterview' },
@@ -22,26 +21,34 @@ const InsightsModal: React.FC<InsightsModalProps> = ({ application, onClose }) =
     const [insights, setInsights] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [requestType, setRequestType] = useState<string>('mockInterview');
+    const [typewriterComplete, setTypewriterComplete] = useState<boolean>(false);
     const responseContainerRef = useRef<HTMLDivElement>(null);
-    const [responses, setResponses] = useState<string[]>(application?.[`${requestType}Responses`] || []);
     const { user, fetchUser } = useUserStore();
+    const { updateApplication, fetchApplications } = useJobApplicationsStore();
+
+    const [responses, setResponses] = useState<string[]>(application?.[`${requestType}Responses`] || []);
 
     useEffect(() => {
         fetchUser();
     }, [fetchUser]);
 
+    useEffect(() => {
+        if (application) {
+            setResponses(application[`${requestType}Responses`] || []);
+        }
+    }, [application, requestType]);
+
     const fetchInsights = async (type: string) => {
         if (application && application.jobSpecUrl && user?.userCVUrl) {
             setLoading(true);
+            setTypewriterComplete(false);
             try {
                 const dataToSend = {
                     jobSpecUrl: application.jobSpecUrl,
                     userCvUrl: user.userCVUrl,
                     type
                 };
-                console.log('Sending data to /api/insights:', dataToSend);
                 const response = await axios.post('/api/insights', dataToSend);
-                console.log('Received response from /api/insights:', response.data);
                 setLoading(false);
                 setInsights(response.data);
             } catch (error) {
@@ -68,9 +75,10 @@ const InsightsModal: React.FC<InsightsModalProps> = ({ application, onClose }) =
         };
 
         try {
-            await axios.put(`/api/applications/${application.id}`, updates);
+            await updateApplication(application.id, updates);
             toast.success('Response removed successfully');
             setResponses(updatedResponses); // Update local state
+            await fetchApplications(); // Fetch latest state
         } catch (error) {
             toast.error(`Failed to remove response: ${error.message}`);
         }
@@ -89,10 +97,12 @@ const InsightsModal: React.FC<InsightsModalProps> = ({ application, onClose }) =
         };
 
         try {
-            await axios.put(`/api/applications/${application.id}`, updates);
+            await updateApplication(application.id, updates);
             toast.success('Response saved successfully');
             setResponses(updatedResponses); // Update local state
             setInsights(null); // Clear the new response
+            setTypewriterComplete(false); // Reset typewriter state
+            await fetchApplications(); // Fetch latest state
         } catch (error) {
             toast.error(`Failed to save response: ${error.message}`);
         }
@@ -102,60 +112,70 @@ const InsightsModal: React.FC<InsightsModalProps> = ({ application, onClose }) =
         if (responseContainerRef.current) {
             responseContainerRef.current.scrollTop = responseContainerRef.current.scrollHeight;
         }
-    }, [insights, requestType]);
+    }, [insights, requestType, responses]);
 
     return (
-        <Modal open onClose={onClose} className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-10">
-            <Paper className="p-6 rounded shadow-md w-[90%] h-[90%] flex flex-col">
-                <Box className="grid grid-cols-2 gap-4 mb-4">
-                    <Box className="grid grid-cols-4 gap-72 mb-4">
-                        <Box className="space-y-2">
-                            <Typography variant="h6" className="font-semibold whitespace-nowrap">My AI Insights for Application:</Typography>
-                        </Box>
-                        <Box className="space-y-2">
-                            <Typography variant="h6" className="font-semibold whitespace-nowrap">Company: {application?.company || 'N/A'}</Typography>
-                            <Typography variant="h6" className="font-semibold whitespace-nowrap">Role: {application?.role || 'N/A'}</Typography>
-                        </Box>
-                        <Box className="space-y-2">
-                            <Typography variant="h6" className="font-semibold whitespace-nowrap">CV: {user?.userCVName || 'N/A'}</Typography>
-                            <Typography variant="h6" className="font-semibold whitespace-nowrap">Job Spec: {application?.jobSpecName || 'N/A'}</Typography>
-                        </Box>
-                    </Box>
-                    <Box className="flex justify-end items-start">
-                        <IconButton onClick={onClose} className="text-gray-500 hover:text-gray-700">
-                            <CloseIcon />
-                        </IconButton>
-                    </Box>
-                </Box>
-                <Tabs value={requestType} onChange={(event, newValue) => handleTabClick(newValue)} className="flex mb-4 border-b-2">
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
+            <div className="bg-white p-6 rounded shadow-md w-[90%] h-[90%] flex flex-col">
+                <div className="grid grid-cols-2 gap-4 mb-4">
+                    <div className="grid grid-cols-4 gap-72 mb-4">
+                        <div className="space-y-2">
+                            <h6 className="text-xl font-semibold whitespace-nowrap">My AI Insights for Application:</h6>
+                        </div>
+                        <div className="space-y-2">
+                            <h6 className="text-xl font-semibold whitespace-nowrap">Company: {application?.company || 'N/A'}</h6>
+                            <h6 className="text-xl font-semibold whitespace-nowrap">Role: {application?.role || 'N/A'}</h6>
+                        </div>
+                        <div className="space-y-2">
+                            <h6 className="text-xl font-semibold whitespace-nowrap">CV: {user?.userCVName || 'N/A'}</h6>
+                            <h6 className="text-xl font-semibold whitespace-nowrap">Job Spec: {application?.jobSpecName || 'N/A'}</h6>
+                        </div>
+                    </div>
+                    <div className="flex justify-end items-start">
+                        <button onClick={onClose} className="text-gray-500 hover:text-gray-700 focus:outline-none">
+                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div className="flex mb-4 border-b-2">
                     {tabs.map(tab => (
-                        <Tab key={tab.value} value={tab.value} label={tab.label} className={requestType === tab.value ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'} />
+                        <button
+                            key={tab.value}
+                            onClick={() => handleTabClick(tab.value)}
+                            className={`px-4 py-2 ${requestType === tab.value ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}
+                        >
+                            {tab.label}
+                        </button>
                     ))}
-                </Tabs>
-                <Box ref={responseContainerRef} className="flex-grow overflow-y-auto bg-gray-100 p-4 rounded grid grid-cols-2 gap-4">
-                    <Box className="space-y-4">
-                        <Typography variant="h6" className="font-semibold mb-2">Saved Responses:</Typography>
+                </div>
+                <div ref={responseContainerRef} className="flex-grow overflow-y-auto bg-gray-100 p-4 rounded grid grid-cols-2 gap-4">
+                    <div className="space-y-4">
+                        <h6 className="text-xl font-semibold mb-2">Saved Responses:</h6>
                         {responses.map((response, index) => (
-                            <Box key={index} className="mb-2 p-2 border border-gray-300 rounded bg-white relative">
+                            <div key={index} className="mb-2 p-2 border border-gray-300 rounded bg-white relative">
                                 <pre className="whitespace-pre-wrap">{response}</pre>
-                                <IconButton onClick={() => handleRemoveResponse(index)} className="absolute top-0 right-0 p-1 bg-red-500 text-white rounded-full hover:bg-red-600">
-                                    <CloseIcon />
-                                </IconButton>
-                            </Box>
+                                <button onClick={() => handleRemoveResponse(index)} className="absolute top-0 right-0 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 focus:outline-none">
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
                         ))}
-                    </Box>
-                    <Box className="space-y-4">
-                        <Typography variant="h6" className="font-semibold mb-2">New Response:</Typography>
+                    </div>
+                    <div className="space-y-4">
+                        <h6 className="text-xl font-semibold mb-2">New Response:</h6>
                         {loading ? (
-                            <Typography>Loading...</Typography>
+                            <p>Loading...</p>
                         ) : (
                             insights && (
-                                <Box className="p-2 border border-gray-300 rounded bg-white relative">
+                                <div className="p-2 border border-gray-300 rounded bg-white relative">
                                     <pre className="whitespace-pre-wrap">
                                         {typeof insights === 'string' && (
                                             <Typewriter
                                                 words={[insights]}
-                                                loop={false}
+                                                loop={1} // Ensure it doesn't restart
                                                 cursor
                                                 cursorStyle="_"
                                                 typeSpeed={20}
@@ -164,21 +184,21 @@ const InsightsModal: React.FC<InsightsModalProps> = ({ application, onClose }) =
                                             />
                                         )}
                                     </pre>
-                                    <IconButton onClick={handleAddResponse} className="absolute top-0 right-0 p-1 bg-green-500 text-white rounded-full hover:bg-green-600">
-                                        Add
-                                    </IconButton>
-                                </Box>
+                                        <button onClick={handleAddResponse} className="absolute top-0 right-0 p-1 bg-green-500 text-white rounded-full hover:bg-green-600 focus:outline-none">
+                                            Add
+                                        </button>
+                                </div>
                             )
                         )}
-                    </Box>
-                </Box>
-                <Box className="flex justify-center mt-4">
-                    <Button onClick={() => fetchInsights(requestType)} variant="contained" color="primary">
+                    </div>
+                </div>
+                <div className="flex justify-center mt-4">
+                    <button onClick={() => fetchInsights(requestType)} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none">
                         Get Insights
-                    </Button>
-                </Box>
-            </Paper>
-        </Modal>
+                    </button>
+                </div>
+            </div>
+        </div>
     );
 };
 

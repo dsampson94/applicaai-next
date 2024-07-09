@@ -13,7 +13,7 @@
     "@emotion/styled": "^11.11.5",
     "@headlessui/react": "^2.1.2",
     "@langchain/community": "^0.0.30",
-    "@langchain/core": "^0.2.11",
+    "@langchain/core": "^0.2.14",
     "@langchain/openai": "^0.2.1",
     "@mui/icons-material": "^5.15.21",
     "@mui/material": "^5.15.21",
@@ -24,6 +24,7 @@
     "filepond-plugin-file-encode": "^2.1.14",
     "jsonwebtoken": "^9.0.2",
     "jwt-decode": "^4.0.0",
+    "langchain": "^0.2.8",
     "mongodb": "^5.9.2",
     "next": "14.2.4",
     "pdf-parse": "^1.1.1",
@@ -36,6 +37,7 @@
     "react-icons": "^5.2.1",
     "react-simple-typewriter": "^5.0.1",
     "react-toastify": "^10.0.5",
+    "transformers": "^3.1.0",
     "zustand": "^4.5.4"
   },
   "devDependencies": {

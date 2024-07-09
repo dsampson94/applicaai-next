@@ -1,10 +1,9 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import {toast} from 'react-toastify';
-import {Application} from '../prisma/generated/prisma';
+import React, { useCallback, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import { Application } from '../prisma/generated/prisma';
 import useJobApplicationsStore from '../lib/store/jobApplicationsStore';
 import useUserStore from '../lib/store/userStore';
-import {getUserIdFromToken} from '../lib/auth';
-import {useDropzone} from 'react-dropzone';
+import { useDropzone } from 'react-dropzone';
 
 interface JobApplicationModalProps {
     application?: Application | null;
@@ -12,15 +11,15 @@ interface JobApplicationModalProps {
 }
 
 const statusOptions = [
-    {value: '', label: 'Select Status'},
-    {value: 'Not Applied', label: 'Not Applied'},
-    {value: 'Applied', label: 'Applied'},
-    {value: 'Interviewing', label: 'Interviewing'},
-    {value: 'Offered', label: 'Offered'},
-    {value: 'Rejected', label: 'Rejected'},
+    { value: '', label: 'Select Status' },
+    { value: 'Not Applied', label: 'Not Applied' },
+    { value: 'Applied', label: 'Applied' },
+    { value: 'Interviewing', label: 'Interviewing' },
+    { value: 'Offered', label: 'Offered' },
+    { value: 'Rejected', label: 'Rejected' },
 ];
 
-const JobApplicationModal: React.FC<JobApplicationModalProps> = ({application, onClose}) => {
+const JobApplicationModal: React.FC<JobApplicationModalProps> = ({ application, onClose }) => {
     const [role, setRole] = useState(application?.role || '');
     const [company, setCompany] = useState(application?.company || '');
     const [status, setStatus] = useState(application?.status || 'Not Applied');
@@ -30,8 +29,8 @@ const JobApplicationModal: React.FC<JobApplicationModalProps> = ({application, o
     const [tags, setTags] = useState<string[]>(application?.tags || []);
     const [newTag, setNewTag] = useState<string>('');
 
-    const {user, fetchUser} = useUserStore();
-    const {addApplication, updateApplication} = useJobApplicationsStore();
+    const { user, fetchUser } = useUserStore();
+    const { addApplication, updateApplication } = useJobApplicationsStore();
 
     useEffect(() => {
         fetchUser();
@@ -63,7 +62,6 @@ const JobApplicationModal: React.FC<JobApplicationModalProps> = ({application, o
     // @ts-ignore
     const { getRootProps, getInputProps } = useDropzone({ onDrop, accept: 'application/pdf' });
 
-
     const handleAddTag = () => {
         if (newTag.trim() !== '') {
             setTags([...tags, newTag.trim()]);
@@ -76,7 +74,7 @@ const JobApplicationModal: React.FC<JobApplicationModalProps> = ({application, o
     };
 
     const handleSubmit = async () => {
-        const updates = {role, company, status, jobSpecUrl, jobSpecName, cvName, tags};
+        const updates = { role, company, status, jobSpecUrl, jobSpecName, cvName, tags };
         try {
             if (application) {
                 await updateApplication(application.id, updates);
@@ -92,7 +90,7 @@ const JobApplicationModal: React.FC<JobApplicationModalProps> = ({application, o
     };
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-51">
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
             <div className="bg-white p-8 rounded shadow-md w-full max-w-4xl my-12 grid grid-cols-2 gap-8">
                 <div className="col-span-2 sm:col-span-1">
                     <h2 className="text-2xl mb-4">{application ? 'Update Job Application' : 'Create Job Application'}</h2>
@@ -130,10 +128,9 @@ const JobApplicationModal: React.FC<JobApplicationModalProps> = ({application, o
                         <option value={user?.userCVName || ''}>
                             {user?.userCVName || 'Select CV'}
                         </option>
-                        {/* Add more options for CVs if you have them */}
                     </select>
                     <label className="block mb-2">Job Spec:</label>
-                    <div {...getRootProps({className: 'dropzone'})}
+                    <div {...getRootProps({ className: 'dropzone' })}
                          className="mb-4 p-2 border border-gray-300 rounded w-full text-center cursor-pointer">
                         <input {...getInputProps()} />
                         <p>Drag & drop a CV here, or click to select a file</p>

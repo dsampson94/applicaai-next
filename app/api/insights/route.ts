@@ -1,11 +1,11 @@
 import pdf from 'pdf-parse';
-import fetch from 'node-fetch';
-import {handleResponse} from '../../../lib/server';
 import {NextRequest} from 'next/server';
+import {ChatOpenAI} from '@langchain/openai';
+import {handleResponse} from '../../../lib/server';
+import {HumanMessage, MessageContentComplex, SystemMessage} from '@langchain/core/messages';
 
 const RESOURCE_NAME = 'insights';
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-
 
 const extractTextFromPDF = async (base64: string): Promise<string> => {
     const base64Data = base64.split(',')[1];
@@ -14,12 +14,11 @@ const extractTextFromPDF = async (base64: string): Promise<string> => {
         const data = await pdf(pdfBuffer);
         return data.text;
     } catch (error) {
-        console.error('Error extracting text from PDF:', error);
         throw new Error('Failed to extract text from PDF');
     }
 };
 
-const getInsights = async (jobSpecUrl: string, userCvUrl: string, type: string): Promise<string | null> => {
+const getInsights = async (jobSpecUrl: string, userCvUrl: string, type: string): Promise<string | MessageContentComplex[]> => {
     const specText = await extractTextFromPDF(jobSpecUrl);
     const cvText = await extractTextFromPDF(userCvUrl);
 
@@ -39,31 +38,16 @@ const getInsights = async (jobSpecUrl: string, userCvUrl: string, type: string):
     }
 
     try {
-        const response = await fetch('https://api.openai.com/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-                Authorization: `Bearer ${OPENAI_API_KEY}`,
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                model: 'gpt-4',
-                messages: [
-                    {role: 'system', content: 'You are a helpful assistant.'},
-                    {role: 'user', content: userPrompt},
-                ],
-                max_tokens: 2000,
-            }),
-        });
+        const model = new ChatOpenAI({ apiKey: OPENAI_API_KEY, modelName: 'gpt-3.5-turbo' });
 
-        const data = await response.json();
-        if (data.choices && data.choices.length > 0) {
-            return data.choices[0].message.content;
-        } else {
-            console.error('No valid choices returned from OpenAI:', data);
-            throw new Error('No valid choices returned from OpenAI');
-        }
+        const messages = [
+            new SystemMessage({ content: "You are a helpful assistant." }),
+            new HumanMessage({ content: userPrompt })
+        ];
+
+        const result = await model.invoke(messages);
+        return result.content;
     } catch (error) {
-        console.error('Error fetching insights from OpenAI:', error);
         throw new Error('Failed to fetch insights');
     }
 };
@@ -75,7 +59,7 @@ export async function POST(req: NextRequest) {
     try {
         const insights = await getInsights(jobSpecUrl, userCvUrl, type);
         return handleResponse(RESOURCE_NAME, '', insights);
-    } catch (error: any) {
+    } catch (error) {
         return handleResponse(RESOURCE_NAME, error.message);
     }
-};
+}

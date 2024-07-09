@@ -4,7 +4,7 @@ import React from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { FaUserCircle, FaChevronLeft, FaChevronRight, FaTachometerAlt } from 'react-icons/fa';
 import Image from 'next/image';
-import aplicaLogo from '../public/applica-nobg-white.png';
+import aplicaLogo from '../public/applica-nobg-white-t.png';
 
 interface SidebarProps {
     isOpen: boolean;
@@ -31,7 +31,7 @@ const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
                 <button onClick={toggleSidebar} className="text-white focus:outline-none">
                     {isOpen ? <FaChevronLeft /> : <FaChevronRight />}
                 </button>
-                {isOpen && <Image src={aplicaLogo} alt="Applica Logo" width={150} height={200} className="mr-2" />}
+                {isOpen && <Image src={aplicaLogo} alt="Applica Logo" width={120} height={100} className="mr-6" />}
             </div>
             <div className="flex flex-col flex-1 overflow-y-auto">
                 {menuItems.map(({ text, icon, path }) => (

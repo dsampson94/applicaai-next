@@ -22,12 +22,12 @@ const JobApplicationsDashboard = () => {
             <div className="flex justify-between items-center">
                 <h1 className="text-4xl font-bold mb-4">Job Applications</h1>
                 <div>
-                    <button
-                        onClick={() => setIsDataControlModalOpen(true)}
-                        className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
-                    >
-                        Data Control
-                    </button>
+                    {/*<button*/}
+                    {/*    onClick={() => setIsDataControlModalOpen(true)}*/}
+                    {/*    className="bg-blue-500 text-white px-4 py-2 rounded mr-2"*/}
+                    {/*>*/}
+                    {/*    Data Control*/}
+                    {/*</button>*/}
                     <button
                         onClick={() => handleOpenModal(null)}
                         className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
