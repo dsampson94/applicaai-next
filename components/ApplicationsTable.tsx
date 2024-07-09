@@ -135,6 +135,7 @@ const JobApplicationsTable: React.FC<JobApplicationsTableProps> = ({ onOpenModal
             </div>
             {isInsightsModalOpen && (
                 <InsightsModal
+                    // @ts-ignore
                     application={selectedJobApplication}
                     onClose={() => setIsInsightsModalOpen(false)}
                 />
