@@ -1,45 +1,41 @@
-import {NextRequest} from 'next/server';
-import prisma from '../../../lib/prisma';
-import {handleResponse, verifyToken} from '../../../lib/server';
-
-const RESOURCE_NAME = 'user';
+import { NextRequest, NextResponse } from 'next/server';
+import connectToDatabase from '../../../lib/mongoose';
+import { verifyToken } from '../../../lib/server';
+import User from '../../../lib/models/User';
 
 export async function GET(req: NextRequest) {
+    await connectToDatabase();
+    const { id: userId } = verifyToken(req);
+
     try {
-        const {id: userId} = verifyToken(req);
-        const user = await prisma.user.findUnique({
-            where: {id: userId},
-        });
-        return handleResponse(RESOURCE_NAME, '', user);
-    } catch (error: any) {
-        return handleResponse(RESOURCE_NAME, error.message);
+        const user = await User.findById(userId);
+        return NextResponse.json(user);
+    } catch (error) {
+        return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }
 
 export async function PUT(req: NextRequest) {
-    try {
-        const {id: userId} = verifyToken(req);
-        const data = await req.json();
+    await connectToDatabase();
+    const { id: userId } = verifyToken(req);
+    const data = await req.json();
 
-        const updatedUser = await prisma.user.update({
-            where: {id: userId},
-            data,
-        });
-        return handleResponse(RESOURCE_NAME, '', updatedUser);
-    } catch (error: any) {
-        return handleResponse(RESOURCE_NAME, error.message);
+    try {
+        const updatedUser = await User.findByIdAndUpdate(userId, data, { new: true });
+        return NextResponse.json(updatedUser);
+    } catch (error) {
+        return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }
 
 export async function DELETE(req: NextRequest) {
-    try {
-        const {id: userId} = verifyToken(req);
+    await connectToDatabase();
+    const { id: userId } = verifyToken(req);
 
-        await prisma.user.delete({
-            where: {id: userId}
-        });
-        return handleResponse(RESOURCE_NAME, '', {});
-    } catch (error: any) {
-        return handleResponse(RESOURCE_NAME, error.message);
+    try {
+        await User.findByIdAndDelete(userId);
+        return NextResponse.json({});
+    } catch (error) {
+        return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }

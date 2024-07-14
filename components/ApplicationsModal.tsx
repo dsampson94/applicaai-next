@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { Application } from '../prisma/generated/prisma';
 import useJobApplicationsStore from '../lib/store/jobApplicationsStore';
 import useUserStore from '../lib/store/userStore';
 import { useDropzone } from 'react-dropzone';
+import { IApplication } from '../lib/models/Application';
 
 interface JobApplicationModalProps {
-    application?: Application | null;
+    application?: IApplication | null;
     onClose: () => void;
 }
 
@@ -23,9 +23,9 @@ const JobApplicationModal: React.FC<JobApplicationModalProps> = ({ application, 
     const [role, setRole] = useState(application?.role || '');
     const [company, setCompany] = useState(application?.company || '');
     const [status, setStatus] = useState(application?.status || 'Not Applied');
-    const [jobSpecUrl, setJobSpecUrl] = useState<string | null>(application?.jobSpecUrl || null);
-    const [jobSpecName, setJobSpecName] = useState<string | null>(application?.jobSpecName || '');
-    const [cvName, setCvName] = useState<string | null>(application?.cvName || '');
+    const [jobSpecUrl, setJobSpecUrl] = useState<string | undefined>(application?.jobSpecUrl || undefined);
+    const [jobSpecName, setJobSpecName] = useState<string | undefined>(application?.jobSpecName || undefined);
+    const [cvName, setCvName] = useState<string | undefined>(application?.cvName || undefined);
     const [tags, setTags] = useState<string[]>(application?.tags || []);
     const [newTag, setNewTag] = useState<string>('');
 
@@ -33,18 +33,19 @@ const JobApplicationModal: React.FC<JobApplicationModalProps> = ({ application, 
     const { addApplication, updateApplication } = useJobApplicationsStore();
 
     useEffect(() => {
-        fetchUser();
-
+        if (user?._id) {
+            fetchUser(user._id);
+        }
         if (application) {
             setRole(application.role || '');
             setCompany(application.company || '');
             setStatus(application.status || 'Not Applied');
-            setJobSpecUrl(application.jobSpecUrl || null);
-            setJobSpecName(application.jobSpecName || '');
-            setCvName(application.cvName || null);
+            setJobSpecUrl(application.jobSpecUrl || undefined);
+            setJobSpecName(application.jobSpecName || undefined);
+            setCvName(application.cvName || undefined);
             setTags(application.tags || []);
         }
-    }, [application, fetchUser]);
+    }, [application, fetchUser, user?._id]);
 
     const onDrop = useCallback((acceptedFiles: File[]) => {
         const file = acceptedFiles[0];
@@ -74,13 +75,21 @@ const JobApplicationModal: React.FC<JobApplicationModalProps> = ({ application, 
     };
 
     const handleSubmit = async () => {
-        const updates = { role, company, status, jobSpecUrl, jobSpecName, cvName, tags };
+        const updates = {
+            role,
+            company,
+            status,
+            jobSpecUrl,
+            jobSpecName,
+            cvName,
+            tags,
+        };
         try {
             if (application) {
-                await updateApplication(application.id, updates);
+                await updateApplication(application._id, updates);
                 toast.success('Job application updated successfully');
             } else {
-                await addApplication(updates as unknown as Omit<Application, 'id'>);
+                await addApplication(updates as unknown as Omit<IApplication, '_id'>);
                 toast.success('Job application created successfully');
             }
             onClose();

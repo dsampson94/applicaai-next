@@ -4,7 +4,7 @@ import { Typewriter } from 'react-simple-typewriter';
 import axios from 'axios';
 import useJobApplicationsStore from '../lib/store/jobApplicationsStore';
 import useUserStore from '../lib/store/userStore';
-import { Application } from '../lib/types';
+import { IApplication } from '../lib/models/Application';
 
 const tabs = [
     { label: 'Mock Interview', value: 'mockInterview' },
@@ -13,7 +13,7 @@ const tabs = [
 ];
 
 interface InsightsModalProps {
-    application: Application | null;
+    application: IApplication | null;
     onClose: () => void;
 }
 
@@ -29,7 +29,9 @@ const InsightsModal: React.FC<InsightsModalProps> = ({ application, onClose }) =
     const [responses, setResponses] = useState<string[]>(application?.[`${requestType}Responses`] || []);
 
     useEffect(() => {
-        fetchUser();
+        if (user && user._id) {
+            fetchUser(user._id);
+        }
     }, [fetchUser]);
 
     useEffect(() => {

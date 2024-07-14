@@ -1,32 +1,30 @@
-import {NextRequest} from 'next/server';
-import prisma from '../../../lib/prisma';
-import {handleResponse, verifyToken} from '../../../lib/server';
-
-const RESOURCE_NAME = 'application';
+import { NextRequest, NextResponse } from 'next/server';
+import connectToDatabase from '../../../lib/mongoose';
+import { verifyToken } from '../../../lib/server';
+import Application from '../../../lib/models/Application';
 
 export async function GET(req: NextRequest) {
-    try {
-        const {id: userId} = verifyToken(req);
+    await connectToDatabase();
+    const { id: userId } = verifyToken(req);
 
-        const applications = await prisma.application.findMany({
-            where: {userId},
-        });
-        return handleResponse(RESOURCE_NAME, '', applications);
-    } catch (error: any) {
-        return handleResponse(RESOURCE_NAME, error.message);
+    try {
+        const applications = await Application.find({ userId });
+        return NextResponse.json(applications);
+    } catch (error) {
+        return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }
 
 export async function POST(req: NextRequest) {
-    try {
-        const {id: userId} = verifyToken(req);
-        const data = await req.json();
+    await connectToDatabase();
+    const { id: userId } = verifyToken(req);
+    const data = await req.json();
 
-        const createdJobApplication = await prisma.application.create({
-            data: {...data, userId},
-        });
-        return handleResponse(RESOURCE_NAME, '', createdJobApplication);
-    } catch (error: any) {
-        return handleResponse(RESOURCE_NAME, error.message);
+    try {
+        const newApplication = new Application({ ...data, userId });
+        await newApplication.save();
+        return NextResponse.json(newApplication);
+    } catch (error) {
+        return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }

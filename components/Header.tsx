@@ -37,7 +37,7 @@ const Header = () => {
     };
 
     return (
-        <header className="sticky top-0 z-50 bg-white text-black shadow-md">
+        <header className="sticky top-0 z-49 bg-white text-black shadow-md">
             <div className="flex justify-between items-center p-1 md:p-2">
                 <div className="flex items-center">
                 </div>

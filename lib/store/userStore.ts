@@ -1,40 +1,39 @@
-import {create} from 'zustand';
+import { create } from 'zustand';
 import axios from 'axios';
-import {getAuthHeaders} from '../auth';
-import {User} from '../types';
+import { getAuthHeaders } from '../auth';
+import { IUser } from '../models/User';
+import { Types } from 'mongoose';
 
 interface UserStore {
-    user: User | null;
+    user: IUser | null;
     loading: boolean;
     error: string | null;
-    fetchUser: () => Promise<void>;
-    updateUser: (user: Partial<User>) => Promise<void>;
+    fetchUser: (id: Types.ObjectId) => Promise<void>;
+    updateUser: (user: Partial<IUser>) => Promise<void>;
 }
 
 const useUserStore = create<UserStore>((set) => ({
     user: null,
     loading: false,
     error: null,
-    fetchUser: async () => {
-        set({loading: true, error: null});
+    fetchUser: async (id: Types.ObjectId) => {
+        set({ loading: true, error: null });
         try {
             const headers = getAuthHeaders();
-            const response = await axios.get<User>
-            (`/api/users`, {headers});
-            set({user: response.data, loading: false});
+            const response = await axios.get<IUser>(`/api/users/${id}`, { headers });
+            set({ user: response.data, loading: false });
         } catch (error: any) {
-            set({error: error.message, loading: false});
+            set({ error: error.message, loading: false });
         }
     },
-    updateUser: async (user: Partial<User>) => {
-        set({loading: true, error: null});
+    updateUser: async (user: Partial<IUser>) => {
+        set({ loading: true, error: null });
         try {
             const headers = getAuthHeaders();
-            const response = await axios.put<User>
-            (`/api/users`, user, {headers});
-            set({user: response.data, loading: false});
+            const response = await axios.put<IUser>('/api/users', user, { headers });
+            set({ user: response.data, loading: false });
         } catch (error: any) {
-            set({error: error.message, loading: false});
+            set({ error: error.message, loading: false });
         }
     },
 }));

@@ -7,18 +7,18 @@ import MagicIcon from '@mui/icons-material/AutoAwesome';
 import EyeIcon from '@mui/icons-material/Visibility';
 import DeleteIcon from '@mui/icons-material/Delete';
 import useJobApplicationsStore from '../lib/store/jobApplicationsStore';
-import { Application } from '../lib/types';
-import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
+import { DragDropContext, Draggable, Droppable, DropResult } from '@hello-pangea/dnd';
+import { IApplication } from '../lib/models/Application';
 
 interface JobApplicationsKanbanProps {
-    onOpenModal: (jobApplication: Application | null) => void;
+    onOpenModal: (jobApplication: IApplication | null) => void;
 }
 
 const JobApplicationsKanban: React.FC<JobApplicationsKanbanProps> = ({ onOpenModal }) => {
-    const [selectedJobApplication, setSelectedJobApplication] = useState<Application | null>(null);
+    const [selectedJobApplication, setSelectedJobApplication] = useState<IApplication | null>(null);
     const [isInsightsModalOpen, setIsInsightsModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-    const [jobToDelete, setJobToDelete] = useState<Application | null>(null);
+    const [jobToDelete, setJobToDelete] = useState<IApplication | null>(null);
     const {
         applications = [],
         fetchApplications,
@@ -33,7 +33,7 @@ const JobApplicationsKanban: React.FC<JobApplicationsKanbanProps> = ({ onOpenMod
     const handleRemove = async () => {
         if (jobToDelete) {
             try {
-                await deleteApplication(jobToDelete.id);
+                await deleteApplication(jobToDelete._id);
                 toast.success('Job application deleted successfully');
                 setIsDeleteModalOpen(false);
                 setJobToDelete(null);
@@ -43,12 +43,12 @@ const JobApplicationsKanban: React.FC<JobApplicationsKanbanProps> = ({ onOpenMod
         }
     };
 
-    const handleOpenInsightsModal = (jobApplication: Application | null) => {
+    const handleOpenInsightsModal = (jobApplication: IApplication | null) => {
         setSelectedJobApplication(jobApplication);
         setIsInsightsModalOpen(true);
     };
 
-    const handleOpenDeleteModal = (jobApplication: Application) => {
+    const handleOpenDeleteModal = (jobApplication: IApplication) => {
         setJobToDelete(jobApplication);
         setIsDeleteModalOpen(true);
     };
@@ -61,13 +61,13 @@ const JobApplicationsKanban: React.FC<JobApplicationsKanbanProps> = ({ onOpenMod
         }
 
         const updatedApplications = [...applications];
-        const draggedApplication = updatedApplications.find((app) => app.id === draggableId);
+        const draggedApplication = updatedApplications.find((app) => app._id.toString() === draggableId);
 
         if (draggedApplication) {
             draggedApplication.status = destination.droppableId;
             updateLocalApplications(updatedApplications);
 
-            updateApplication(draggedApplication.id, { status: destination.droppableId })
+            updateApplication(draggedApplication._id, { status: destination.droppableId })
                 .then(() => {
                     toast.success('Job application status updated successfully');
                 })
@@ -80,8 +80,7 @@ const JobApplicationsKanban: React.FC<JobApplicationsKanbanProps> = ({ onOpenMod
         }
     };
 
-    const updateLocalApplications = (updatedApplications: Application[]) => {
-        // Ensure the state updates reflect immediately
+    const updateLocalApplications = (updatedApplications: IApplication[]) => {
         useJobApplicationsStore.setState({ applications: updatedApplications });
     };
 
@@ -93,7 +92,6 @@ const JobApplicationsKanban: React.FC<JobApplicationsKanbanProps> = ({ onOpenMod
         { title: 'Unsuccessful', status: 'Unsuccessful' },
     ];
 
-    // @ts-ignore
     return (
         <DragDropContext onDragEnd={handleDragEnd}>
             <div className="max-h-[80vh] overflow-hidden">
@@ -107,15 +105,15 @@ const JobApplicationsKanban: React.FC<JobApplicationsKanbanProps> = ({ onOpenMod
                                         ref={provided.innerRef}
                                         className="bg-gray-200 rounded-lg flex-1 min-w-[250px] max-h-[80vh] overflow-auto"
                                     >
-                                        <div className="sticky top-0 bg-gray-200 z-10 p-4 border-b border-gray-300">
+                                        <div className="sticky top-0 bg-gray-200 z-49 p-4 border-b border-gray-300">
                                             <h2 className="text-xl font-bold mb-2">{column.title}</h2>
                                         </div>
                                         <div className="p-4 space-y-4">
                                             {applications
                                                 .filter((job) => job.status === column.status)
-                                                .sort((a, b) => Number(b.isFavorite) - Number(a.isFavorite)) // Sort favorites to the top
+                                                .sort((a, b) => Number(b.isFavorite) - Number(a.isFavorite))
                                                 .map((job, index) => (
-                                                    <Draggable key={job.id} draggableId={job.id} index={index}>
+                                                    <Draggable key={job._id.toString()} draggableId={job._id.toString()} index={index}>
                                                         {(provided) => (
                                                             <div
                                                                 ref={provided.innerRef}
@@ -159,8 +157,8 @@ const JobApplicationsKanban: React.FC<JobApplicationsKanbanProps> = ({ onOpenMod
                                                                             key={tag}
                                                                             className="bg-blue-100 text-blue-800 rounded-full px-3 py-1"
                                                                         >
-                                      {tag}
-                                    </span>
+                                                                            {tag}
+                                                                        </span>
                                                                     ))}
                                                                 </div>
                                                             </div>

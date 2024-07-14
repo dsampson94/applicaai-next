@@ -1,70 +1,83 @@
-import {NextRequest} from 'next/server';
-import prisma from '../../../../lib/prisma';
-import {handleResponse, verifyToken} from '../../../../lib/server';
-
-const RESOURCE_NAME = 'application';
+import { NextRequest, NextResponse } from 'next/server';
+import mongoose from 'mongoose';
+import connectToDatabase from '../../../../lib/mongoose';
+import Application from '../../../../lib/models/Application';
+import { verifyToken } from '../../../../lib/server';
 
 type Params = { params: { id: string } };
 
-export async function GET(req: NextRequest, {params}: Params) {
-    const {id: userId} = verifyToken(req);
-    const {id} = params;
+export async function GET(req: NextRequest, { params }: Params) {
+    await connectToDatabase();
+    const { id: userId } = verifyToken(req);
+    const { id } = params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return NextResponse.json({ error: 'Invalid application ID' }, { status: 400 });
+    }
 
     try {
-        const jobApplication = await prisma.application.findFirst({
-            where: {
-                id,
-                userId,
-            },
-        });
-        return handleResponse(RESOURCE_NAME, '', jobApplication);
+        const application = await Application.findOne({ _id: id, userId });
+        if (!application) {
+            return NextResponse.json({ error: 'Application not found' }, { status: 404 });
+        }
+
+        const applications = await Application.find({ userId });
+        return NextResponse.json(applications.map(app => app.toObject()));
     } catch (error: any) {
-        return handleResponse(RESOURCE_NAME, error.message);
+        console.error(`Error fetching application: ${error.message}`);
+        return NextResponse.json({ error: 'Error fetching application' }, { status: 500 });
     }
 }
 
-export async function PUT(req: NextRequest, {params}: Params) {
-    const {id: userId} = verifyToken(req);
-    const {id} = params;
+export async function PUT(req: NextRequest, { params }: Params) {
+    await connectToDatabase();
+    const { id: userId } = verifyToken(req);
+    const { id } = params;
     const data = await req.json();
 
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return NextResponse.json({ error: 'Invalid application ID' }, { status: 400 });
+    }
+
     try {
-        await prisma.application.updateMany({
-            where: {
-                id,
-                userId,
-            },
+        const updatedApplication = await Application.findOneAndUpdate(
+            { _id: id, userId },
             data,
-        });
-        const applications = await prisma.application.findMany({
-            where: {
-                userId,
-            },
-        });
-        return handleResponse(RESOURCE_NAME, '', applications);
+            { new: true }
+        );
+
+        if (!updatedApplication) {
+            return NextResponse.json({ error: 'Application not found' }, { status: 404 });
+        }
+
+        const applications = await Application.find({ userId });
+
+        return NextResponse.json(applications.map(app => app.toObject()));
     } catch (error: any) {
-        return handleResponse(RESOURCE_NAME, error.message);
+        console.error(`Error updating application: ${error.message}`);
+        return NextResponse.json({ error: 'Error updating application' }, { status: 500 });
     }
 }
 
-export async function DELETE(req: NextRequest, {params}: Params) {
-    const {id: userId} = verifyToken(req);
-    const {id} = params;
+export async function DELETE(req: NextRequest, { params }: Params) {
+    await connectToDatabase();
+    const { id: userId } = verifyToken(req);
+    const { id } = params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return NextResponse.json({ error: 'Invalid application ID' }, { status: 400 });
+    }
 
     try {
-        await prisma.application.deleteMany({
-            where: {
-                id,
-                userId,
-            },
-        });
-        const applications = await prisma.application.findMany({
-            where: {
-                userId,
-            },
-        });
-        return handleResponse(RESOURCE_NAME, '', applications);
+        const deletedApplication = await Application.findOneAndDelete({ _id: id, userId });
+        if (!deletedApplication) {
+            return NextResponse.json({ error: 'Application not found' }, { status: 404 });
+        }
+
+        const applications = await Application.find({ userId });
+        return NextResponse.json(applications.map(app => app.toObject()));
     } catch (error: any) {
-        return handleResponse(RESOURCE_NAME, error.message);
+        console.error(`Error deleting application: ${error.message}`);
+        return NextResponse.json({ error: 'Error deleting application' }, { status: 500 });
     }
 }

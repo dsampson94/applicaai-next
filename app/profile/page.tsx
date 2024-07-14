@@ -1,25 +1,25 @@
-'use client';
+'use client'
 
 import React, { ChangeEvent, useEffect, useState, useCallback } from 'react';
 import { toast } from 'react-toastify';
 import { useDropzone } from 'react-dropzone';
 import useUserStore from '../../lib/store/userStore';
+import { IUser } from '../../lib/models/User';
 
 const Profile: React.FC = () => {
     const { user, fetchUser, updateUser } = useUserStore();
-    const initialProfile = {
-        username: user?.username || '',
-        email: user?.email || '',
-        userCVName: user?.userCVName || '',
-        userCVUrl: user?.userCVUrl || '',
-    };
-
-    const [profile, setProfile] = useState(initialProfile);
-    const [newCV, setNewCV] = useState(null);
+    const [profile, setProfile] = useState<Partial<IUser>>({
+        username: '',
+        email: '',
+        userCVName: '',
+        userCVUrl: '',
+    });
 
     useEffect(() => {
-        fetchUser();
-    }, [fetchUser]);
+        if (user && user._id) {
+            fetchUser(user._id);
+        }
+    }, [fetchUser, user]);
 
     useEffect(() => {
         if (user) {
@@ -32,24 +32,26 @@ const Profile: React.FC = () => {
         }
     }, [user]);
 
-    const onDrop = useCallback((acceptedFiles: File[]) => {
-        const file = acceptedFiles[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = async () => {
-                const base64String = reader.result as string;
-                // @ts-ignore
-                setNewCV({name: file.name, url: base64String});
-                setProfile((prevState) => ({
-                    ...prevState,
-                    userCVName: file.name,
-                    userCVUrl: base64String,
-                }));
-                await updateUser({...profile});
-            };
-            reader.readAsDataURL(file);
-        }
-    }, []);
+    const onDrop = useCallback(
+        (acceptedFiles: File[]) => {
+            const file = acceptedFiles[0];
+            if (file && user && user._id) {
+                const reader = new FileReader();
+                reader.onloadend = async () => {
+                    const base64String = reader.result as string;
+                    const updatedProfile = {
+                        ...profile,
+                        userCVName: file.name,
+                        userCVUrl: base64String,
+                    };
+                    setProfile(updatedProfile);
+                    await updateUser({ ...updatedProfile, _id: user._id });
+                };
+                reader.readAsDataURL(file);
+            }
+        },
+        [profile, updateUser, user]
+    );
 
     // @ts-ignore
     const { getRootProps, getInputProps } = useDropzone({ onDrop, accept: 'application/pdf' });
@@ -69,11 +71,13 @@ const Profile: React.FC = () => {
     };
 
     const handleSubmit = async () => {
-        try {
-            await updateUser({ ...profile });
-            toast.success('Profile updated successfully');
-        } catch (error: any) {
-            toast.error(`Failed to update profile: ${error.message}`);
+        if (user && user._id) {
+            try {
+                await updateUser({ ...profile, _id: user._id });
+                toast.success('Profile updated successfully');
+            } catch (error: any) {
+                toast.error(`Failed to update profile: ${error.message}`);
+            }
         }
     };
 
