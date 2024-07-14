@@ -16,10 +16,8 @@ const Profile: React.FC = () => {
     });
 
     useEffect(() => {
-        if (user && user._id) {
-            fetchUser(user._id);
-        }
-    }, [fetchUser, user]);
+        fetchUser();
+    }, [fetchUser]);
 
     useEffect(() => {
         if (user) {
@@ -45,7 +43,12 @@ const Profile: React.FC = () => {
                         userCVUrl: base64String,
                     };
                     setProfile(updatedProfile);
-                    await updateUser({ ...updatedProfile, _id: user._id });
+                    try {
+                        await updateUser({ ...updatedProfile, _id: user._id });
+                        toast.success('CV updated successfully');
+                    } catch (error: any) {
+                        toast.error(`Failed to update CV: ${error.message}`);
+                    }
                 };
                 reader.readAsDataURL(file);
             }
@@ -56,13 +59,21 @@ const Profile: React.FC = () => {
     // @ts-ignore
     const { getRootProps, getInputProps } = useDropzone({ onDrop, accept: 'application/pdf' });
 
-    const handleRemoveCV = () => {
-        setProfile((prevState) => ({
-            ...prevState,
-            userCVName: '',
-            userCVUrl: '',
-        }));
-        toast.info('CV removed');
+    const handleRemoveCV = async () => {
+        if (user && user._id) {
+            const updatedProfile = {
+                ...profile,
+                userCVName: '',
+                userCVUrl: '',
+            };
+            setProfile(updatedProfile);
+            try {
+                await updateUser({ ...updatedProfile, _id: user._id });
+                toast.info('CV removed');
+            } catch (error: any) {
+                toast.error(`Failed to remove CV: ${error.message}`);
+            }
+        }
     };
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {

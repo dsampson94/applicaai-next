@@ -3,15 +3,12 @@ import connectToDatabase from '../../../../lib/mongoose';
 import User from '../../../../lib/models/User';
 import { verifyToken } from '../../../../lib/server';
 
-type Params = { params: { id: string } };
-
-export async function GET(req: NextRequest, { params }: Params) {
+export async function GET(req: NextRequest) {
     await connectToDatabase();
     const { id: userId } = verifyToken(req);
-    const { id } = params;
 
     try {
-        const user = await User.findById(id);
+        const user = await User.findById(userId);
         if (!user) {
             return NextResponse.json({ error: 'User not found' }, { status: 404 });
         }
@@ -22,14 +19,13 @@ export async function GET(req: NextRequest, { params }: Params) {
     }
 }
 
-export async function PUT(req: NextRequest, { params }: Params) {
+export async function PUT(req: NextRequest) {
     await connectToDatabase();
     const { id: userId } = verifyToken(req);
-    const { id } = params;
     const data = await req.json();
 
     try {
-        const updatedUser = await User.findByIdAndUpdate(id, data, { new: true });
+        const updatedUser = await User.findByIdAndUpdate(userId, data, { new: true });
         if (!updatedUser) {
             return NextResponse.json({ error: 'User not found' }, { status: 404 });
         }
