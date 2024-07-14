@@ -1,7 +1,7 @@
 import {create} from 'zustand';
 import axios from 'axios';
-import {Application} from '../../prisma/generated/prisma';
 import {getAuthHeaders} from '../auth';
+import { Application } from 'lib/types';
 
 interface JobApplicationsState {
     applications: Application[];

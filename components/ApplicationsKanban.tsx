@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { DndProvider, useDrag, useDrop } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
 import InsightsModal from './InsightsModal';
 import DeleteConfirmationModal from './DeleteConfirmationModal';
 import StarIcon from '@mui/icons-material/Star';
@@ -9,7 +7,8 @@ import MagicIcon from '@mui/icons-material/AutoAwesome';
 import EyeIcon from '@mui/icons-material/Visibility';
 import DeleteIcon from '@mui/icons-material/Delete';
 import useJobApplicationsStore from '../lib/store/jobApplicationsStore';
-import {Application} from '../lib/types';
+import { Application } from '../lib/types';
+import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
 
 interface JobApplicationsKanbanProps {
     onOpenModal: (jobApplication: Application | null) => void;
@@ -22,8 +21,6 @@ const JobApplicationsKanban: React.FC<JobApplicationsKanbanProps> = ({ onOpenMod
     const [jobToDelete, setJobToDelete] = useState<Application | null>(null);
     const {
         applications = [],
-        loading,
-        error,
         fetchApplications,
         deleteApplication,
         updateApplication
@@ -56,13 +53,36 @@ const JobApplicationsKanban: React.FC<JobApplicationsKanbanProps> = ({ onOpenMod
         setIsDeleteModalOpen(true);
     };
 
-    const handleDrop = async (item: Application, status: string) => {
-        try {
-            await updateApplication(item.id, { status });
-            toast.success('Job application status updated successfully');
-        } catch (error) {
-            toast.error(`Failed to update job application status: ${error}`);
+    const handleDragEnd = (result: DropResult) => {
+        const { source, destination, draggableId } = result;
+
+        if (!destination || source.droppableId === destination.droppableId) {
+            return;
         }
+
+        const updatedApplications = [...applications];
+        const draggedApplication = updatedApplications.find((app) => app.id === draggableId);
+
+        if (draggedApplication) {
+            draggedApplication.status = destination.droppableId;
+            updateLocalApplications(updatedApplications);
+
+            updateApplication(draggedApplication.id, { status: destination.droppableId })
+                .then(() => {
+                    toast.success('Job application status updated successfully');
+                })
+                .catch((error) => {
+                    toast.error(`Failed to update job application status: ${error}`);
+                    // Revert to original state on error
+                    draggedApplication.status = source.droppableId;
+                    updateLocalApplications(updatedApplications);
+                });
+        }
+    };
+
+    const updateLocalApplications = (updatedApplications: Application[]) => {
+        // Ensure the state updates reflect immediately
+        useJobApplicationsStore.setState({ applications: updatedApplications });
     };
 
     const columns = [
@@ -73,23 +93,85 @@ const JobApplicationsKanban: React.FC<JobApplicationsKanbanProps> = ({ onOpenMod
         { title: 'Unsuccessful', status: 'Unsuccessful' },
     ];
 
+    // @ts-ignore
     return (
-        <DndProvider backend={HTML5Backend}>
+        <DragDropContext onDragEnd={handleDragEnd}>
             <div className="max-h-[80vh] overflow-hidden">
                 <div className="text-center">
                     <div className="flex space-x-4 overflow-x-auto py-4">
                         {columns.map((column) => (
-                            <KanbanColumn
-                                key={column.status}
-                                status={column.status}
-                                title={column.title}
-                                // @ts-ignore
-                                applications={Array.isArray(applications) ? applications.filter((job) => job.status === column.status) : []}
-                                onOpenModal={onOpenModal}
-                                handleOpenInsightsModal={handleOpenInsightsModal}
-                                handleOpenDeleteModal={handleOpenDeleteModal}
-                                onDrop={handleDrop}
-                            />
+                            <Droppable droppableId={column.status} key={column.status}>
+                                {(provided) => (
+                                    <div
+                                        {...provided.droppableProps}
+                                        ref={provided.innerRef}
+                                        className="bg-gray-200 rounded-lg flex-1 min-w-[250px] max-h-[80vh] overflow-auto"
+                                    >
+                                        <div className="sticky top-0 bg-gray-200 z-10 p-4 border-b border-gray-300">
+                                            <h2 className="text-xl font-bold mb-2">{column.title}</h2>
+                                        </div>
+                                        <div className="p-4 space-y-4">
+                                            {applications
+                                                .filter((job) => job.status === column.status)
+                                                .sort((a, b) => Number(b.isFavorite) - Number(a.isFavorite)) // Sort favorites to the top
+                                                .map((job, index) => (
+                                                    <Draggable key={job.id} draggableId={job.id} index={index}>
+                                                        {(provided) => (
+                                                            <div
+                                                                ref={provided.innerRef}
+                                                                {...provided.draggableProps}
+                                                                {...provided.dragHandleProps}
+                                                                className="bg-white rounded-lg p-4 mb-4 shadow-md hover:shadow-lg transition-shadow duration-300"
+                                                            >
+                                                                <div className="flex justify-between items-center mb-2">
+                                                                    <div className="text-left">
+                                                                        <div className="font-bold text-lg">
+                                                                            {job.company} {job.isFavorite && (
+                                                                            <StarIcon className="text-yellow-500" />
+                                                                        )}
+                                                                        </div>
+                                                                        <div className="text-gray-600">{job.role}</div>
+                                                                    </div>
+                                                                    <div className="flex space-x-2">
+                                                                        <button
+                                                                            onClick={() => handleOpenInsightsModal(job)}
+                                                                            className="text-white w-8 h-8 p-1 rounded-full flex items-center justify-center bg-green-500 hover:bg-green-600 hover:border-green-600 border-2 border-transparent active:bg-transparent active:text-green-500 active:border-green-500"
+                                                                        >
+                                                                            <MagicIcon />
+                                                                        </button>
+                                                                        <button
+                                                                            onClick={() => onOpenModal(job)}
+                                                                            className="text-white w-8 h-8 p-1 rounded-full flex items-center justify-center bg-yellow-500 hover:bg-yellow-600 hover:border-yellow-600 border-2 border-transparent active:bg-transparent active:text-yellow-500 active:border-yellow-500"
+                                                                        >
+                                                                            <EyeIcon />
+                                                                        </button>
+                                                                        <button
+                                                                            onClick={() => handleOpenDeleteModal(job)}
+                                                                            className="text-white w-8 h-8 p-1 rounded-full flex items-center justify-center bg-red-500 hover:bg-red-600 hover:border-red-600 border-2 border-transparent active:bg-transparent active:text-red-500 active:border-red-500"
+                                                                        >
+                                                                            <DeleteIcon />
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="mt-2 flex flex-wrap gap-2">
+                                                                    {job.tags?.map((tag) => (
+                                                                        <span
+                                                                            key={tag}
+                                                                            className="bg-blue-100 text-blue-800 rounded-full px-3 py-1"
+                                                                        >
+                                      {tag}
+                                    </span>
+                                                                    ))}
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                    </Draggable>
+                                                ))}
+                                            {provided.placeholder}
+                                        </div>
+                                    </div>
+                                )}
+                            </Droppable>
                         ))}
                     </div>
                 </div>
@@ -106,126 +188,7 @@ const JobApplicationsKanban: React.FC<JobApplicationsKanbanProps> = ({ onOpenMod
                     />
                 )}
             </div>
-        </DndProvider>
-    );
-};
-
-interface KanbanColumnProps {
-    status: string;
-    title: string;
-    applications: Application[];
-    onOpenModal: (jobApplication: Application | null) => void;
-    handleOpenInsightsModal: (jobApplication: Application | null) => void;
-    handleOpenDeleteModal: (jobApplication: Application) => void;
-    onDrop: (item: Application, status: string) => void;
-}
-
-const KanbanColumn: React.FC<KanbanColumnProps> = ({
-                                                       status,
-                                                       title,
-                                                       applications,
-                                                       onOpenModal,
-                                                       handleOpenInsightsModal,
-                                                       handleOpenDeleteModal,
-                                                       onDrop
-                                                   }) => {
-    const [, drop] = useDrop({
-        accept: 'application',
-        drop: (item: Application) => onDrop(item, status),
-    });
-
-    return (
-        <div
-            // @ts-ignore
-            ref={drop}
-            className="bg-gray-200 rounded-lg flex-1 max-h-[75vh] h-[70vh] overflow-auto z-10"
-        >
-            <div className="sticky top-0 bg-gray-200 p-4 border-b border-gray-300">
-                <h2 className="text-xl font-bold mb-2 z-10">{title}</h2>
-            </div>
-            <div className="p-4 space-y-4">
-                {applications.map((application) => (
-                    <KanbanItem
-                        key={application.id}
-                        application={application}
-                        onOpenModal={onOpenModal}
-                        handleOpenInsightsModal={handleOpenInsightsModal}
-                        handleOpenDeleteModal={handleOpenDeleteModal}
-                    />
-                ))}
-            </div>
-        </div>
-    );
-};
-
-interface KanbanItemProps {
-    application: Application;
-    onOpenModal: (jobApplication: Application | null) => void;
-    handleOpenInsightsModal: (jobApplication: Application | null) => void;
-    handleOpenDeleteModal: (jobApplication: Application) => void;
-}
-
-const KanbanItem: React.FC<KanbanItemProps> = ({
-                                                   application,
-                                                   onOpenModal,
-                                                   handleOpenInsightsModal,
-                                                   handleOpenDeleteModal
-                                               }) => {
-    const [{ isDragging }, drag] = useDrag({
-        type: 'application',
-        item: { ...application },
-        collect: (monitor) => ({
-            isDragging: monitor.isDragging(),
-        }),
-    });
-
-    const style = {
-        opacity: isDragging ? 0.5 : 1,
-    };
-
-    return (
-        <div
-            // @ts-ignore
-            ref={drag}
-            style={style}
-            className="bg-white rounded-lg p-2 shadow-md hover:shadow-lg transition-shadow duration-300"
-        >
-            <div className="flex justify-between items-start">
-                <div className="text-left">
-                    <div className="font-bold text-lg">
-                        {application.company} {application.isFavorite && <StarIcon className="text-yellow-500"/>}
-                    </div>
-                    <div className="text-gray-600">{application.role}</div>
-                </div>
-                <div className="flex space-y-1 flex-col">
-                    <button
-                        onClick={() => handleOpenInsightsModal(application)}
-                        className="text-white w-8 h-8 p-1 rounded-full flex items-center justify-center bg-green-500 hover:bg-green-600 hover:border-green-600 border-2 border-transparent active:bg-transparent active:text-green-500 active:border-green-500"
-                    >
-                        <MagicIcon/>
-                    </button>
-                    <button
-                        onClick={() => onOpenModal(application)}
-                        className="text-white w-8 h-8 p-1 rounded-full flex items-center justify-center bg-yellow-500 hover:bg-yellow-600 hover:border-yellow-600 border-2 border-transparent active:bg-transparent active:text-yellow-500 active:border-yellow-500"
-                    >
-                        <EyeIcon/>
-                    </button>
-                    <button
-                        onClick={() => handleOpenDeleteModal(application)}
-                        className="text-white w-8 h-8 p-1 rounded-full flex items-center justify-center bg-red-500 hover:bg-red-600 hover:border-red-600 border-2 border-transparent active:bg-transparent active:text-red-500 active:border-red-500"
-                    >
-                        <DeleteIcon/>
-                    </button>
-                </div>
-            </div>
-            <div className="flex flex-wrap gap-2">
-                {application.tags?.map((tag) => (
-                    <span key={tag} className="bg-blue-100 text-blue-800 rounded-full px-3 py-1">
-                        {tag}
-                    </span>
-                ))}
-            </div>
-        </div>
+        </DragDropContext>
     );
 };
 
