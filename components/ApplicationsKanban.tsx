@@ -73,7 +73,6 @@ const JobApplicationsKanban: React.FC<JobApplicationsKanbanProps> = ({ onOpenMod
                 })
                 .catch((error) => {
                     toast.error(`Failed to update job application status: ${error}`);
-                    // Revert to original state on error
                     draggedApplication.status = source.droppableId;
                     updateLocalApplications(updatedApplications);
                 });

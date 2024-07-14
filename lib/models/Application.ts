@@ -14,6 +14,8 @@ interface IApplication extends Document {
     suitabilityResponses: string[];
     tipsResponses: string[];
     isFavorite: boolean;
+    userEmail: string;
+    contactEmail: string;
 }
 
 const ApplicationSchema: Schema<IApplication> = new Schema({
@@ -29,6 +31,8 @@ const ApplicationSchema: Schema<IApplication> = new Schema({
     suitabilityResponses: { type: [String], default: [] },
     tipsResponses: { type: [String], default: [] },
     isFavorite: { type: Boolean, default: false },
+    userEmail: { type: String, required: true },
+    contactEmail: { type: String, required: true },
 }, { timestamps: true });
 
 const Application: Model<IApplication> = models.Application || model<IApplication>('Application', ApplicationSchema);

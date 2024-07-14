@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import connectToDatabase from '../../../lib/mongoose';
 import { verifyToken } from '../../../lib/server';
 import Application from '../../../lib/models/Application';
+import { sendEmail } from '../../../lib/mailgun';
 
 export async function GET(req: NextRequest) {
     await connectToDatabase();
@@ -21,10 +22,16 @@ export async function POST(req: NextRequest) {
     const data = await req.json();
 
     try {
-        const newApplication = new Application({ ...data, userId });
-        await newApplication.save();
-        return NextResponse.json(newApplication);
-    } catch (error) {
+        const application = await Application.create({ ...data, userId });
+
+        await sendEmail({
+            to: data.contactEmail,
+            subject: 'New Job Application Created',
+            text: `A job application for the role of ${data.role} at ${data.company} has been created.`,
+        });
+
+        return NextResponse.json(application);
+    } catch (error: any) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }

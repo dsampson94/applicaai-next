@@ -115,7 +115,11 @@ const Profile: React.FC = () => {
                     />
                     <div {...getRootProps({ className: 'dropzone' })} className="mb-4 p-2 border border-gray-300 rounded w-full text-center cursor-pointer">
                         <input {...getInputProps()} />
-                        <p>Drag & drop a CV here, or click to select a file</p>
+                        {profile.userCVName ? (
+                            <p>{profile.userCVName}</p>
+                        ) : (
+                            <p>Drag & drop a CV here, or click to select a file</p>
+                        )}
                     </div>
                     <div className="flex justify-between items-center w-full">
                         <button
