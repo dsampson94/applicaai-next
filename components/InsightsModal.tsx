@@ -26,17 +26,15 @@ const InsightsModal: React.FC<InsightsModalProps> = ({ application, onClose }) =
     const { user, fetchUser } = useUserStore();
     const { updateApplication, fetchApplications } = useJobApplicationsStore();
 
-    const [responses, setResponses] = useState<string[]>(application?.[`${requestType}Responses`] || []);
+    const [responses, setResponses] = useState<string[]>(application?.[`${ requestType }Responses`] || []);
 
     useEffect(() => {
-        if (user && user._id) {
-            fetchUser(user._id);
-        }
+        fetchUser();
     }, [fetchUser]);
 
     useEffect(() => {
         if (application) {
-            setResponses(application[`${requestType}Responses`] || []);
+            setResponses(application[`${ requestType }Responses`] || []);
         }
     }, [application, requestType]);
 
@@ -55,7 +53,7 @@ const InsightsModal: React.FC<InsightsModalProps> = ({ application, onClose }) =
                 setInsights(response.data);
             } catch (error) {
                 setLoading(false);
-                toast.error(`Failed to fetch insights: ${error.message}`);
+                toast.error(`Failed to fetch insights: ${ error.message }`);
             }
         }
     };
@@ -63,7 +61,7 @@ const InsightsModal: React.FC<InsightsModalProps> = ({ application, onClose }) =
     const handleTabClick = (type: string) => {
         setRequestType(type);
         setInsights(null);
-        setResponses(application?.[`${type}Responses`] || []);
+        setResponses(application?.[`${ type }Responses`] || []);
     };
 
     const handleRemoveResponse = async (index: number) => {
@@ -73,7 +71,7 @@ const InsightsModal: React.FC<InsightsModalProps> = ({ application, onClose }) =
         updatedResponses.splice(index, 1);
 
         const updates = {
-            [`${requestType}Responses`]: updatedResponses,
+            [`${ requestType }Responses`]: updatedResponses,
         };
 
         try {
@@ -82,7 +80,7 @@ const InsightsModal: React.FC<InsightsModalProps> = ({ application, onClose }) =
             setResponses(updatedResponses); // Update local state
             await fetchApplications(); // Fetch latest state
         } catch (error) {
-            toast.error(`Failed to remove response: ${error.message}`);
+            toast.error(`Failed to remove response: ${ error.message }`);
         }
     };
 
@@ -95,7 +93,7 @@ const InsightsModal: React.FC<InsightsModalProps> = ({ application, onClose }) =
         ];
 
         const updates = {
-            [`${requestType}Responses`]: updatedResponses,
+            [`${ requestType }Responses`]: updatedResponses,
         };
 
         try {
@@ -106,7 +104,7 @@ const InsightsModal: React.FC<InsightsModalProps> = ({ application, onClose }) =
             setTypewriterComplete(false); // Reset typewriter state
             await fetchApplications(); // Fetch latest state
         } catch (error) {
-            toast.error(`Failed to save response: ${error.message}`);
+            toast.error(`Failed to save response: ${ error.message }`);
         }
     };
 
@@ -125,77 +123,86 @@ const InsightsModal: React.FC<InsightsModalProps> = ({ application, onClose }) =
                             <h6 className="text-xl font-semibold whitespace-nowrap">My AI Insights for Application:</h6>
                         </div>
                         <div className="space-y-2">
-                            <h6 className="text-xl font-semibold whitespace-nowrap">Company: {application?.company || 'N/A'}</h6>
-                            <h6 className="text-xl font-semibold whitespace-nowrap">Role: {application?.role || 'N/A'}</h6>
+                            <h6 className="text-xl font-semibold whitespace-nowrap">Company: { application?.company || 'N/A' }</h6>
+                            <h6 className="text-xl font-semibold whitespace-nowrap">Role: { application?.role || 'N/A' }</h6>
                         </div>
                         <div className="space-y-2">
-                            <h6 className="text-xl font-semibold whitespace-nowrap">CV: {user?.userCVName || 'N/A'}</h6>
-                            <h6 className="text-xl font-semibold whitespace-nowrap">Job Spec: {application?.jobSpecName || 'N/A'}</h6>
+                            <h6 className="text-xl font-semibold whitespace-nowrap">CV: { user?.userCVName || 'N/A' }</h6>
+                            <h6 className="text-xl font-semibold whitespace-nowrap">Job
+                                Spec: { application?.jobSpecName || 'N/A' }</h6>
                         </div>
                     </div>
                     <div className="flex justify-end items-start">
-                        <button onClick={onClose} className="text-gray-500 hover:text-gray-700 focus:outline-none">
-                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        <button onClick={ onClose } className="text-gray-500 hover:text-gray-700 focus:outline-none">
+                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={ 2 }
+                                      d="M6 18L18 6M6 6l12 12"/>
                             </svg>
                         </button>
                     </div>
                 </div>
                 <div className="flex mb-4 border-b-2">
-                    {tabs.map(tab => (
+                    { tabs.map(tab => (
                         <button
-                            key={tab.value}
-                            onClick={() => handleTabClick(tab.value)}
-                            className={`px-4 py-2 ${requestType === tab.value ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}
+                            key={ tab.value }
+                            onClick={ () => handleTabClick(tab.value) }
+                            className={ `px-4 py-2 ${ requestType === tab.value ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }` }
                         >
-                            {tab.label}
+                            { tab.label }
                         </button>
-                    ))}
+                    )) }
                 </div>
-                <div ref={responseContainerRef} className="flex-grow overflow-y-auto bg-gray-100 p-4 rounded grid grid-cols-2 gap-4">
+                <div ref={ responseContainerRef }
+                     className="flex-grow overflow-y-auto bg-gray-100 p-4 rounded grid grid-cols-2 gap-4">
                     <div className="space-y-4">
                         <h6 className="text-xl font-semibold mb-2">Saved Responses:</h6>
-                        {responses.map((response, index) => (
-                            <div key={index} className="mb-2 p-2 border border-gray-300 rounded bg-white relative">
-                                <pre className="whitespace-pre-wrap">{response}</pre>
-                                <button onClick={() => handleRemoveResponse(index)} className="absolute top-0 right-0 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 focus:outline-none">
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        { responses.map((response, index) => (
+                            <div key={ index } className="mb-2 p-2 border border-gray-300 rounded bg-white relative">
+                                <pre className="whitespace-pre-wrap">{ response }</pre>
+                                <button onClick={ () => handleRemoveResponse(index) }
+                                        className="absolute top-0 right-0 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 focus:outline-none">
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={ 2 }
+                                              d="M6 18L18 6M6 6l12 12"/>
                                     </svg>
                                 </button>
                             </div>
-                        ))}
+                        )) }
                     </div>
                     <div className="space-y-4">
                         <h6 className="text-xl font-semibold mb-2">New Response:</h6>
-                        {loading ? (
+                        { loading ? (
                             <p>Loading...</p>
                         ) : (
                             insights && (
                                 <div className="p-2 border border-gray-300 rounded bg-white relative">
                                     <pre className="whitespace-pre-wrap">
-                                        {typeof insights === 'string' && (
+                                        { typeof insights === 'string' && (
                                             <Typewriter
-                                                words={[insights]}
-                                                loop={1} // Ensure it doesn't restart
+                                                words={ [insights] }
+                                                loop={ 1 } // Ensure it doesn't restart
                                                 cursor
                                                 cursorStyle="_"
-                                                typeSpeed={20}
-                                                deleteSpeed={0}
-                                                delaySpeed={0}
+                                                typeSpeed={ 20 }
+                                                deleteSpeed={ 0 }
+                                                delaySpeed={ 0 }
                                             />
-                                        )}
+                                        ) }
                                     </pre>
-                                        <button onClick={handleAddResponse} className="absolute top-0 right-0 p-1 bg-green-500 text-white rounded-full hover:bg-green-600 focus:outline-none">
-                                            Add
-                                        </button>
+                                    <button onClick={ handleAddResponse }
+                                            className="absolute top-0 right-0 p-1 bg-green-500 text-white rounded-full hover:bg-green-600 focus:outline-none">
+                                        Add
+                                    </button>
                                 </div>
                             )
-                        )}
+                        ) }
                     </div>
                 </div>
                 <div className="flex justify-center mt-4">
-                    <button onClick={() => fetchInsights(requestType)} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none">
+                    <button onClick={ () => fetchInsights(requestType) }
+                            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none">
                         Get Insights
                     </button>
                 </div>
