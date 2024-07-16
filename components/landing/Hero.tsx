@@ -4,7 +4,7 @@ export function Hero() {
     return (
         <Container className="pb-16 pt-20 text-center lg:pt-32">
             <h1 className="mx-auto max-w-4xl font-display text-5xl font-medium tracking-tight text-slate-900 sm:text-7xl">
-                job search{' '}
+                applications{' '}
                 <span className="relative whitespace-nowrap text-blue-500">
           <svg
               aria-hidden="true"
@@ -20,7 +20,7 @@ export function Hero() {
 
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-lg tracking-tight text-slate-700">
-                Manage your job search, get personalised Ai insights and handle your job applications like a professional with ApplicaAi.
+                Manage your job or property search, get personalised Ai insights and handle your applications like a boss with ApplicaAi.
             </p>
             {/*<div className="mt-10 flex justify-center gap-x-6">*/}
             {/*    <Button href="/register">Get 3 months free</Button>*/}
