@@ -77,8 +77,8 @@ const InsightsModal: React.FC<InsightsModalProps> = ({ application, onClose }) =
         try {
             await updateApplication(application.id, updates);
             toast.success('Response removed successfully');
-            setResponses(updatedResponses); // Update local state
-            await fetchApplications(); // Fetch latest state
+            setResponses(updatedResponses);
+            await fetchApplications();
         } catch (error) {
             toast.error(`Failed to remove response: ${ error.message }`);
         }
@@ -99,10 +99,10 @@ const InsightsModal: React.FC<InsightsModalProps> = ({ application, onClose }) =
         try {
             await updateApplication(application.id, updates);
             toast.success('Response saved successfully');
-            setResponses(updatedResponses); // Update local state
-            setInsights(null); // Clear the new response
-            setTypewriterComplete(false); // Reset typewriter state
-            await fetchApplications(); // Fetch latest state
+            setResponses(updatedResponses);
+            setInsights(null);
+            setTypewriterComplete(false);
+            await fetchApplications();
         } catch (error) {
             toast.error(`Failed to save response: ${ error.message }`);
         }
@@ -182,7 +182,7 @@ const InsightsModal: React.FC<InsightsModalProps> = ({ application, onClose }) =
                                         { typeof insights === 'string' && (
                                             <Typewriter
                                                 words={ [insights] }
-                                                loop={ 1 } // Ensure it doesn't restart
+                                                loop={ 1 }
                                                 cursor
                                                 cursorStyle="_"
                                                 typeSpeed={ 20 }
