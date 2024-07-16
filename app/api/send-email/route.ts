@@ -1,11 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
-import mailgun from 'mailgun-js';
+import mailgun from 'mailgun.js';
+import formData from 'form-data';
 
-const DOMAIN = process.env.MAILGUN_DOMAIN;
-const mg = mailgun({ apiKey: process.env.MAILGUN_API_KEY as string, domain: DOMAIN as string });
+const DOMAIN = process.env.MAILGUN_DOMAIN as string;
+const API_KEY = process.env.MAILGUN_API_KEY as string;
 
-export async function POST(req: NextRequest) {
-    const { to, subject, text } = await req.json();
+const mg = new mailgun(formData);
+const client = mg.client({ username: 'api', key: API_KEY });
+
+interface EmailData {
+    to: string;
+    subject: string;
+    text: string;
+}
+
+export async function POST(req: NextRequest): Promise<NextResponse> {
+    const { to, subject, text }: EmailData = await req.json();
 
     const data = {
         from: 'ApplicaAI <no-reply@applicaai.com>',
@@ -15,7 +25,7 @@ export async function POST(req: NextRequest) {
     };
 
     try {
-        await mg.messages().send(data);
+        await client.messages.create(DOMAIN, data);
         return NextResponse.json({ message: 'Email sent successfully' });
     } catch (error: any) {
         return NextResponse.json({ message: 'Failed to send email', error: error.message }, { status: 500 });
